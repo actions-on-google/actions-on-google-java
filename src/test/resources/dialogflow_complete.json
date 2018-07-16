@@ -1,0 +1,156 @@
+{
+  "responseId": "acdddd",
+  "queryResult": {
+    "queryText": "blue grey coffee",
+    "parameters": {
+      "fakeColor": "blue grey coffee"
+    },
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/favoritecolorintent-followup",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "color": "yellow",
+          "fakeColor.original": "blue grey coffee",
+          "color.original": "Yellow"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_screen_output",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "fakeColor.original": "blue grey coffee"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/_actions_on_google",
+        "lifespanCount": 97,
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "color": "yellow",
+          "data": "{\"userName\":\"first last\"}",
+          "fakeColor.original": "blue grey coffee",
+          "color.original": "Yellow"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_audio_output",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "fakeColor.original": "blue grey coffee"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/google_assistant_input_type_keyboard",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "fakeColor.original": "blue grey coffee"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_web_browser",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "fakeColor.original": "blue grey coffee"
+        }
+      },
+      {
+        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_media_response_audio",
+        "parameters": {
+          "fakeColor": "blue grey coffee",
+          "fakeColor.original": "blue grey coffee"
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/ksub-aog-codelab-2/agent/intents/efded27e-5d6b-437e-bdb4-09a29d1fcaee",
+      "displayName": "favorite fake color"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "blue grey coffee",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "arguments": [
+            {
+              "rawText": "blue grey coffee",
+              "textValue": "blue grey coffee",
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.TEXT"
+        }
+      ],
+      "user": {
+        "userStorage": "{\"data\":{}}",
+        "lastSeen": "2018-05-06T02:23:10Z",
+        "permissions": [
+          "NAME"
+        ],
+        "profile": {
+          "displayName": "Display name",
+          "givenName": "Given name",
+          "familyName": "Family name"
+        },
+        "locale": "en-US",
+        "userId": "adsf"
+      },
+      "conversation": {
+        "conversationId": "1234",
+        "type": "ACTIVE",
+        "conversationToken": "[\"_actions_on_google\",\"favoritecolorintent-followup\"]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641"
+}

@@ -1,0 +1,131 @@
+{
+  "responseId": "4",
+  "queryResult": {
+    "queryText": "actions_intent_DATETIME",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/actions_intent_datetime",
+        "parameters": {
+          "DATETIME": {
+            "date": {
+              "month": 6,
+              "year": 2018,
+              "day": 7
+            },
+            "time": {
+              "hours": 17
+            }
+          }
+        }
+      },
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/actions_capability_media_response_audio"
+      },
+      {
+        "name": "projects/project-nameagent/sessions/1234/contexts/actions_capability_web_browser"
+      }
+    ],
+    "intent": {
+      "name": "projects/project-nameagent/intents/0327af89-7be3-4f72-9e85-a6558c664245",
+      "displayName": "actions_intent_datetime"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          }
+        ]
+      },
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "5pm",
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "arguments": [
+            {
+              "datetimeValue": {
+                "date": {
+                  "month": 6,
+                  "year": 2018,
+                  "day": 7
+                },
+                "time": {
+                  "hours": 17
+                }
+              },
+              "name": "DATETIME"
+            }
+          ],
+          "intent": "actions.intent.DATETIME"
+        }
+      ],
+      "user": {
+        "lastSeen": "2018-06-06T21:10:08Z",
+        "locale": "en-US",
+        "userId": "123456"
+      },
+      "conversation": {
+        "conversationId": "1234",
+        "type": "ACTIVE",
+        "conversationToken": "[]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/project-nameagent/sessions/1234"
+}

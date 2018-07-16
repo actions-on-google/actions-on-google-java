@@ -1,0 +1,26 @@
+{
+  "rawInputs": [
+    {
+      "query": "5pm",
+      "inputType": "KEYBOARD"
+    }
+  ],
+  "arguments": [
+    {
+      "datetimeValue": {
+        "date": {
+          "month": 6,
+          "year": 2018,
+          "day": 7
+        },
+        "time": {
+          "hours": 17,
+          "minutes": 0,
+          "seconds": 0
+        }
+      },
+      "name": "DATETIME"
+    }
+  ],
+  "intent": "actions.intent.DATETIME"
+}
