@@ -1,0 +1,207 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>com.google.actions.api - actions-on-google</title>
+    <link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">actions-on-google</a>&nbsp;/&nbsp;<a href=".">com.google.actions.api</a><br/>
+<br/>
+<h2>Package com.google.actions.api</h2>
+<h3>Types</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-action-context/index.html">ActionContext</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">ActionContext</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Any</span></code>
+            <p>ActionContext represent the current context of a user's request.
+                See
+                <a href="https://dialogflow.com/docs/contexts">ActionContext</a>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-action-request/index.html">ActionRequest</a></td>
+        <td>
+            <code><span class="keyword">interface </span><span
+                    class="identifier">ActionRequest</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Any</span></code>
+            <p>Defines requirements of an object that represents a request to
+                the Actions
+                webhook.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-action-response/index.html">ActionResponse</a></td>
+        <td>
+            <code><span class="keyword">interface </span><span
+                    class="identifier">ActionResponse</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Any</span></code>
+            <p>Defines requirements of an object that represents a response from
+                the Actions
+                webhook.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-actions-sdk-app/index.html">ActionsSdkApp</a></td>
+        <td>
+            <code><span class="keyword">open</span> <span
+                    class="keyword">class </span><span class="identifier">ActionsSdkApp</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<a
+                    href="-default-app/index.html"><span class="identifier">DefaultApp</span></a></code>
+            <p>Implementation of App for ActionsSDK based webhook. Developers
+                must extend
+                this class if they are using the ActionsSDK (as against
+                Dialogflow) to handle
+                requests.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-app/index.html">App</a></td>
+        <td>
+            <code><span class="keyword">interface </span><span
+                    class="identifier">App</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Any</span></code>
+            <p>Top level interface for the Actions webhook. Sub-classes must
+                implement the JSON based protocol for the Actions on Google
+                Conversational
+                API as described <a
+                        href="https://developers.google.com/actions/build/json/conversation-webhook-json">here</a>.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-capability/index.html">Capability</a></td>
+        <td>
+            <code><span class="keyword">enum</span> <span
+                    class="keyword">class </span><span class="identifier">Capability</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Enum</span><span
+                    class="symbol">&lt;</span><a
+                    href="-capability/index.html"><span class="identifier">Capability</span></a><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-default-app/index.html">DefaultApp</a></td>
+        <td>
+            <code><span class="keyword">abstract</span> <span class="keyword">class </span><span
+                    class="identifier">DefaultApp</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<a href="-app/index.html"><span
+                    class="identifier">App</span></a></code>
+            <p>Default implementation of an Actions App. This class provides
+                most of the
+                functionality of an App such as request parsing and routing.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-dialogflow-app/index.html">DialogflowApp</a></td>
+        <td>
+            <code><span class="keyword">open</span> <span
+                    class="keyword">class </span><span class="identifier">DialogflowApp</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<a
+                    href="-default-app/index.html"><span class="identifier">DefaultApp</span></a></code>
+            <p>Implementation of App for Dialogflow based webhook. Developers
+                must extend
+                this class if they are using Dialogflow (as against ActionsSDK)
+                to handle
+                requests. The DialogflowApp parses the incoming JSON request
+                into an
+                ActionRequest that encapsulates the JSON protocol between
+                Dialogflow and
+                your webhook as described <a
+                        href="https://developers.google.com/actions/build/json/dialogflow-webhook-json">here</a>.
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Annotations</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-for-intent/index.html">ForIntent</a></td>
+        <td>
+            <code><span class="keyword">annotation</span> <span class="keyword">class </span><span
+                    class="identifier">ForIntent</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">Annotation</span></code>
+            <p>Annotates a method in a sub-class of an App as an intent
+                handler.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Properties</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-p-e-r-m-i-s-s-i-o-n_-d-e-v-i-c-e_-c-o-a-r-s-e_-l-o-c-a-t-i-o-n.html">PERMISSION_DEVICE_COARSE_LOCATION</a>
+        </td>
+        <td>
+            <code><span class="keyword">const</span> <span
+                    class="keyword">val </span><span class="identifier">PERMISSION_DEVICE_COARSE_LOCATION</span><span
+                    class="symbol">: </span><span
+                    class="identifier">String</span></code>
+            <p>Permission to request user's coarse location, zip code, city and
+                country
+                code. Please check documentation for devices that support this
+                permission.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-p-e-r-m-i-s-s-i-o-n_-d-e-v-i-c-e_-p-r-e-c-i-s-e_-l-o-c-a-t-i-o-n.html">PERMISSION_DEVICE_PRECISE_LOCATION</a>
+        </td>
+        <td>
+            <code><span class="keyword">const</span> <span
+                    class="keyword">val </span><span class="identifier">PERMISSION_DEVICE_PRECISE_LOCATION</span><span
+                    class="symbol">: </span><span
+                    class="identifier">String</span></code>
+            <p>Permission to request user's precise location, lat/lng and
+                formatted
+                address. Returns only lat/lng on phones.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-p-e-r-m-i-s-s-i-o-n_-n-a-m-e.html">PERMISSION_NAME</a>
+        </td>
+        <td>
+            <code><span class="keyword">const</span> <span
+                    class="keyword">val </span><span class="identifier">PERMISSION_NAME</span><span
+                    class="symbol">: </span><span
+                    class="identifier">String</span></code>
+            <p>Permission to request user's first and last name</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="-p-e-r-m-i-s-s-i-o-n_-u-p-d-a-t-e.html">PERMISSION_UPDATE</a>
+        </td>
+        <td>
+            <code><span class="keyword">const</span> <span
+                    class="keyword">val </span><span class="identifier">PERMISSION_UPDATE</span><span
+                    class="symbol">: </span><span
+                    class="identifier">String</span></code>
+            <p>Permission to send updates to the user</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

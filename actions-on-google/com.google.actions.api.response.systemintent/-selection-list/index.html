@@ -1,0 +1,115 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>SelectionList - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api.response.systemintent</a>&nbsp;/&nbsp;<a
+        href=".">SelectionList</a><br/>
+<br/>
+<h1>SelectionList</h1>
+<code><span class="keyword">class </span><span
+        class="identifier">SelectionList</span>&nbsp;<span
+        class="symbol">:</span>&nbsp;<a
+        href="../-system-intent/index.html"><span class="identifier">SystemIntent</span></a></code>
+<p>System intent response to collect user's input with a list.</p>
+<pre><code class="lang-Java">List&lt;ListSelectListItem&gt; items = new ArrayList&lt;&gt;();
+ListSelectListItem item;
+for (int i = 0; i &lt; 3; i++) {
+  item = new ListSelectListItem();
+  item.setTitle("Item #" + (i + 1))
+      .setDescription("Description of Item #" + (i + 1))
+      .setImage(new Image()
+      .setUrl(IMAGES[i])
+      .setAccessibilityText("Image alt text"))
+      .setOptionInfo(new OptionInfo()
+        .setKey(String.valueOf(i + 1)));
+  items.add(item);
+}
+responseBuilder
+  .add("This is the first simple response for a list.")
+  .add(new SelectionList().setTitle("List title").setItems(items));</code></pre>
+<p>The following code demonstrates how to get the user's selection:</p>
+<pre><code class="lang-Java">@ForIntent("item selected")
+public CompletableFuture&lt;ActionResponse&gt; itemSelected(ActionRequest request) {
+  ResponseBuilder responseBuilder = getResponseBuilder();
+  String selectedItem = request.getArgument("OPTION").getTextValue();
+  responseBuilder
+    .add("You selected: " + selectedItem);
+  return CompletableFuture.completedFuture(responseBuilder.build());
+}</code></pre>
+<h3>Constructors</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-init-.html">&lt;init&gt;</a></td>
+        <td>
+            <code><span class="identifier">SelectionList</span><span
+                    class="symbol">(</span><span class="symbol">)</span></code>
+            <p>System intent response to collect user's input with a list.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Properties</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="name.html">name</a></td>
+        <td>
+            <code><span class="keyword">val </span><span
+                    class="identifier">name</span><span class="symbol">: </span><span
+                    class="identifier">String</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="parameters.html">parameters</a></td>
+        <td>
+            <code><span class="keyword">val </span><span class="identifier">parameters</span><span
+                    class="symbol">: </span><span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">,</span>&nbsp;<span
+                    class="identifier">Any</span><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<h3>Functions</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="set-items.html">setItems</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">setItems</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.response.systemintent.SelectionList$setItems(kotlin.collections.List((com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem)))/items">items</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">List</span><span
+                    class="symbol">&lt;</span><span class="identifier">ListSelectListItem</span><span
+                    class="symbol">&gt;</span><span class="symbol">)</span><span
+                    class="symbol">: </span><span class="identifier">SelectionList</span></code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="set-title.html">setTitle</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">setTitle</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.response.systemintent.SelectionList$setTitle(kotlin.String)/title">title</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">)</span><span class="symbol">: </span><span
+                    class="identifier">SelectionList</span></code></td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

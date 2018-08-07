@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>App - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api</a>&nbsp;/&nbsp;<a href=".">App</a><br/>
+<br/>
+<h1>App</h1>
+<code><span class="keyword">interface </span><span class="identifier">App</span>&nbsp;<span
+        class="symbol">:</span>&nbsp;<span class="identifier">Any</span></code>
+<p>Top level interface for the Actions webhook. Sub-classes must
+    implement the JSON based protocol for the Actions on Google Conversational
+    API as described <a
+            href="https://developers.google.com/actions/build/json/conversation-webhook-json">here</a>.
+</p>
+<p>It is recommended that developers sub-class from DialogflowApp or
+    ActionsSdkApp to implement their intent handlers.</p>
+<h3>Functions</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="handle-request.html">handleRequest</a></td>
+        <td>
+            <code><span class="keyword">abstract</span> <span class="keyword">fun </span><span
+                    class="identifier">handleRequest</span><span class="symbol">(</span><span
+                    class="identifier"
+                    id="com.google.actions.api.App$handleRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/inputJson">inputJson</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">?</span><span class="symbol">, </span><span
+                    class="identifier"
+                    id="com.google.actions.api.App$handleRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/headers">headers</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">*</span><span class="symbol">,</span>&nbsp;<span
+                    class="identifier">*</span><span
+                    class="symbol">&gt;</span><span class="symbol">?</span><span
+                    class="symbol">)</span><span class="symbol">: </span><a
+                    href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/CompletableFuture.html"><span
+                    class="identifier">CompletableFuture</span></a><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">&gt;</span></code>
+            <p>Processes the incoming JSON request and returns JSON as described
+                in the
+                Actions on Google conversation <a
+                        href="https://developers.google.com/actions/build/json/conversation-webhook-json">protocol</a>.
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="../-default-app/index.html">DefaultApp</a></td>
+        <td>
+            <code><span class="keyword">abstract</span> <span class="keyword">class </span><span
+                    class="identifier">DefaultApp</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">App</span></code>
+            <p>Default implementation of an Actions App. This class provides
+                most of the
+                functionality of an App such as request parsing and routing.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

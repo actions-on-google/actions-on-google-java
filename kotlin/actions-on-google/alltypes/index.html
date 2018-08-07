@@ -1,0 +1,235 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>alltypes - actions-on-google</title>
+    <link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<h3>All Types</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-action-context/index.html">com.google.actions.api.ActionContext</a>
+        </td>
+        <td>
+            <p>ActionContext represent the current context of a user's request.
+                See
+                <a href="https://dialogflow.com/docs/contexts">ActionContext</a>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-action-request/index.html">com.google.actions.api.ActionRequest</a>
+        </td>
+        <td>
+            <p>Defines requirements of an object that represents a request to
+                the Actions
+                webhook.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-action-response/index.html">com.google.actions.api.ActionResponse</a>
+        </td>
+        <td>
+            <p>Defines requirements of an object that represents a response from
+                the Actions
+                webhook.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-actions-sdk-app/index.html">com.google.actions.api.ActionsSdkApp</a>
+        </td>
+        <td>
+            <p>Implementation of App for ActionsSDK based webhook. Developers
+                must extend
+                this class if they are using the ActionsSDK (as against
+                Dialogflow) to handle
+                requests.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-app/index.html">com.google.actions.api.App</a>
+        </td>
+        <td>
+            <p>Top level interface for the Actions webhook. Sub-classes must
+                implement the JSON based protocol for the Actions on Google
+                Conversational
+                API as described <a
+                        href="https://developers.google.com/actions/build/json/conversation-webhook-json">here</a>.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-capability/index.html">com.google.actions.api.Capability</a>
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-confirmation/index.html">com.google.actions.api.response.systemintent.Confirmation</a>
+        </td>
+        <td>
+            <p>System intent response to ask user for confirmation.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-date-time-prompt/index.html">com.google.actions.api.response.systemintent.DateTimePrompt</a>
+        </td>
+        <td>
+            <p>System intent response to ask user for a timezone agnostic date
+                and time.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-deep-link/index.html">com.google.actions.api.response.systemintent.DeepLink</a>
+        </td>
+        <td>
+            <p>System intent response to request to transfer to a linked out
+                Android app
+                intent. Using this feature requires verifying the linked app in
+                the
+                (Actions console)<a
+                        href="@link https//console.actions.google.com">@link
+                    https//console.actions.google.com</a>.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-default-app/index.html">com.google.actions.api.DefaultApp</a>
+        </td>
+        <td>
+            <p>Default implementation of an Actions App. This class provides
+                most of the
+                functionality of an App such as request parsing and routing.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-dialogflow-app/index.html">com.google.actions.api.DialogflowApp</a>
+        </td>
+        <td>
+            <p>Implementation of App for Dialogflow based webhook. Developers
+                must extend
+                this class if they are using Dialogflow (as against ActionsSDK)
+                to handle
+                requests. The DialogflowApp parses the incoming JSON request
+                into an
+                ActionRequest that encapsulates the JSON protocol between
+                Dialogflow and
+                your webhook as described <a
+                        href="https://developers.google.com/actions/build/json/dialogflow-webhook-json">here</a>.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api/-for-intent/index.html">com.google.actions.api.ForIntent</a>
+        </td>
+        <td>
+            <p>Annotates a method in a sub-class of an App as an intent
+                handler.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-new-surface/index.html">com.google.actions.api.response.systemintent.NewSurface</a>
+        </td>
+        <td>
+            <p>System intent response to request user to transfer to another
+                surface with
+                the specified capabilities. For example, the user may need to
+                continue the
+                conversation on a device with a screen output.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-permission/index.html">com.google.actions.api.response.systemintent.Permission</a>
+        </td>
+        <td>
+            <p>System intent response to request user for permissions.
+                Usage:</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-place/index.html">com.google.actions.api.response.systemintent.Place</a>
+        </td>
+        <td>
+            <p>System intent response to request user to provide a geo-located
+                place,
+                possibly using contextual information, like a store near the
+                user's location
+                or a contact's address.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-register-update/index.html">com.google.actions.api.response.systemintent.RegisterUpdate</a>
+        </td>
+        <td>
+            <p>System intent to request for updates (eg: daily update).</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response/-response-builder/index.html">com.google.actions.api.response.ResponseBuilder</a>
+        </td>
+        <td>
+            <p>Builder to assemble the response from the Actions webhook.
+                Recommended way is
+                to get the ResponseBuilder instance from the App instead of
+                instantiating it
+                directly.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-selection-carousel/index.html">com.google.actions.api.response.systemintent.SelectionCarousel</a>
+        </td>
+        <td>
+            <p>System intent response to collect user's input with a
+                carousel.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-selection-list/index.html">com.google.actions.api.response.systemintent.SelectionList</a>
+        </td>
+        <td>
+            <p>System intent response to collect user's input with a list.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-sign-in/index.html">com.google.actions.api.response.systemintent.SignIn</a>
+        </td>
+        <td>
+            <p>Hands the user off to a web sign in flow. App sign in and OAuth
+                credentials
+                are set in the <a href="https://console.actions.google.com">Actions
+                    console</a>.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../com.google.actions.api.response.systemintent/-system-intent/index.html">com.google.actions.api.response.systemintent.SystemIntent</a>
+        </td>
+        <td>
+            <p>Interface for objects that represent a system generated
+                response.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

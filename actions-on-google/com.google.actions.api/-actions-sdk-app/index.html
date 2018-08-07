@@ -1,0 +1,160 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>ActionsSdkApp - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api</a>&nbsp;/&nbsp;<a href=".">ActionsSdkApp</a><br/>
+<br/>
+<h1>ActionsSdkApp</h1>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span
+        class="identifier">ActionsSdkApp</span>&nbsp;<span
+        class="symbol">:</span>&nbsp;<a href="../-default-app/index.html"><span
+        class="identifier">DefaultApp</span></a></code>
+<p>Implementation of App for ActionsSDK based webhook. Developers must extend
+    this class if they are using the ActionsSDK (as against Dialogflow) to
+    handle
+    requests.</p>
+<p>Note that the value of the @ForIntent annotation must match (case-sensitive)
+    the name of the intent.</p>
+<p>Usage:</p>
+<pre><code class="lang-Java">class MyActionsApp extends ActionsSdkApp {
+  @ForIntent("welcome")
+  public CompletableFuture&lt;ActionResponse&gt; showWelcomeMessage(
+     ActionRequest request) {
+     // Intent handler implementation here.
+  }</code></pre>
+<h3>Constructors</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-init-.html">&lt;init&gt;</a></td>
+        <td>
+            <code><span class="identifier">ActionsSdkApp</span><span
+                    class="symbol">(</span><span class="symbol">)</span></code>
+            <p>Implementation of App for ActionsSDK based webhook. Developers
+                must extend
+                this class if they are using the ActionsSDK (as against
+                Dialogflow) to handle
+                requests.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Functions</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="create-request.html">createRequest</a></td>
+        <td>
+            <code><span class="keyword">open</span> <span
+                    class="keyword">fun </span><span class="identifier">createRequest</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.ActionsSdkApp$createRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/inputJson">inputJson</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">, </span><span class="identifier"
+                                                  id="com.google.actions.api.ActionsSdkApp$createRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/headers">headers</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">*</span><span class="symbol">,</span>&nbsp;<span
+                    class="identifier">*</span><span
+                    class="symbol">&gt;</span><span class="symbol">?</span><span
+                    class="symbol">)</span><span class="symbol">: </span><a
+                    href="../-action-request/index.html"><span
+                    class="identifier">ActionRequest</span></a></code>
+            <p>Creates an ActionRequest for the specified JSON and metadata.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="get-response-builder.html">getResponseBuilder</a></td>
+        <td>
+            <code><span class="keyword">open</span> <span
+                    class="keyword">fun </span><span class="identifier">getResponseBuilder</span><span
+                    class="symbol">(</span><span class="symbol">)</span><span
+                    class="symbol">: </span><a
+                    href="../../com.google.actions.api.response/-response-builder/index.html"><span
+                    class="identifier">ResponseBuilder</span></a></code></td>
+    </tr>
+    </tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="../-default-app/handle-error.html">handleError</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">handleError</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.DefaultApp$handleError(java.lang.Exception)/exception">exception</span><span
+                    class="symbol">:</span>&nbsp;<a
+                    href="http://docs.oracle.com/javase/6/docs/api/java/lang/Exception.html"><span
+                    class="identifier">Exception</span></a><span class="symbol">)</span><span
+                    class="symbol">: </span><a
+                    href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/CompletableFuture.html"><span
+                    class="identifier">CompletableFuture</span></a><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-default-app/handle-request.html">handleRequest</a></td>
+        <td>
+            <code><span class="keyword">open</span> <span
+                    class="keyword">fun </span><span class="identifier">handleRequest</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.DefaultApp$handleRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/inputJson">inputJson</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">?</span><span class="symbol">, </span><span
+                    class="identifier"
+                    id="com.google.actions.api.DefaultApp$handleRequest(kotlin.String, kotlin.collections.Map((kotlin.Any, )))/headers">headers</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">*</span><span class="symbol">,</span>&nbsp;<span
+                    class="identifier">*</span><span
+                    class="symbol">&gt;</span><span class="symbol">?</span><span
+                    class="symbol">)</span><span class="symbol">: </span><a
+                    href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/CompletableFuture.html"><span
+                    class="identifier">CompletableFuture</span></a><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">&gt;</span></code>
+            <p>Processes the incoming JSON request and returns JSON as described
+                in the
+                Actions on Google conversation <a
+                        href="https://developers.google.com/actions/build/json/conversation-webhook-json">protocol</a>.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-default-app/route-request.html">routeRequest</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">routeRequest</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.DefaultApp$routeRequest(com.google.actions.api.ActionRequest)/request">request</span><span
+                    class="symbol">:</span>&nbsp;<a
+                    href="../-action-request/index.html"><span
+                    class="identifier">ActionRequest</span></a><span
+                    class="symbol">)</span><span class="symbol">: </span><a
+                    href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/CompletableFuture.html"><span
+                    class="identifier">CompletableFuture</span></a><span
+                    class="symbol">&lt;</span><a
+                    href="../-action-response/index.html"><span
+                    class="identifier">ActionResponse</span></a><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

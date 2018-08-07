@@ -1,0 +1,119 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>Place - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api.response.systemintent</a>&nbsp;/&nbsp;<a
+        href=".">Place</a><br/>
+<br/>
+<h1>Place</h1>
+<code><span class="keyword">class </span><span class="identifier">Place</span>&nbsp;<span
+        class="symbol">:</span>&nbsp;<a
+        href="../-system-intent/index.html"><span class="identifier">SystemIntent</span></a></code>
+<p>System intent response to request user to provide a geo-located place,
+    possibly using contextual information, like a store near the user's location
+    or a contact's address.</p>
+<p>Developer provides custom text prompts to tailor the request handled by
+    Google.</p>
+<pre><code class="lang-Java">@ForIntent("askForPlace")
+public CompletableFuture&lt;ActionResponse&gt; askForPlace(ActionRequest request) {
+  ResponseBuilder responseBuilder = getResponseBuilder();
+  responseBuilder
+    .add("Placeholder for place text")
+    .add(new Place()
+      .setRequestPrompt("Where do you want to have lunch?"),
+      .setPermissionContext("To find lunch locations"));
+  return CompletableFuture.completedFuture(responseBuilder.build());
+}</code></pre>
+<pre><code class="lang-Java">@ForIntent("actions_intent_place")
+public CompletableFuture&lt;ActionResponse&gt; handlePlaceResponse(ActionRequest request) {
+  ResponseBuilder responseBuilder = getResponseBuilder();
+  Location location = request.getPlace();
+  String response;
+  if (location != null) {
+    response = " Suggested place - " + getLocationString(location);
+  } else {
+    response = "Unable to find any lunch locations";
+  }
+  responseBuilder.add(response);
+  return CompletableFuture.completedFuture(responseBuilder.build());
+}</code></pre>
+<h3>Constructors</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="-init-.html">&lt;init&gt;</a></td>
+        <td>
+            <code><span class="identifier">Place</span><span
+                    class="symbol">(</span><span class="symbol">)</span></code>
+            <p>System intent response to request user to provide a geo-located
+                place,
+                possibly using contextual information, like a store near the
+                user's location
+                or a contact's address.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h3>Properties</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="name.html">name</a></td>
+        <td>
+            <code><span class="keyword">val </span><span
+                    class="identifier">name</span><span class="symbol">: </span><span
+                    class="identifier">String</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="parameters.html">parameters</a></td>
+        <td>
+            <code><span class="keyword">val </span><span class="identifier">parameters</span><span
+                    class="symbol">: </span><span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">,</span>&nbsp;<span
+                    class="identifier">Any</span><span
+                    class="symbol">?</span><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<h3>Functions</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="set-permission-context.html">setPermissionContext</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">setPermissionContext</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.response.systemintent.Place$setPermissionContext(kotlin.String)/permissionContext">permissionContext</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">)</span><span class="symbol">: </span><span
+                    class="identifier">Place</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="set-request-prompt.html">setRequestPrompt</a></td>
+        <td>
+            <code><span class="keyword">fun </span><span class="identifier">setRequestPrompt</span><span
+                    class="symbol">(</span><span class="identifier"
+                                                 id="com.google.actions.api.response.systemintent.Place$setRequestPrompt(kotlin.String)/requestPrompt">requestPrompt</span><span
+                    class="symbol">:</span>&nbsp;<span
+                    class="identifier">String</span><span
+                    class="symbol">)</span><span class="symbol">: </span><span
+                    class="identifier">Place</span></code></td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

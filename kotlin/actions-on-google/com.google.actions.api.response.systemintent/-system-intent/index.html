@@ -1,0 +1,161 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>SystemIntent - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api.response.systemintent</a>&nbsp;/&nbsp;<a
+        href=".">SystemIntent</a><br/>
+<br/>
+<h1>SystemIntent</h1>
+<code><span class="keyword">interface </span><span class="identifier">SystemIntent</span>&nbsp;<span
+        class="symbol">:</span>&nbsp;<span class="identifier">Any</span></code>
+<p>Interface for objects that represent a system generated response.</p>
+<h3>Properties</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="name.html">name</a></td>
+        <td>
+            <code><span class="keyword">abstract</span> <span class="keyword">val </span><span
+                    class="identifier">name</span><span class="symbol">: </span><span
+                    class="identifier">String</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="parameters.html">parameters</a></td>
+        <td>
+            <code><span class="keyword">abstract</span> <span class="keyword">val </span><span
+                    class="identifier">parameters</span><span
+                    class="symbol">: </span><span
+                    class="identifier">Map</span><span
+                    class="symbol">&lt;</span><span
+                    class="identifier">String</span><span
+                    class="symbol">,</span>&nbsp;<span
+                    class="identifier">Any</span><span
+                    class="symbol">?</span><span
+                    class="symbol">&gt;</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <a href="../-confirmation/index.html">Confirmation</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">Confirmation</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to ask user for confirmation.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-date-time-prompt/index.html">DateTimePrompt</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">DateTimePrompt</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to ask user for a timezone agnostic date
+                and time.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-deep-link/index.html">DeepLink</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">DeepLink</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to request to transfer to a linked out
+                Android app
+                intent. Using this feature requires verifying the linked app in
+                the
+                (Actions console)<a
+                        href="@link https//console.actions.google.com">@link
+                    https//console.actions.google.com</a>.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-new-surface/index.html">NewSurface</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">NewSurface</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to request user to transfer to another
+                surface with
+                the specified capabilities. For example, the user may need to
+                continue the
+                conversation on a device with a screen output.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-permission/index.html">Permission</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">Permission</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to request user for permissions.
+                Usage:</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-place/index.html">Place</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">Place</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to request user to provide a geo-located
+                place,
+                possibly using contextual information, like a store near the
+                user's location
+                or a contact's address.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-register-update/index.html">RegisterUpdate</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">RegisterUpdate</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent to request for updates (eg: daily update).</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-selection-carousel/index.html">SelectionCarousel</a>
+        </td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">SelectionCarousel</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to collect user's input with a
+                carousel.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-selection-list/index.html">SelectionList</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">SelectionList</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>System intent response to collect user's input with a list.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="../-sign-in/index.html">SignIn</a></td>
+        <td>
+            <code><span class="keyword">class </span><span class="identifier">SignIn</span>&nbsp;<span
+                    class="symbol">:</span>&nbsp;<span class="identifier">SystemIntent</span></code>
+            <p>Hands the user off to a web sign in flow. App sign in and OAuth
+                credentials
+                are set in the <a href="https://console.actions.google.com">Actions
+                    console</a>.</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</BODY>
+</HTML>

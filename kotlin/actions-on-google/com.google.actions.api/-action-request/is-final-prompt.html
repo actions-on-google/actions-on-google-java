@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>ActionRequest.isFinalPrompt - actions-on-google</title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api</a>&nbsp;/&nbsp;<a
+        href="index.html">ActionRequest</a>&nbsp;/&nbsp;<a href=".">isFinalPrompt</a><br/>
+<br/>
+<h1>isFinalPrompt</h1>
+<a name="com.google.actions.api.ActionRequest$isFinalPrompt()"></a>
+<code><span class="keyword">abstract</span> <span
+        class="keyword">fun </span><span class="identifier">isFinalPrompt</span><span
+        class="symbol">(</span><span class="symbol">)</span><span
+        class="symbol">: </span><span class="identifier">Boolean</span><span
+        class="symbol">?</span></code>
+<p>Returns true if it is the final reprompt related to silent input from the
+    user, false otherwise. This should be used along with the NO_INPUT intent
+    to give the final response to the user after multiple silences and should
+    be a response which ends the conversation.</p>
+<p>Returns null if no information about final reprompt is available in the
+    request.</p>
+<pre><code class="lang-Java">int repromptCount = request.getRepromptCount();
+if (reprmptCount == 0) {
+  responseBuilder.add("What was that?").build();
+} else if (repromptCount == 1) {
+  responseBuilder.add(
+    "Sorry I didn't catch that. Could you please repeat?").build();
+} else if (request.isFinalReprompt()) {
+  responseBuilder
+    .add("Okay let's try this again later.")
+    .endConversation()
+    .build();
+}</code></pre>
+</BODY>
+</HTML>

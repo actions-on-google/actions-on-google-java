@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+    <meta charset="UTF-8">
+    <title>Permission.
+        <init> - actions-on-google
+    </title>
+    <link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">actions-on-google</a>&nbsp;/&nbsp;<a
+        href="../index.html">com.google.actions.api.response.systemintent</a>&nbsp;/&nbsp;<a
+        href="index.html">Permission</a>&nbsp;/&nbsp;<a
+        href=".">&lt;init&gt;</a><br/>
+<br/>
+<h1>&lt;init&gt;</h1>
+<code><span class="identifier">Permission</span><span
+        class="symbol">(</span><span class="symbol">)</span></code>
+<p>System intent response to request user for permissions.
+    Usage:</p>
+<pre><code class="lang-Java">ResponseBuilder responseBuilder = getResponseBuilder();
+responseBuilder
+  .add("Placeholder for permissions text")
+  .add(new Permission()
+    .setPermissions(new String[]{
+      ConstantsKt.PERMISSION_NAME,
+      ConstantsKt.PERMISSION_DEVICE_PRECISE_LOCATION)
+    .setContext("To provide a better experience"));</code></pre>
+<p>To get the user's response:</p>
+<pre><code class="lang-Java">boolean permissionGranted = request.isPermissionGranted() != null &amp;&amp;
+  request.isPermissionGranted().booleanValue();</code></pre>
+</BODY>
+</HTML>
