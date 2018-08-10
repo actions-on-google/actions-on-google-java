@@ -85,6 +85,7 @@ class AogRequestTest {
     assertNull(aogRequest.isPermissionGranted())
     assertNull(aogRequest.isSignedIn())
     assertNull(aogRequest.getMediaStatus())
+    assertNull(aogRequest.isUpdateRegistered())
 
     val rawInputs = inputs[0].rawInputs
     assertEquals("yes", rawInputs[0].query)
@@ -193,6 +194,27 @@ class AogRequestTest {
     val extension = argument?.extension
     val status = extension?.get("status")
     assertEquals("FINISHED", status)
+  }
+
+  @Test
+  @Throws(Exception::class)
+  fun registerUpdateIsParsed() {
+    val aogRequest = fromFile("aog_with_register_update.json")
+    val argument = aogRequest.getArgument("REGISTER_UPDATE")
+    val extension = argument?.extension
+    val status = extension?.get("status")
+    assertEquals("OK", status)
+  }
+
+  @Test
+  @Throws(Exception::class)
+  fun updatePermissionIsParsed() {
+    val aogRequest = fromFile("aog_with_update_permission.json")
+    assertTrue(aogRequest.isPermissionGranted()!!)
+    val argument = aogRequest.getArgument("UPDATES_USER_ID")
+    assertNotNull(argument)
+    val textValue = argument?.textValue
+    assertEquals("123456", textValue)
   }
 
   @Test

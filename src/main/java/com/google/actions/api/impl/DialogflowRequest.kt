@@ -88,6 +88,10 @@ internal class DialogflowRequest private constructor(
     return aogRequest?.isSignedIn()
   }
 
+  override fun isUpdateRegistered(): Boolean? {
+    return aogRequest?.isUpdateRegistered()
+  }
+
   override fun getPlace(): Location? {
     return aogRequest?.getPlace()
   }

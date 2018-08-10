@@ -16,6 +16,8 @@
 
 package com.google.actions.api.response.systemintent
 
+import com.google.api.services.actions_fulfillment.v2.model.UpdatePermissionValueSpec
+
 /**
  * System intent response to request user for permissions.
  * Usage:
@@ -37,11 +39,12 @@ package com.google.actions.api.response.systemintent
  *   request.isPermissionGranted().booleanValue();
  * ```
  */
-class Permission : SystemIntent {
+open class Permission : SystemIntent {
   private val map = HashMap<String, Any?>()
 
   private var permissions: Array<String>? = null
   private var context: String? = null
+  private var updatePermissionValueSpec: UpdatePermissionValueSpec? = null
 
   fun setPermissions(permissions: Array<String>): Permission {
     this.permissions = permissions
@@ -53,14 +56,21 @@ class Permission : SystemIntent {
     return this
   }
 
+  protected fun setUpdatePermissionValueSpec(
+          updatePermissionValueSpec: UpdatePermissionValueSpec): Permission {
+    this.updatePermissionValueSpec = updatePermissionValueSpec
+    return this
+  }
+
   override val name: String
     get() = "actions.intent.PERMISSION"
 
-  private fun prepareMap() {
+  open fun prepareMap() {
     map.put("@type",
             "type.googleapis.com/google.actions.v2.PermissionValueSpec")
     map.put("optContext", context)
     map.put("permissions", permissions)
+    map.put("updatePermissionValueSpec", updatePermissionValueSpec)
   }
 
   override val parameters: Map<String, Any?>

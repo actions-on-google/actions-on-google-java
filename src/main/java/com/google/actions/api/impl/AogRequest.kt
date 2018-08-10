@@ -106,6 +106,16 @@ internal class AogRequest private constructor(
     return (status == "OK")
   }
 
+  override fun isUpdateRegistered(): Boolean? {
+    val arg = getArgument("REGISTER_UPDATE")
+    if (arg == null) {
+      return null
+    }
+    val map = arg.extension
+    val status = map!!["status"] as String
+    return (status == "OK")
+  }
+
   override fun getPlace(): Location? {
     val arg = getArgument("PLACE")
     if (arg == null) {

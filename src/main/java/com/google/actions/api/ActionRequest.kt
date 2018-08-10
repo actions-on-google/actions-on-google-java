@@ -186,6 +186,13 @@ interface ActionRequest {
   fun isSignedIn(): Boolean?
 
   /**
+   * Returns the status of a register updates request.
+   * @return Whether updates have been registered or null if the request has no
+   * information about update registration.
+   */
+  fun isUpdateRegistered(): Boolean?
+
+  /**
    * @return User provided location or null if request has no information
    * about Place.
    */

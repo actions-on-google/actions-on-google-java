@@ -1,0 +1,65 @@
+{
+  "user": {
+    "userId": "abcde",
+    "locale": "en-US",
+    "userStorage": "{\"data\":{}}"
+  },
+  "conversation": {
+    "conversationId": "1234",
+    "type": "ACTIVE",
+    "conversationToken": "[]"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.REGISTER_UPDATE",
+      "rawInputs": [
+        {
+          "inputType": "TOUCH",
+          "query": "1pm"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "REGISTER_UPDATE",
+          "extension": {
+            "@type": "type.googleapis.com/google.actions.v2.RegisterUpdateValue",
+            "status": "OK"
+          }
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      },
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        },
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        },
+        {
+          "name": "actions.capability.WEB_BROWSER"
+        }
+      ]
+    }
+  ],
+  "requestType": "SIMULATOR"
+}

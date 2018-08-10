@@ -1,0 +1,69 @@
+{
+  "user": {
+    "userId": "123456",
+    "permissions": [
+      "UPDATE"
+    ],
+    "locale": "en-US"
+  },
+  "conversation": {
+    "conversationId": "1234",
+    "type": "ACTIVE",
+    "conversationToken": "[]"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.PERMISSION",
+      "rawInputs": [
+        {
+          "inputType": "KEYBOARD",
+          "query": "yes"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "PERMISSION",
+          "boolValue": true,
+          "textValue": "true"
+        },
+        {
+          "name": "UPDATES_USER_ID",
+          "textValue": "123456"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      },
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        },
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        },
+        {
+          "name": "actions.capability.WEB_BROWSER"
+        }
+      ]
+    }
+  ],
+  "requestType": "SIMULATOR"
+}
