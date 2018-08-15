@@ -187,6 +187,19 @@ internal class AogRequest private constructor(
       return appRequest.conversation.conversationId
     }
 
+  override fun getLocale(): Locale? {
+    val localeString = user?.locale
+    val parts = localeString?.split("-")
+
+    if (parts != null) {
+      when (parts.size) {
+        1 -> return Locale(parts[0])
+        2 -> return Locale(parts[0], parts[1])
+      }
+    }
+    return null
+  }
+
   companion object {
 
     fun create(appRequest: AppRequest): AogRequest {

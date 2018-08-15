@@ -90,7 +90,7 @@ class DialogflowRequestTest {
     val dialogflowRequest = fromFile(
             "dialogflow_complete.json")
     val conversationData = dialogflowRequest.conversationData
-    assertEquals("first last", conversationData!!["userName"])
+    assertEquals("first last", conversationData["userName"])
   }
 
 

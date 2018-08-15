@@ -24,6 +24,7 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.*
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.util.*
 
 internal class DialogflowRequest private constructor(
         override val webhookRequest: WebhookRequest,
@@ -144,6 +145,10 @@ internal class DialogflowRequest private constructor(
       return webhookRequest.session
     }
 
+  override fun getLocale(): Locale? {
+    return aogRequest?.getLocale()
+  }
+
   private fun getAsNamespaced(name: String): String {
     val namespace = webhookRequest.session + "/contexts/"
     if (name.startsWith(namespace)) {
@@ -174,7 +179,7 @@ internal class DialogflowRequest private constructor(
       val gson = gsonBuilder.create()
       val webhookRequest = gson.fromJson<WebhookRequest>(json,
               WebhookRequest::class.java)
-      var aogRequest: AogRequest
+      val aogRequest: AogRequest
 
       val originalDetectIntentRequest =
               webhookRequest.originalDetectIntentRequest

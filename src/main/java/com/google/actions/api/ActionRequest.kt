@@ -18,6 +18,7 @@ package com.google.actions.api
 
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookRequest
+import java.util.*
 
 /**
  * Defines requirements of an object that represents a request to the Actions
@@ -221,4 +222,9 @@ interface ActionRequest {
    * about media status.
    */
   fun getMediaStatus(): String?
+
+  /**
+   * Returns the Locale of the user.
+   */
+  fun getLocale(): Locale?
 }

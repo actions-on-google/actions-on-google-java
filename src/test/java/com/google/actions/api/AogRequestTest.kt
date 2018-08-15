@@ -28,6 +28,7 @@ import org.testng.annotations.Test
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 
 class AogRequestTest {
 
@@ -53,6 +54,7 @@ class AogRequestTest {
             .inputs[0].rawInputs[0].query)
     assertEquals("First", request.appRequest.user
             .profile.givenName)
+    assertEquals(Locale.US, request.getLocale())
   }
 
   @Test
@@ -60,8 +62,9 @@ class AogRequestTest {
   fun userObjectIsParsed() {
     val aogRequest = fromFile("aog_with_arguments.json")
     val user = aogRequest.appRequest.user
-    assertEquals("en-US", user.locale)
+    assertEquals("fr-FR", user.locale)
     assertEquals("2018-05-24T19:03:47Z", user.lastSeen)
+    assertEquals(Locale.FRANCE, aogRequest.getLocale())
   }
 
   @Test
@@ -183,7 +186,7 @@ class AogRequestTest {
   fun conversationTokenIsParsed() {
     val aogRequest = fromFile("aog_user_conversation_data.json")
     assertEquals("1", aogRequest
-            .conversationData!!["count"])
+            .conversationData["count"])
   }
 
   @Test
