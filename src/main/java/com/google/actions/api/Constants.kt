@@ -34,6 +34,8 @@ const val PERMISSION_DEVICE_PRECISE_LOCATION = "DEVICE_PRECISE_LOCATION"
 const val PERMISSION_DEVICE_COARSE_LOCATION = "DEVICE_COARSE_LOCATION"
 /** Permission to send updates to the user */
 const val PERMISSION_UPDATE = "UPDATE"
+/** Argument key for the ID of the user granting permission for updates */
+const val UPDATES_USER_ID = "UPDATES_USER_ID"
 
 enum class Capability(val value: String) {
   SCREEN_OUTPUT("actions.capability.SCREEN_OUTPUT"),
