@@ -121,6 +121,10 @@ internal class DialogflowRequest private constructor(
     return aogRequest?.isFinalPrompt()
   }
 
+  override fun getSelectedOption(): String? {
+    return aogRequest?.getSelectedOption()
+  }
+
   override fun getContexts(): List<ActionContext> {
     val result: List<ActionContext>
     val dfContexts = webhookRequest.queryResult?.outputContexts

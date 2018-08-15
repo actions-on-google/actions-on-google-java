@@ -224,6 +224,11 @@ interface ActionRequest {
   fun getMediaStatus(): String?
 
   /**
+   * @return Text value of the option selected by the user in a List/Carousel.
+   */
+  fun getSelectedOption(): String?
+
+  /**
    * Returns the Locale of the user.
    */
   fun getLocale(): Locale?

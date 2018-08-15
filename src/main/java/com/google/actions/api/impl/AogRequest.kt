@@ -16,8 +16,7 @@
 
 package com.google.actions.api.impl
 
-import com.google.actions.api.ActionContext
-import com.google.actions.api.ActionRequest
+import com.google.actions.api.*
 import com.google.actions.api.impl.io.*
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookRequest
@@ -97,7 +96,7 @@ internal class AogRequest private constructor(
   }
 
   override fun isSignedIn(): Boolean? {
-    val arg = getArgument("SIGN_IN")
+    val arg = getArgument(ARG_SIGN_IN)
     if (arg == null) {
       return null
     }
@@ -107,7 +106,7 @@ internal class AogRequest private constructor(
   }
 
   override fun isUpdateRegistered(): Boolean? {
-    val arg = getArgument("REGISTER_UPDATE")
+    val arg = getArgument(ARG_REGISTER_UPDATE)
     if (arg == null) {
       return null
     }
@@ -117,7 +116,7 @@ internal class AogRequest private constructor(
   }
 
   override fun getPlace(): Location? {
-    val arg = getArgument("PLACE")
+    val arg = getArgument(ARG_PLACE)
     if (arg == null) {
       return null
     }
@@ -125,7 +124,7 @@ internal class AogRequest private constructor(
   }
 
   override fun isPermissionGranted(): Boolean? {
-    val arg = getArgument("PERMISSION")
+    val arg = getArgument(ARG_PERMISSION)
     if (arg == null) {
       return null
     }
@@ -133,7 +132,7 @@ internal class AogRequest private constructor(
   }
 
   override fun getUserConfirmation(): Boolean? {
-    val arg = getArgument("CONFIRMATION")
+    val arg = getArgument(ARG_CONFIRMATION)
     if (arg == null) {
       return null
     }
@@ -141,7 +140,7 @@ internal class AogRequest private constructor(
   }
 
   override fun getDateTime(): DateTime? {
-    val arg = getArgument("DATETIME")
+    val arg = getArgument(ARG_DATETIME)
     if (arg == null) {
       return null
     }
@@ -149,15 +148,16 @@ internal class AogRequest private constructor(
   }
 
   override fun getMediaStatus(): String? {
-    val arg = getArgument("MEDIA_STATUS")
+    val arg = getArgument(ARG_MEDIA_STATUS)
     if (arg == null) {
+
       return null
     }
     return arg.extension?.get("status") as String
   }
 
   override fun getRepromptCount(): Int? {
-    val arg = getArgument("REPROMPT_COUNT")
+    val arg = getArgument(ARG_REPROMPT_COUNT)
     if (arg == null) {
       return null
     }
@@ -165,11 +165,19 @@ internal class AogRequest private constructor(
   }
 
   override fun isFinalPrompt(): Boolean? {
-    val arg = getArgument("IS_FINAL_REPROMPT")
+    val arg = getArgument(ARG_IS_FINAL_REPROMPT)
     if (arg == null) {
       return null
     }
     return arg.boolValue
+  }
+
+  override fun getSelectedOption(): String? {
+    val arg = getArgument(ARG_OPTION)
+    if (arg == null) {
+      return null
+    }
+    return arg.textValue
   }
 
   override fun getContext(name: String): ActionContext? {

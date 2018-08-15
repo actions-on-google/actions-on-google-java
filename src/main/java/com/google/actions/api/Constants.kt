@@ -35,7 +35,27 @@ const val PERMISSION_DEVICE_COARSE_LOCATION = "DEVICE_COARSE_LOCATION"
 /** Permission to send updates to the user */
 const val PERMISSION_UPDATE = "UPDATE"
 /** Argument key for the ID of the user granting permission for updates */
-const val UPDATES_USER_ID = "UPDATES_USER_ID"
+const val ARG_UPDATES_USER_ID = "UPDATES_USER_ID"
+/** Name of argument to get the user selected option (eg: from a List). */
+const val ARG_OPTION = "OPTION"
+/** Name of argument to get whether it is the final reprompt */
+const val ARG_IS_FINAL_REPROMPT = "IS_FINAL_REPROMPT"
+/** Name of argument to get the reprompt count */
+const val ARG_REPROMPT_COUNT = "REPROMPT_COUNT"
+/** Name of argument to get media status */
+const val ARG_MEDIA_STATUS = "MEDIA_STATUS"
+/** Name of argument to get the datetime value selected by the user. */
+const val ARG_DATETIME = "DATETIME"
+/** Name of the argument to get the confirmation response from user. */
+const val ARG_CONFIRMATION = "CONFIRMATION"
+/** Name of the argument to get the permission response from the user. */
+const val ARG_PERMISSION = "PERMISSION"
+/** Name of the argument to get the place / location response from the user. */
+const val ARG_PLACE = "PLACE"
+/** Name of the argument to get register for update status. */
+const val ARG_REGISTER_UPDATE = "REGISTER_UPDATE"
+/** Name of the argument to get the sign in status */
+const val ARG_SIGN_IN = "SIGN_IN"
 
 enum class Capability(val value: String) {
   SCREEN_OUTPUT("actions.capability.SCREEN_OUTPUT"),

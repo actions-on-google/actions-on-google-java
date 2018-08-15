@@ -237,4 +237,12 @@ class AogRequestTest {
     assertEquals(2, repromptCount)
     assertTrue(aogRequest.isFinalPrompt()!!)
   }
+
+  @Test
+  @Throws(Exception::class)
+  fun selectedOptionIsParsed() {
+    val aogRequest = fromFile("aog_with_option.json")
+    val selected = aogRequest.getSelectedOption()
+    assertEquals("2", selected)
+  }
 }
