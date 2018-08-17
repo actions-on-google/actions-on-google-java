@@ -30,6 +30,7 @@ internal class AogResponse internal constructor(
   internal var appResponse: AppResponse?
   internal var conversationData: Map<String, Any>? = null
   internal var userStorage: Map<String, Any>? = null
+  internal var textIntent: ExpectedIntent? = null
 
   init {
     this.appResponse = responseBuilder.appResponse
@@ -53,6 +54,10 @@ internal class AogResponse internal constructor(
     }
     this.systemIntents = responseBuilder.systemIntents
     this.userStorage = responseBuilder.userStorage
+    this.textIntent = ExpectedIntent()
+    this.textIntent
+            ?.setIntent("actions.intent.TEXT")
+            ?.setInputValueData(emptyMap())
   }
 
   override fun addContext(context: ActionContext) {
@@ -102,6 +107,8 @@ internal class AogResponse internal constructor(
 
     if (systemIntents.isNotEmpty()) {
       expectedInput.possibleIntents = systemIntents
+    } else {
+      expectedInput.possibleIntents = listOf(textIntent)
     }
 
     val expectedInputs = ArrayList<ExpectedInput>()

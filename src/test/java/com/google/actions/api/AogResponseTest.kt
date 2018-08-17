@@ -38,10 +38,26 @@ class AogResponseTest {
   }
 
   @Test
+  fun testBasicResponse() {
+    val responseBuilder = ResponseBuilder()
+    responseBuilder.usesDialogflow = false
+
+    responseBuilder.add("this is a test");
+    val response = responseBuilder.buildAogResponse()
+    assertNotNull(response)
+    val asJson = toJson(response)
+    assertNotNull(Gson().fromJson(asJson, JsonObject::class.java))
+
+    assertEquals("actions.intent.TEXT", response.appResponse
+            ?.expectedInputs?.get(0)
+            ?.possibleIntents?.get(0)
+            ?.intent)
+  }
+
+  @Test
   fun testAskConfirmation() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
     val confirmation = Confirmation().setConfirmationText("Are you sure?")
     val jsonOutput = toJson(responseBuilder
             .add(confirmation)
@@ -63,7 +79,6 @@ class AogResponseTest {
   fun testAskDateTime() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     val dateTimePrompt = DateTimePrompt()
             .setDatePrompt("What date?")
@@ -94,7 +109,6 @@ class AogResponseTest {
   fun testAskPermission() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     responseBuilder.add(Permission()
             .setPermissions(arrayOf(PERMISSION_NAME,
@@ -122,7 +136,6 @@ class AogResponseTest {
   fun testAskPlace() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     val requestPrompt = "Where do you want to have lunch?"
     val permissionPrompt = "To find lunch locations"
@@ -154,7 +167,6 @@ class AogResponseTest {
   fun testAskSignIn() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     responseBuilder.add(SignIn())
     val response = responseBuilder.build()
@@ -173,7 +185,6 @@ class AogResponseTest {
   fun testListSelect() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     val items = ArrayList<ListSelectListItem>()
     items.add(ListSelectListItem().setTitle("Android"))
@@ -281,7 +292,6 @@ class AogResponseTest {
 
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     val deepLink = DeepLink().setUrl(link).setPackageName(packageName)
     responseBuilder.add(deepLink)
@@ -303,7 +313,6 @@ class AogResponseTest {
 
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     responseBuilder.add(NewSurface()
             .setCapability(capability)
@@ -325,7 +334,6 @@ class AogResponseTest {
 
     val responseBuilder = ResponseBuilder()
     responseBuilder.usesDialogflow = false
-    responseBuilder.expectUserResponse = true
 
     responseBuilder.add(RegisterUpdate().setIntent(updateIntent))
     val response = responseBuilder.buildAogResponse()
@@ -340,6 +348,8 @@ class AogResponseTest {
   @Test
   fun testAddSuggestions() {
     val responseBuilder = ResponseBuilder()
+    responseBuilder.usesDialogflow = false
+
     responseBuilder
             .add("this is a test")
             .addSuggestions(arrayOf("one", "two", "three"))
@@ -350,5 +360,9 @@ class AogResponseTest {
             ?.richInitialPrompt
             ?.suggestions?.get(0)
             ?.title)
+    assertEquals("actions.intent.TEXT", response.appResponse
+            ?.expectedInputs?.get(0)
+            ?.possibleIntents?.get(0)
+            ?.intent)
   }
 }
