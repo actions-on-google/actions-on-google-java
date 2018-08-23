@@ -20,17 +20,21 @@ import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
 import com.google.actions.api.response.ResponseBuilder
 import com.google.api.services.actions_fulfillment.v2.model.*
+import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import java.util.*
 
 internal class AogResponse internal constructor(
         responseBuilder: ResponseBuilder) : ActionResponse {
-  internal var richResponse: RichResponse? = null
-  internal var expectUserResponse: Boolean = true
-  internal var systemIntents: List<ExpectedIntent>
-  internal var appResponse: AppResponse?
+  override var appResponse: AppResponse? = null
+  override val webhookResponse: WebhookResponse? = null
+  override var richResponse: RichResponse? = null
+  override val expectUserResponse: Boolean
+
+  internal var systemIntents: List<ExpectedIntent>?
   internal var conversationData: Map<String, Any>? = null
   internal var userStorage: Map<String, Any>? = null
-  internal var textIntent: ExpectedIntent? = null
+
+  private var textIntent: ExpectedIntent? = null
 
   init {
     this.appResponse = responseBuilder.appResponse
@@ -60,7 +64,14 @@ internal class AogResponse internal constructor(
             ?.setInputValueData(emptyMap())
   }
 
+  override val systemIntent: ExpectedIntent?
+    get() = systemIntents?.get(0)
+
   override fun addContext(context: ActionContext) {
+    // no op as ActionsSDK does not support concept of Context.
+  }
+
+  override fun removeContext(name: String) {
     // no op as ActionsSDK does not support concept of Context.
   }
 
@@ -105,7 +116,7 @@ internal class AogResponse internal constructor(
       expectedInput.inputPrompt = inputPrompt
     }
 
-    if (systemIntents.isNotEmpty()) {
+    if (systemIntents != null) {
       expectedInput.possibleIntents = systemIntents
     } else {
       expectedInput.possibleIntents = listOf(textIntent)

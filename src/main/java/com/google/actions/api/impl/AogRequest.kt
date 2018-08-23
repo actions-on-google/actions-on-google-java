@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.util.*
 
-internal class AogRequest private constructor(
+internal class AogRequest internal constructor(
         override val appRequest: AppRequest) : ActionRequest {
   override val webhookRequest: WebhookRequest? get() = null
 
@@ -52,6 +52,58 @@ internal class AogRequest private constructor(
       appRequest.availableSurfaces
   override val isInSandbox: Boolean get() = appRequest.isInSandbox
 
+  override val rawText: String?
+    get() = rawInput?.query
+
+  override val rawInput: RawInput?
+    get() {
+      val inputs = appRequest.inputs
+      if (inputs != null && inputs.size > 0) {
+        val rawInputs = inputs[0].rawInputs
+        if (rawInputs != null && rawInputs.size > 0) {
+          return rawInputs[0]
+        }
+      }
+      return null
+    }
+
+  override val locale: Locale?
+    get() {
+      val localeString = user?.locale
+      val parts = localeString?.split("-")
+
+      if (parts != null) {
+        when (parts.size) {
+          1 -> return Locale(parts[0])
+          2 -> return Locale(parts[0], parts[1])
+        }
+      }
+      return null
+    }
+
+  override val repromptCount: Int?
+    get() {
+      val arg = getArgument(ARG_REPROMPT_COUNT)
+      if (arg == null) {
+        return null
+      }
+      return arg.intValue?.toInt()
+    }
+
+  override val isFinalPrompt: Boolean?
+    get() {
+      val arg = getArgument(ARG_IS_FINAL_REPROMPT)
+      if (arg == null) {
+        return null
+      }
+      return arg.boolValue
+    }
+
+  override val sessionId: String
+    get() {
+      return appRequest.conversation.conversationId
+    }
+
   override fun getArgument(name: String): Argument? {
     val inputs = appRequest.inputs
     if (inputs == null || inputs.size == 0) {
@@ -69,17 +121,6 @@ internal class AogRequest private constructor(
 
   override fun getParameter(name: String): Any? {
     // Only valid for Dialogflow requests.
-    return null
-  }
-
-  override fun getRawInput(): RawInput? {
-    val inputs = appRequest.inputs
-    if (inputs != null && inputs.size > 0) {
-      val rawInputs = inputs[0].rawInputs
-      if (rawInputs != null && rawInputs.size > 0) {
-        return rawInputs[0]
-      }
-    }
     return null
   }
 
@@ -156,22 +197,6 @@ internal class AogRequest private constructor(
     return arg.extension?.get("status") as String
   }
 
-  override fun getRepromptCount(): Int? {
-    val arg = getArgument(ARG_REPROMPT_COUNT)
-    if (arg == null) {
-      return null
-    }
-    return arg.intValue?.toInt()
-  }
-
-  override fun isFinalPrompt(): Boolean? {
-    val arg = getArgument(ARG_IS_FINAL_REPROMPT)
-    if (arg == null) {
-      return null
-    }
-    return arg.boolValue
-  }
-
   override fun getSelectedOption(): String? {
     val arg = getArgument(ARG_OPTION)
     if (arg == null) {
@@ -188,24 +213,6 @@ internal class AogRequest private constructor(
   override fun getContexts(): List<ActionContext> {
     // Actions SDK does not support concept of Context.
     return ArrayList()
-  }
-
-  override val sessionId: String
-    get() {
-      return appRequest.conversation.conversationId
-    }
-
-  override fun getLocale(): Locale? {
-    val localeString = user?.locale
-    val parts = localeString?.split("-")
-
-    if (parts != null) {
-      when (parts.size) {
-        1 -> return Locale(parts[0])
-        2 -> return Locale(parts[0], parts[1])
-      }
-    }
-    return null
   }
 
   companion object {

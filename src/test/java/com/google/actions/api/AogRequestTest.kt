@@ -54,7 +54,7 @@ class AogRequestTest {
             .inputs[0].rawInputs[0].query)
     assertEquals("First", request.appRequest.user
             .profile.givenName)
-    assertEquals(Locale.US, request.getLocale())
+    assertEquals(Locale.US, request.locale)
   }
 
   @Test
@@ -64,7 +64,7 @@ class AogRequestTest {
     val user = aogRequest.appRequest.user
     assertEquals("fr-FR", user.locale)
     assertEquals("2018-05-24T19:03:47Z", user.lastSeen)
-    assertEquals(Locale.FRANCE, aogRequest.getLocale())
+    assertEquals(Locale.FRANCE, aogRequest.locale)
   }
 
   @Test
@@ -140,7 +140,7 @@ class AogRequestTest {
     assertEquals(2018, dateTime!!.date.year!!.toLong())
     assertEquals(17, dateTime.time.hours!!.toLong())
     assertNull(dateTime.time.minutes)
-    assertEquals("5pm", aogRequest.getRawInput()!!.query)
+    assertEquals("5pm", aogRequest.rawInput!!.query)
     assertNull(aogRequest.getUserConfirmation())
   }
 
@@ -224,18 +224,18 @@ class AogRequestTest {
   @Throws(Exception::class)
   fun repromptCountIsParsed() {
     val aogRequest = fromFile("aog_with_reprompt.json")
-    val repromptCount = aogRequest.getRepromptCount()
+    val repromptCount = aogRequest.repromptCount
     assertEquals(1, repromptCount)
-    assertFalse(aogRequest.isFinalPrompt()!!)
+    assertFalse(aogRequest.isFinalPrompt!!)
   }
 
   @Test
   @Throws(Exception::class)
   fun finalRepromptIsParsed() {
     val aogRequest = fromFile("aog_with_final_reprompt.json")
-    val repromptCount = aogRequest.getRepromptCount()
+    val repromptCount = aogRequest.repromptCount
     assertEquals(2, repromptCount)
-    assertTrue(aogRequest.isFinalPrompt()!!)
+    assertTrue(aogRequest.isFinalPrompt!!)
   }
 
   @Test

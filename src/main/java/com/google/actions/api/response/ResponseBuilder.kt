@@ -22,7 +22,6 @@ import com.google.actions.api.impl.DialogflowResponse
 import com.google.actions.api.response.systemintent.SystemIntent
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
-import java.util.*
 
 /**
  * Builder to assemble the response from the Actions webhook. Recommended way is
@@ -71,7 +70,7 @@ class ResponseBuilder internal constructor() {
 
   internal var linkOutSuggestion: LinkOutSuggestion? = null
 
-  internal var systemIntents: MutableList<ExpectedIntent> = ArrayList()
+  internal var systemIntents: MutableList<ExpectedIntent>? = null
 
   internal var userStorage: Map<String, Any>? = null
 
@@ -327,6 +326,9 @@ class ResponseBuilder internal constructor() {
     val expectedIntent = ExpectedIntent()
     expectedIntent.intent = systemIntent.name
     expectedIntent.inputValueData = systemIntent.parameters
-    systemIntents.add(expectedIntent)
+    if (systemIntents == null) {
+      systemIntents = ArrayList()
+    }
+    systemIntents?.add(expectedIntent)
   }
 }

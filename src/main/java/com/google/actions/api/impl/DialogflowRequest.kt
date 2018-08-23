@@ -26,10 +26,9 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import java.util.*
 
-internal class DialogflowRequest private constructor(
+internal class DialogflowRequest internal constructor(
         override val webhookRequest: WebhookRequest,
-        val aogRequest: AogRequest?)
-  : ActionRequest {
+        val aogRequest: AogRequest?) : ActionRequest {
 
   override val appRequest: AppRequest? get() = aogRequest?.appRequest
 
@@ -68,9 +67,13 @@ internal class DialogflowRequest private constructor(
     }
   }
 
-  override fun getRawInput(): RawInput? {
-    return aogRequest?.getRawInput()
-  }
+  override val rawInput: RawInput?
+    get() {
+      return aogRequest?.rawInput
+    }
+
+  override val rawText: String?
+    get() = aogRequest?.rawText
 
   override fun getArgument(name: String): Argument? {
     return aogRequest?.getArgument(name)
@@ -113,12 +116,14 @@ internal class DialogflowRequest private constructor(
     return aogRequest?.getMediaStatus()
   }
 
-  override fun getRepromptCount(): Int? {
-    return aogRequest?.getRepromptCount()
+  override val repromptCount: Int?
+    get() {
+      return aogRequest?.repromptCount
   }
 
-  override fun isFinalPrompt(): Boolean? {
-    return aogRequest?.isFinalPrompt()
+  override val isFinalPrompt: Boolean?
+    get() {
+      return aogRequest?.isFinalPrompt
   }
 
   override fun getSelectedOption(): String? {
@@ -149,8 +154,9 @@ internal class DialogflowRequest private constructor(
       return webhookRequest.session
     }
 
-  override fun getLocale(): Locale? {
-    return aogRequest?.getLocale()
+  override val locale: Locale?
+    get() {
+      return aogRequest?.locale
   }
 
   private fun getAsNamespaced(name: String): String {

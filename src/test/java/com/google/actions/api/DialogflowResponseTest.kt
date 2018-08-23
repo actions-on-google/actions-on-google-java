@@ -161,7 +161,7 @@ class DialogflowResponseTest {
 
     val dialogflowResponse = responseBuilder.buildDialogflowResponse()
     val googlePayload = dialogflowResponse.googlePayload
-    val systemIntent = googlePayload!!.systemIntents[0]
+    val systemIntent = googlePayload!!.systemIntents!![0]
     TestCase.assertEquals("actions.intent.OPTION", systemIntent.intent)
 
     val inputValueData = systemIntent
@@ -185,7 +185,7 @@ class DialogflowResponseTest {
     val response = responseBuilder.buildDialogflowResponse()
     val googlePayload = response.googlePayload!!
 
-    val intent = googlePayload.systemIntents.get(0)
+    val intent = googlePayload.systemIntents!![0]
     val openUrlAction = intent.inputValueData
             ?.get("openUrlAction") as OpenUrlAction
 
@@ -206,7 +206,7 @@ class DialogflowResponseTest {
             .setNotificationTitle("notification title"))
     val response = responseBuilder.buildDialogflowResponse()
     val googlePayload = response.googlePayload!!
-    val intent = googlePayload.systemIntents[0]
+    val intent = googlePayload.systemIntents!![0]
 
     assertEquals("actions.intent.NEW_SURFACE", intent.intent)
     val capabilitiesArray =

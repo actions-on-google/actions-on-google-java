@@ -57,6 +57,19 @@ interface ActionRequest {
   val user: User?
 
   /**
+   * Returns the Locale of the user.
+   */
+  val locale: Locale?
+
+  /**
+   * @return Information about the raw input provided by the user.
+   */
+  val rawInput: RawInput?
+
+  /** @return Raw text of the user utterance. */
+  val rawText: String?
+
+  /**
    * @return The Google Assistant client surface. This is different from Device
    * by the fact that multiple Assistant surfaces may live on the same device.
    */
@@ -97,40 +110,6 @@ interface ActionRequest {
   val sessionId: String
 
   /**
-   * @param name Name of the argument.
-   * @return The Argument specified by the name or null if not found.
-   */
-  fun getArgument(name: String): Argument?
-
-  /**
-   * @param name Name of the parameter.
-   * @return Value of the parameter or null if parameter not found.
-   */
-  fun getParameter(name: String): Any?
-
-  /**
-   * @return The ActionContext for the specified name or null if no context
-   * found for the name.
-   */
-  fun getContext(name: String): ActionContext?
-
-  /**
-   * @return Collection of all [contexts](https://dialogflow.com/docs/contexts).
-   */
-  fun getContexts(): List<ActionContext>
-
-  /**
-   * @return Information about the raw input provided by the user.
-   */
-  fun getRawInput(): RawInput?
-
-  /**
-   * @param capability
-   * @return True if the device has the specified capability.
-   */
-  fun hasCapability(capability: String): Boolean
-
-  /**
    * Returns the number of subsequent reprompts related to silent input from the
    * user. This should be used along with the NO_INPUT intent to reprompt the
    * user for input in cases where the Google Assistant could not pick up any
@@ -151,7 +130,7 @@ interface ActionRequest {
    * }
    * ```
    */
-  fun getRepromptCount(): Int?
+  val repromptCount: Int?
 
   /**
    * Returns true if it is the final reprompt related to silent input from the
@@ -177,7 +156,39 @@ interface ActionRequest {
    * }
    * ```
    */
-  fun isFinalPrompt(): Boolean?
+  val isFinalPrompt: Boolean?
+
+  /**
+   * @param name Name of the argument.
+   * @return The Argument specified by the name or null if not found.
+   */
+  fun getArgument(name: String): Argument?
+
+  /**
+   * See: [Dialogflow Parameters](https://dialogflow.com/docs/actions-and-parameters)
+   * @param name Name of the parameter.
+   * @return Value of the parameter or null if parameter not found.
+   */
+  fun getParameter(name: String): Any?
+
+  /**
+   * See [Dialogflow Context](https://dialogflow.com/docs/contexts)
+   * @return The ActionContext for the specified name or null if no context
+   * found for the name.
+   */
+  fun getContext(name: String): ActionContext?
+
+  /**
+   * @return Collection of all [contexts](https://dialogflow.com/docs/contexts).
+   */
+  fun getContexts(): List<ActionContext>
+
+  /**
+   * @param capability
+   * @return True if the device has the specified capability.
+   */
+  fun hasCapability(capability: String): Boolean
+
 
   /**
    * Returns the status of a sign in request.
@@ -227,9 +238,4 @@ interface ActionRequest {
    * @return Text value of the option selected by the user in a List/Carousel.
    */
   fun getSelectedOption(): String?
-
-  /**
-   * Returns the Locale of the user.
-   */
-  fun getLocale(): Locale?
 }

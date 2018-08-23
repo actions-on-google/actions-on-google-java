@@ -131,13 +131,13 @@ internal class ResponseSerializer(
         }
       } else {
         richResponse = aogResponse.richResponse
-        if (aogResponse.systemIntents.size > 0) {
-          val expectedIntent = aogResponse
-                  .systemIntents.get(0)
+        val systemIntents = aogResponse.systemIntents
+        if (systemIntents != null && systemIntents.isNotEmpty()) {
+          val aogSystemIntent = systemIntents.get(0)
 
           systemIntent = DFSystemIntent()
-                  .setIntent(expectedIntent.intent)
-                  .setData(expectedIntent.inputValueData)
+                  .setIntent(aogSystemIntent.intent)
+                  .setData(aogSystemIntent.inputValueData)
         }
       }
       this.isSsml = false

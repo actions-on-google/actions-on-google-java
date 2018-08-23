@@ -16,12 +16,57 @@
 
 package com.google.actions.api
 
+import com.google.api.services.actions_fulfillment.v2.model.AppResponse
+import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
+import com.google.api.services.actions_fulfillment.v2.model.RichResponse
+import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
+
 /**
  * Defines requirements of an object that represents a response from the Actions
  * webhook.
  */
 interface ActionResponse {
 
+  /**
+   * Whether a user response is expected.
+   */
+  val expectUserResponse: Boolean?
+
+  /**
+   * Binding class (POJO) that represents a Dialogflow response. This is set
+   * only if the request is routed through Dialogflow.
+   */
+  val webhookResponse: WebhookResponse?
+
+  /**
+   * The binding class (POJO) that represents an Actions on Google response.
+   */
+  val appResponse: AppResponse?
+
+  /**
+   * A rich response that can include audio, text, cards, suggestions and
+   * structured data.
+   */
+  val richResponse: RichResponse?
+
+  /**
+   * System intents tell the Assistant to momentarily take over the conversation
+   * to obtain common data such as a user's full name, a date and time, or a
+   * delivery address. When you request a helper, the Assistant presents a
+   * standard, consistent UI to users to obtain this information, so you don't
+   * have to design your own.
+   */
+  val systemIntent: ExpectedIntent?
+
+  /**
+   * Adds a Context to the response. Only available for Dialogflow.
+   * See [Dialogflow Contexts](https://dialogflow.com/docs/contexts)
+   */
   fun addContext(context: ActionContext)
 
+  /**
+   * Removes the Context with the specified name. Only available for Dialogflow.
+   * See [Dialogflow Contexts](https://dialogflow.com/docs/contexts)
+   */
+  fun removeContext(name: String)
 }

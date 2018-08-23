@@ -19,12 +19,19 @@ package com.google.actions.api.impl
 import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
 import com.google.actions.api.response.ResponseBuilder
+import com.google.api.services.actions_fulfillment.v2.model.AppResponse
+import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
+import com.google.api.services.actions_fulfillment.v2.model.RichResponse
 import com.google.api.services.dialogflow_fulfillment.v2.model.Context
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 
 internal class DialogflowResponse internal constructor(
         responseBuilder: ResponseBuilder) : ActionResponse {
-  internal var webhookResponse: WebhookResponse
+  override val webhookResponse: WebhookResponse
+  override val appResponse: AppResponse? = null
+  override val expectUserResponse: Boolean?
+    get() = googlePayload?.expectUserResponse
+
   internal var conversationData: Map<String, Any>? = null
   internal var googlePayload: AogResponse? = null
   internal var contexts: List<ActionContext>? = null
@@ -37,6 +44,12 @@ internal class DialogflowResponse internal constructor(
     }
     googlePayload = responseBuilder.buildAogResponse()
   }
+
+  override val richResponse: RichResponse?
+    get() = googlePayload?.richResponse
+
+  override val systemIntent: ExpectedIntent?
+    get() = googlePayload?.systemIntent
 
   override fun addContext(context: ActionContext) {
     val ctx = webhookResponse.outputContexts?.find { it.name == context.name }
@@ -52,6 +65,13 @@ internal class DialogflowResponse internal constructor(
       dfContext.lifespanCount = context.lifespan
       dfContext.parameters = context.parameters
       webhookResponse.outputContexts?.add(dfContext)
+    }
+  }
+
+  override fun removeContext(name: String) {
+    val ctx = webhookResponse.outputContexts?.find { it.name == name }
+    if (ctx != null) {
+      ctx.lifespanCount = 0
     }
   }
 }
