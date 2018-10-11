@@ -13,6 +13,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.2"
     }
 }
 
@@ -105,3 +106,5 @@ compileTestKotlin {
         jvmTarget = "1.8"
     }
 }
+
+apply from: 'build-smarthome.gradle'
