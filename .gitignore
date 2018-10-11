@@ -6,4 +6,4 @@ gradlew
 gradlew.bat
 out/
 .DS_Store
->>>>>>> Adds auto-generated Java classes for HomeGraph
+src/generated # Generated source files
