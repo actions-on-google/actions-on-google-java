@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 /**
- * Interface for objects that represent a system generated response.
+ * Hands the user off to a web sign in flow. App sign in and OAuth credentials
+ * are set in the [Actions console](https://console.actions.google.com).
+ *
+ * ``` Java
+ * ResponseBuilder responseBuilder = getResponseBuilder();
+ * responseBuilder.add(new SignIn());
+ * ```
  */
-interface SystemIntent {
-  val name: String
-  val parameters: Map<String, Any?>
+class SignIn : HelperIntent {
+  private val map = HashMap<String, Any>()
+
+  override val name: String
+    get() = "actions.intent.SIGN_IN"
+
+  override val parameters: Map<String, Any>
+    get() = map
 }

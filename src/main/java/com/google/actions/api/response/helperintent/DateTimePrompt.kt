@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 import com.google.api.services.actions_fulfillment.v2.model.DateTimeValueSpecDateTimeDialogSpec
 
 /**
- * System intent response to ask user for a timezone agnostic date and time.
+ * Helper intent response to ask user for a timezone agnostic date and time.
  *
  * ``` Java
  * @ForIntent("askForDateTime")
@@ -52,7 +52,7 @@ import com.google.api.services.actions_fulfillment.v2.model.DateTimeValueSpecDat
  *   return CompletableFuture.completedFuture(responseBuilder.build());
  * }
  */
-class DateTimePrompt : SystemIntent {
+class DateTimePrompt : HelperIntent {
 
   private var dateTimePrompt: String? = null
   private var datePrompt: String? = null

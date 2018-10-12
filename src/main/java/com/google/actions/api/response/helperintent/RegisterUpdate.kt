@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 import com.google.api.services.actions_fulfillment.v2.model.Argument
 import com.google.api.services.actions_fulfillment.v2.model.RegisterUpdateValueSpec
@@ -22,9 +22,9 @@ import com.google.api.services.actions_fulfillment.v2.model.TriggerContext
 import com.google.api.services.actions_fulfillment.v2.model.TriggerContextTimeContext
 
 /**
- * System intent to request for updates (eg: daily update).
+ * Helper intent to request for updates (eg: daily update).
  */
-class RegisterUpdate : SystemIntent {
+class RegisterUpdate : HelperIntent {
   private var map: MutableMap<String, Any>? = null
   private var registerValueSpec: RegisterUpdateValueSpec? = null
 

@@ -48,8 +48,8 @@ internal class DialogflowResponse internal constructor(
   override val richResponse: RichResponse?
     get() = googlePayload?.richResponse
 
-  override val systemIntent: ExpectedIntent?
-    get() = googlePayload?.systemIntent
+  override val helperIntent: ExpectedIntent?
+    get() = googlePayload?.helperIntent
 
   override fun addContext(context: ActionContext) {
     val ctx = webhookResponse.outputContexts?.find { it.name == context.name }

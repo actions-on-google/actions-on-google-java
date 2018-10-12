@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 import com.google.api.services.actions_fulfillment.v2.model.Argument
 import com.google.api.services.actions_fulfillment.v2.model.UpdatePermissionValueSpec
 
 /**
- * System intent response to request user for permissions.
+ * Helper intent response to request user for permissions.
  * Usage:
  *
  * ``` Java

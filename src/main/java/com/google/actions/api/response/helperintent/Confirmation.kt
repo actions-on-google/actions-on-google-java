@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 import com.google.api.services.actions_fulfillment.v2.model.ConfirmationValueSpecConfirmationDialogSpec
 
 /**
- * System intent response to ask user for confirmation.
+ * Helper intent response to ask user for confirmation.
  *
  * ``` Java
  * @ForIntent("askForConfirmation")
@@ -49,7 +49,7 @@ import com.google.api.services.actions_fulfillment.v2.model.ConfirmationValueSpe
  * }
  * ```
  */
-class Confirmation : SystemIntent {
+class Confirmation : HelperIntent {
   private var confirmationText: String? = null
 
   private val map = HashMap<String, Any>()

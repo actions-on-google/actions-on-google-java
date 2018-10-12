@@ -19,10 +19,10 @@ package com.google.actions.api
 import com.google.actions.api.impl.DialogflowResponse
 import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
-import com.google.actions.api.response.systemintent.DeepLink
-import com.google.actions.api.response.systemintent.NewSurface
-import com.google.actions.api.response.systemintent.RegisterUpdate
-import com.google.actions.api.response.systemintent.SelectionList
+import com.google.actions.api.response.helperintent.DeepLink
+import com.google.actions.api.response.helperintent.NewSurface
+import com.google.actions.api.response.helperintent.RegisterUpdate
+import com.google.actions.api.response.helperintent.SelectionList
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
@@ -161,10 +161,10 @@ class DialogflowResponseTest {
 
     val dialogflowResponse = responseBuilder.buildDialogflowResponse()
     val googlePayload = dialogflowResponse.googlePayload
-    val systemIntent = googlePayload!!.systemIntents!![0]
-    TestCase.assertEquals("actions.intent.OPTION", systemIntent.intent)
+    val helperIntent = googlePayload!!.helperIntents!![0]
+    TestCase.assertEquals("actions.intent.OPTION", helperIntent.intent)
 
-    val inputValueData = systemIntent
+    val inputValueData = helperIntent
             .inputValueData["listSelect"] as ListSelect
     assertNotNull(inputValueData)
     TestCase.assertEquals("Topics", inputValueData.title)
@@ -173,7 +173,7 @@ class DialogflowResponseTest {
   }
 
   @Test
-  fun testDeepLinkSystemIntent() {
+  fun testDeepLinkHelperIntent() {
     val link = "http://www.example.com/link"
     val packageName = "com.example.myAndroidApp"
 
@@ -185,7 +185,7 @@ class DialogflowResponseTest {
     val response = responseBuilder.buildDialogflowResponse()
     val googlePayload = response.googlePayload!!
 
-    val intent = googlePayload.systemIntents!![0]
+    val intent = googlePayload.helperIntents!![0]
     val openUrlAction = intent.inputValueData
             ?.get("openUrlAction") as OpenUrlAction
 
@@ -195,7 +195,7 @@ class DialogflowResponseTest {
   }
 
   @Test
-  fun testNewSurfaceSystemIntent() {
+  fun testNewSurfaceHelperIntent() {
     val capability = Capability.SCREEN_OUTPUT.value
 
     val responseBuilder = ResponseBuilder()
@@ -206,7 +206,7 @@ class DialogflowResponseTest {
             .setNotificationTitle("notification title"))
     val response = responseBuilder.buildDialogflowResponse()
     val googlePayload = response.googlePayload!!
-    val intent = googlePayload.systemIntents!![0]
+    val intent = googlePayload.helperIntents!![0]
 
     assertEquals("actions.intent.NEW_SURFACE", intent.intent)
     val capabilitiesArray =
@@ -223,7 +223,7 @@ class DialogflowResponseTest {
 
     responseBuilder.add(RegisterUpdate().setIntent(updateIntent))
     val response = responseBuilder.buildDialogflowResponse()
-    val intent = response.googlePayload?.systemIntents?.get(0)
+    val intent = response.googlePayload?.helperIntents?.get(0)
     assertEquals("actions.intent.REGISTER_UPDATE", intent?.intent)
     assertEquals(updateIntent, intent?.inputValueData?.get("intent"))
   }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 /**
- * System intent response to request user to transfer to another surface with
+ * Helper intent response to request user to transfer to another surface with
  * the specified capabilities. For example, the user may need to continue the
  * conversation on a device with a screen output.
  *
@@ -34,7 +34,7 @@ package com.google.actions.api.response.systemintent
  *
  * ```
  */
-class NewSurface : SystemIntent {
+class NewSurface : HelperIntent {
   private val map = HashMap<String, Any?>()
 
   private var capabilities: List<String>? = null

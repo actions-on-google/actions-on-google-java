@@ -50,13 +50,13 @@ interface ActionResponse {
   val richResponse: RichResponse?
 
   /**
-   * System intents tell the Assistant to momentarily take over the conversation
+   * Helper intents tell the Assistant to momentarily take over the conversation
    * to obtain common data such as a user's full name, a date and time, or a
    * delivery address. When you request a helper, the Assistant presents a
    * standard, consistent UI to users to obtain this information, so you don't
    * have to design your own.
    */
-  val systemIntent: ExpectedIntent?
+  val helperIntent: ExpectedIntent?
 
   /**
    * Adds a Context to the response. Only available for Dialogflow.

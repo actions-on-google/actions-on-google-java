@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
-import com.google.api.services.actions_fulfillment.v2.model.CarouselSelect
-import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
+import com.google.api.services.actions_fulfillment.v2.model.ListSelect
+import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
 
 /**
- * System intent response to collect user's input with a carousel.
- *
- * Usage:
+ * Helper intent response to collect user's input with a list.
  *
  * ``` Java
- * List<CarouselSelectCarouselItem> items = new ArrayList<>();
- * CarouselSelectCarouselItem item;
+ * List<ListSelectListItem> items = new ArrayList<>();
+ * ListSelectListItem item;
  * for (int i = 0; i < 3; i++) {
- *   item = new CarouselSelectCarouselItem();
+ *   item = new ListSelectListItem();
  *   item.setTitle("Item #" + (i + 1))
  *       .setDescription("Description of Item #" + (i + 1))
  *       .setImage(new Image()
  *       .setUrl(IMAGES[i])
  *       .setAccessibilityText("Image alt text"))
  *       .setOptionInfo(new OptionInfo()
- *       .setKey(String.valueOf(i + 1)));
+ *         .setKey(String.valueOf(i + 1)));
  *   items.add(item);
  * }
  * responseBuilder
- *   .add("This is the first simple response for a selection carousel.")
- *   .add(new SelectionCarousel().setItems(items));
+ *   .add("This is the first simple response for a list.")
+ *   .add(new SelectionList().setTitle("List title").setItems(items));
  * ```
  *
  * The following code demonstrates how to get the user's selection:
@@ -56,11 +54,18 @@ import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarous
  * }
  * ```
  */
-class SelectionCarousel : SystemIntent {
+class SelectionList : HelperIntent {
   private val map = HashMap<String, Any>()
-  private var items: List<CarouselSelectCarouselItem>? = null
 
-  fun setItems(items: List<CarouselSelectCarouselItem>): SelectionCarousel {
+  private var title: String? = null
+  private var items: List<ListSelectListItem?>? = null
+
+  fun setTitle(title: String): SelectionList {
+    this.title = title
+    return this
+  }
+
+  fun setItems(items: List<ListSelectListItem>): SelectionList {
     this.items = items
     return this
   }
@@ -70,9 +75,10 @@ class SelectionCarousel : SystemIntent {
 
   private fun prepareMap() {
     map.put("@type", "type.googleapis.com/google.actions.v2.OptionValueSpec")
-    val carouselSelect = CarouselSelect()
-    carouselSelect.items = items
-    map.put("carouselSelect", carouselSelect)
+    val listSelect = ListSelect()
+    listSelect.title = title
+    listSelect.items = items
+    map.put("listSelect", listSelect)
   }
 
   override val parameters: Map<String, Any>

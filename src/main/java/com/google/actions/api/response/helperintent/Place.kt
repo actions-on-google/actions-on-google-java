@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 /**
- * System intent response to request user to provide a geo-located place,
+ * Helper intent response to request user to provide a geo-located place,
  * possibly using contextual information, like a store near the user's location
  * or a contact's address.
  *
@@ -53,7 +53,7 @@ package com.google.actions.api.response.systemintent
  * }
  * ```
  */
-class Place : SystemIntent {
+class Place : HelperIntent {
   private val map = HashMap<String, Any?>()
 
   private var requestPrompt: String? = null

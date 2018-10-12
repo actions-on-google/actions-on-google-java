@@ -30,7 +30,7 @@ internal class AogResponse internal constructor(
   override var richResponse: RichResponse? = null
   override val expectUserResponse: Boolean
 
-  internal var systemIntents: List<ExpectedIntent>?
+  internal var helperIntents: List<ExpectedIntent>?
   internal var conversationData: Map<String, Any>? = null
   internal var userStorage: Map<String, Any>? = null
 
@@ -56,7 +56,7 @@ internal class AogResponse internal constructor(
         }
       }
     }
-    this.systemIntents = responseBuilder.systemIntents
+    this.helperIntents = responseBuilder.helperIntents
     this.userStorage = responseBuilder.userStorage
     this.textIntent = ExpectedIntent()
     this.textIntent
@@ -64,8 +64,8 @@ internal class AogResponse internal constructor(
             ?.setInputValueData(emptyMap())
   }
 
-  override val systemIntent: ExpectedIntent?
-    get() = systemIntents?.get(0)
+  override val helperIntent: ExpectedIntent?
+    get() = helperIntents?.get(0)
 
   override fun addContext(context: ActionContext) {
     // no op as ActionsSDK does not support concept of Context.
@@ -116,8 +116,8 @@ internal class AogResponse internal constructor(
       expectedInput.inputPrompt = inputPrompt
     }
 
-    if (systemIntents != null) {
-      expectedInput.possibleIntents = systemIntents
+    if (helperIntents != null) {
+      expectedInput.possibleIntents = helperIntents
     } else {
       expectedInput.possibleIntents = listOf(textIntent)
     }

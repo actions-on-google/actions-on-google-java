@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.actions.api.response.systemintent
+package com.google.actions.api.response.helperintent
 
 import com.google.api.services.actions_fulfillment.v2.model.AndroidApp
 import com.google.api.services.actions_fulfillment.v2.model.LinkValueSpecLinkDialogSpec
 import com.google.api.services.actions_fulfillment.v2.model.OpenUrlAction
 
 /**
- * System intent response to request to transfer to a linked out Android app
+ * Helper intent response to request to transfer to a linked out Android app
  * intent. Using this feature requires verifying the linked app in the
  * (Actions console)[@link https://console.actions.google.com].
  *
@@ -36,7 +36,7 @@ import com.google.api.services.actions_fulfillment.v2.model.OpenUrlAction
  *     .setReason("handle this in the app"));
  * ```
  */
-class DeepLink : SystemIntent {
+class DeepLink : HelperIntent {
 
   private var url: String? = null
   private var packageName: String? = null

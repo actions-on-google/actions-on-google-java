@@ -19,7 +19,7 @@ package com.google.actions.api
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
-import com.google.actions.api.response.systemintent.*
+import com.google.actions.api.response.helperintent.*
 import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
 import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
@@ -286,7 +286,7 @@ class AogResponseTest {
   }
 
   @Test
-  fun testDeepLinkSystemIntent() {
+  fun testDeepLinkHelperIntent() {
     val link = "http://www.example.com/link"
     val packageName = "com.example.myAndroidApp"
 
@@ -308,7 +308,7 @@ class AogResponseTest {
   }
 
   @Test
-  fun testNewSurfaceSystemIntent() {
+  fun testNewSurfaceHelperIntent() {
     val capability = Capability.SCREEN_OUTPUT.value
 
     val responseBuilder = ResponseBuilder()

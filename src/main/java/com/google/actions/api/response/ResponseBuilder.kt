@@ -19,7 +19,7 @@ package com.google.actions.api.response
 import com.google.actions.api.ActionResponse
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.DialogflowResponse
-import com.google.actions.api.response.systemintent.SystemIntent
+import com.google.actions.api.response.helperintent.HelperIntent
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 
@@ -70,7 +70,7 @@ class ResponseBuilder internal constructor() {
 
   internal var linkOutSuggestion: LinkOutSuggestion? = null
 
-  internal var systemIntents: MutableList<ExpectedIntent>? = null
+  internal var helperIntents: MutableList<ExpectedIntent>? = null
 
   internal var userStorage: Map<String, Any>? = null
 
@@ -262,12 +262,12 @@ class ResponseBuilder internal constructor() {
   }
 
   /**
-   * Adds a SystemIntent to the response.
-   * @param systemIntent The SystemIntent to add.
+   * Adds a HelperIntent to the response.
+   * @param helperIntent The HelperIntent to add.
    * @return This ResponseBuilder.
    */
-  fun add(systemIntent: SystemIntent): ResponseBuilder {
-    addSystemIntent(systemIntent)
+  fun add(helperIntent: HelperIntent): ResponseBuilder {
+    addHelperIntent(helperIntent)
     return this
   }
 
@@ -322,13 +322,13 @@ class ResponseBuilder internal constructor() {
     return DialogflowResponse(this)
   }
 
-  private fun addSystemIntent(systemIntent: SystemIntent) {
+  private fun addHelperIntent(helperIntent: HelperIntent) {
     val expectedIntent = ExpectedIntent()
-    expectedIntent.intent = systemIntent.name
-    expectedIntent.inputValueData = systemIntent.parameters
-    if (systemIntents == null) {
-      systemIntents = ArrayList()
+    expectedIntent.intent = helperIntent.name
+    expectedIntent.inputValueData = helperIntent.parameters
+    if (helperIntents == null) {
+      helperIntents = ArrayList()
     }
-    systemIntents?.add(expectedIntent)
+    helperIntents?.add(expectedIntent)
   }
 }

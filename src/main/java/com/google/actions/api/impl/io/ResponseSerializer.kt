@@ -108,7 +108,7 @@ internal class ResponseSerializer(
     internal var noInputPrompts: Array<SimpleResponse>? = null
     internal var isSsml: Boolean = false
     internal var keyValueStore: Map<String, Any>? = null
-    internal var systemIntent: DFSystemIntent? = null
+    internal var helperIntent: DFHelperIntent? = null
 
     init {
       if (aogResponse.appResponse != null) {
@@ -122,7 +122,7 @@ internal class ResponseSerializer(
                   ?.expectedInputs?.get(0)
                   ?.possibleIntents?.get(0)
           if (expectedIntent != null) {
-            systemIntent = DFSystemIntent()
+            helperIntent = DFHelperIntent()
                     .setIntent(expectedIntent.intent)
                     .setData(expectedIntent.inputValueData)
           }
@@ -131,13 +131,13 @@ internal class ResponseSerializer(
         }
       } else {
         richResponse = aogResponse.richResponse
-        val systemIntents = aogResponse.systemIntents
-        if (systemIntents != null && systemIntents.isNotEmpty()) {
-          val aogSystemIntent = systemIntents.get(0)
+        val helperIntents = aogResponse.helperIntents
+        if (helperIntents != null && helperIntents.isNotEmpty()) {
+          val aogHelperIntent = helperIntents.get(0)
 
-          systemIntent = DFSystemIntent()
-                  .setIntent(aogSystemIntent.intent)
-                  .setData(aogSystemIntent.inputValueData)
+          helperIntent = DFHelperIntent()
+                  .setIntent(aogHelperIntent.intent)
+                  .setData(aogHelperIntent.inputValueData)
         }
       }
       this.isSsml = false
@@ -145,10 +145,10 @@ internal class ResponseSerializer(
   }
 
   /**
-   * This represents the "systemIntent" object as part of the Dialogflow's
+   * This represents the "helperIntent" object as part of the Dialogflow's
    * payload.
    */
-  private inner class DFSystemIntent {
+  private inner class DFHelperIntent {
     internal var intent: String = ""
     internal var data: Map<*, *> = HashMap<String, Any>()
 
@@ -156,7 +156,7 @@ internal class ResponseSerializer(
       return intent
     }
 
-    fun setIntent(intent: String): DFSystemIntent {
+    fun setIntent(intent: String): DFHelperIntent {
       this.intent = intent
       return this
     }
@@ -165,7 +165,7 @@ internal class ResponseSerializer(
       return data
     }
 
-    fun setData(data: Map<*, *>): DFSystemIntent {
+    fun setData(data: Map<*, *>): DFHelperIntent {
       this.data = data
       return this
     }
