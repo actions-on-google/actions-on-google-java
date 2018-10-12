@@ -26,74 +26,74 @@ import java.nio.file.Paths
 
 class SmartHomeRequestTest {
 
-  @Throws(IOException::class)
-  private fun fromFile(file: String): SmartHomeRequest {
-    val absolutePath = Paths.get("src", "test", "resources",
-        file)
-    val gson = Gson()
-    val reader = Files.newBufferedReader(absolutePath)
-    val json = gson.fromJson(reader, JsonObject::class.java)
+    @Throws(IOException::class)
+    private fun fromFile(file: String): SmartHomeRequest {
+        val absolutePath = Paths.get("src", "test", "resources",
+                file)
+        val gson = Gson()
+        val reader = Files.newBufferedReader(absolutePath)
+        val json = gson.fromJson(reader, JsonObject::class.java)
 
-    return SmartHomeRequest.create(json.toString())
-  }
+        return SmartHomeRequest.create(json.toString())
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun basicSyncJsonIsParsed() {
-    val request = fromFile("smarthome_sync_request.json") as SyncRequest
-    Assert.assertNotNull(request)
-    Assert.assertNotNull(request.requestId)
-    Assert.assertEquals(request.inputs.size, 1)
-    Assert.assertEquals(request.inputs[0].intent, "action.devices.SYNC")
-  }
+    @Test
+    @Throws(Exception::class)
+    fun basicSyncJsonIsParsed() {
+        val request = fromFile("smarthome_sync_request.json") as SyncRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.SYNC")
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun basicQueryJsonIsParsed() {
-    val request = fromFile("smarthome_query_request.json") as QueryRequest
-    Assert.assertNotNull(request)
-    Assert.assertNotNull(request.requestId)
-    Assert.assertEquals(request.inputs.size, 1)
-    Assert.assertEquals(request.inputs[0].intent, "action.devices.QUERY")
+    @Test
+    @Throws(Exception::class)
+    fun basicQueryJsonIsParsed() {
+        val request = fromFile("smarthome_query_request.json") as QueryRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.QUERY")
 
-    val payload = (request.inputs[0] as QueryRequest.Inputs).payload
-    Assert.assertEquals(payload.devices.size, 2)
-    Assert.assertEquals(payload.devices[0].id, "123")
-    Assert.assertEquals(payload.devices[0].customData!!["fooValue"], 74)
+        val payload = (request.inputs[0] as QueryRequest.Inputs).payload
+        Assert.assertEquals(payload.devices.size, 2)
+        Assert.assertEquals(payload.devices[0].id, "123")
+        Assert.assertEquals(payload.devices[0].customData!!["fooValue"], 74)
 
-    Assert.assertEquals(payload.devices[1].id, "456")
-    Assert.assertEquals(payload.devices[1].customData!!["fooValue"], 12)
-  }
+        Assert.assertEquals(payload.devices[1].id, "456")
+        Assert.assertEquals(payload.devices[1].customData!!["fooValue"], 12)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun basicExecuteJsonIsParsed() {
-    val request = fromFile("smarthome_execute_request.json") as ExecuteRequest
-    Assert.assertNotNull(request)
-    Assert.assertNotNull(request.requestId)
-    Assert.assertEquals(request.inputs.size, 1)
-    Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+    @Test
+    @Throws(Exception::class)
+    fun basicExecuteJsonIsParsed() {
+        val request = fromFile("smarthome_execute_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
 
-    val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
-    Assert.assertEquals(payload.commands.size, 1)
-    Assert.assertEquals(payload.commands[0].devices.size, 2)
-    Assert.assertEquals(payload.commands[0].devices[0].id, "123")
-    Assert.assertEquals(payload.commands[0].devices[0].customData!!["fooValue"], 74)
-    Assert.assertEquals(payload.commands[0].devices[1].id, "456")
-    Assert.assertEquals(payload.commands[0].devices[1].customData!!["fooValue"], 36)
-    Assert.assertEquals(payload.commands[0].execution.size, 1)
-    Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.OnOff")
-    Assert.assertEquals(payload.commands[0].execution[0].params!!["on"], true)
-  }
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands.size, 1)
+        Assert.assertEquals(payload.commands[0].devices.size, 2)
+        Assert.assertEquals(payload.commands[0].devices[0].id, "123")
+        Assert.assertEquals(payload.commands[0].devices[0].customData!!["fooValue"], 74)
+        Assert.assertEquals(payload.commands[0].devices[1].id, "456")
+        Assert.assertEquals(payload.commands[0].devices[1].customData!!["fooValue"], 36)
+        Assert.assertEquals(payload.commands[0].execution.size, 1)
+        Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.OnOff")
+        Assert.assertEquals(payload.commands[0].execution[0].params!!["on"], true)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun basicDisconnectJsonIsParsed() {
-    val request = fromFile("smarthome_disconnect_request.json") as DisconnectRequest
-    Assert.assertNotNull(request)
-    Assert.assertNotNull(request.requestId)
-    Assert.assertEquals(request.inputs.size, 1)
-    Assert.assertEquals(request.inputs[0].intent, "action.devices.DISCONNECT")
-  }
+    @Test
+    @Throws(Exception::class)
+    fun basicDisconnectJsonIsParsed() {
+        val request = fromFile("smarthome_disconnect_request.json") as DisconnectRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.DISCONNECT")
+    }
 
 }
