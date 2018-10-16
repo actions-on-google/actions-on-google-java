@@ -17,9 +17,28 @@
 package com.google.actions.api.smarthome
 
 import com.google.actions.api.App
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.home.graph.v1.HomeGraphApiServiceGrpc
+import com.google.home.graph.v1.HomeGraphApiServiceProto
+import io.grpc.ManagedChannelBuilder
+import io.grpc.auth.MoreCallCredentials
+import java.io.FileInputStream
+import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
 abstract class SmartHomeApp : App {
+    var credentials: GoogleCredentials? = null
+
+    constructor()
+
+    constructor (credentials: GoogleCredentials) {
+        this.credentials = credentials
+    }
+
+    constructor (fileName: String) {
+        val stream = FileInputStream("key.json")
+        this.credentials = GoogleCredentials.fromStream(stream)
+    }
 
     fun createRequest(inputJson: String): SmartHomeRequest {
         return SmartHomeRequest.create(inputJson)
@@ -32,6 +51,38 @@ abstract class SmartHomeApp : App {
     abstract fun onExecute(request: ExecuteRequest, headers: Map<*, *>?): ExecuteResponse
 
     abstract fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit
+
+    fun requestSync(agentUserId: String): HomeGraphApiServiceProto.RequestSyncDevicesResponse {
+        if (this.credentials == null) {
+            throw IllegalArgumentException("You must pass credentials in the app constructor")
+        }
+        val channel = ManagedChannelBuilder.forTarget("homegraph.googleapis.com").build()
+
+        val blockingStub = HomeGraphApiServiceGrpc.newBlockingStub(channel)
+                // See https://grpc.io/docs/guides/auth.html#authenticate-with-google-3.
+                .withCallCredentials(MoreCallCredentials.from(this.credentials))
+        val request = HomeGraphApiServiceProto.RequestSyncDevicesRequest.newBuilder()
+                .setAgentUserId(agentUserId)
+                .build()
+
+        return blockingStub.requestSyncDevices(request)
+
+    }
+
+    fun reportState(request: HomeGraphApiServiceProto.ReportStateAndNotificationRequest):
+            HomeGraphApiServiceProto.ReportStateAndNotificationResponse {
+        if (this.credentials == null) {
+            throw IllegalArgumentException("You must pass credentials in the app constructor")
+        }
+        val channel = ManagedChannelBuilder.forTarget("homegraph.googleapis.com").build()
+
+        val blockingStub = HomeGraphApiServiceGrpc.newBlockingStub(channel)
+                // See https://grpc.io/docs/guides/auth.html#authenticate-with-google-3.
+                .withCallCredentials(MoreCallCredentials.from(this.credentials))
+
+        return blockingStub.reportStateAndNotification(request)
+
+    }
 
     override fun handleRequest(inputJson: String?, headers: Map<*, *>?): CompletableFuture<String> {
         if (inputJson == null || inputJson.isEmpty()) {
