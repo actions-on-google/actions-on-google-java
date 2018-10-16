@@ -108,7 +108,7 @@ internal class ResponseSerializer(
     internal var noInputPrompts: Array<SimpleResponse>? = null
     internal var isSsml: Boolean = false
     internal var keyValueStore: Map<String, Any>? = null
-    internal var helperIntent: DFHelperIntent? = null
+    internal var systemIntent: DFHelperIntent? = null
 
     init {
       if (aogResponse.appResponse != null) {
@@ -122,7 +122,7 @@ internal class ResponseSerializer(
                   ?.expectedInputs?.get(0)
                   ?.possibleIntents?.get(0)
           if (expectedIntent != null) {
-            helperIntent = DFHelperIntent()
+            systemIntent = DFHelperIntent()
                     .setIntent(expectedIntent.intent)
                     .setData(expectedIntent.inputValueData)
           }
@@ -135,7 +135,7 @@ internal class ResponseSerializer(
         if (helperIntents != null && helperIntents.isNotEmpty()) {
           val aogHelperIntent = helperIntents.get(0)
 
-          helperIntent = DFHelperIntent()
+          systemIntent = DFHelperIntent()
                   .setIntent(aogHelperIntent.intent)
                   .setData(aogHelperIntent.inputValueData)
         }
