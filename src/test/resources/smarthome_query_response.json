@@ -1,0 +1,20 @@
+{
+  "payload":{
+    "devices":{
+      "456":{
+        "online":true,
+        "brightness":80,
+        "color":{
+          "name":"cerulean",
+          "spectrumRGB":31655
+        },
+        "on":true
+      },
+      "123":{
+        "online":true,
+        "on":true
+      }
+    }
+  },
+  "requestId":"ff36a3cc-ec34-11e6-b1a0-64510650abcf"
+}

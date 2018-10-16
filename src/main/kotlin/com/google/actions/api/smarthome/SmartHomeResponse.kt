@@ -17,6 +17,7 @@
 package com.google.actions.api.smarthome
 
 import com.google.home.graph.v1.DeviceProto
+import com.google.protobuf.util.JsonFormat
 import org.json.JSONObject
 
 open class SmartHomeResponse {
@@ -42,8 +43,12 @@ class SyncResponse : SmartHomeResponse() {
 
         fun build(): JSONObject {
             val json = JSONObject()
+            val devicesJson = devices.map {
+                val jsonString = JsonFormat.printer().omittingInsignificantWhitespace().print(it)
+                JSONObject(jsonString)
+            }
             json.put("agentUserId", agentUserId)
-            json.put("devices", devices)
+            json.put("devices", devicesJson)
             return json
         }
     }
@@ -102,8 +107,12 @@ class ExecuteResponse : SmartHomeResponse() {
                 val json = JSONObject()
                 json.put("ids", ids)
                 json.put("status", status)
-                json.put("states", states)
-                json.put("errorCode", errorCode)
+                if (states != null) {
+                    json.put("states", states)
+                }
+                if (errorCode != null) {
+                    json.put("errorCode", errorCode)
+                }
                 return json
             }
         }

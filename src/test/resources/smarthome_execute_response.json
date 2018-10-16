@@ -1,0 +1,17 @@
+{
+  "payload":{
+    "commands":[{
+      "ids":["123"],
+      "status":"SUCCESS",
+      "states":{
+        "online":true,
+        "on":true
+      }
+    },{
+      "ids":["456"],
+      "errorCode":"deviceTurnedOff",
+      "status":"ERROR"
+    }]
+  },
+  "requestId":"ff36a3cc-ec34-11e6-b1a0-64510650abcf"
+}

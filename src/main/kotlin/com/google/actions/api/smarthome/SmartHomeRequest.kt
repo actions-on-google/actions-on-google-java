@@ -54,7 +54,7 @@ open class SmartHomeRequest {
                             .getJSONObject("payload")
                             .getJSONArray("devices")
 
-                    for (i in 0..devicesJsonArray.length() - 1) {
+                    for (i in 0 until devicesJsonArray.length()) {
                         val deviceJson = devicesJsonArray.getJSONObject(i)
                         val deviceObject = QueryRequest.Inputs.Payload.Device()
                         deviceObject.id = deviceJson.getString("id")
@@ -78,10 +78,10 @@ open class SmartHomeRequest {
                             .getJSONObject(0)
                             .getJSONObject("payload")
                             .getJSONArray("commands")
-                    for (i in 0..commandsJsonArray.length() - 1) {
+                    for (i in 0 until commandsJsonArray.length()) {
                         val devicesList = ArrayList<ExecuteRequest.Inputs.Payload.Commands.Devices>()
                         val devicesJsonArray = commandsJsonArray.getJSONObject(i).getJSONArray("devices")
-                        for (j in 0..devicesJsonArray.length() - 1) {
+                        for (j in 0 until devicesJsonArray.length()) {
                             val deviceJson = devicesJsonArray.getJSONObject(j)
                             val deviceObject = ExecuteRequest.Inputs.Payload.Commands.Devices()
                             deviceObject.id = deviceJson.getString("id")
@@ -91,7 +91,7 @@ open class SmartHomeRequest {
 
                         val executionsList = ArrayList<ExecuteRequest.Inputs.Payload.Commands.Execution>()
                         val executionsJsonArray = commandsJsonArray.getJSONObject(i).getJSONArray("execution")
-                        for (j in 0..executionsJsonArray.length() - 1) {
+                        for (j in 0 until executionsJsonArray.length()) {
                             val executionJson = executionsJsonArray.getJSONObject(j)
                             val executionObject = ExecuteRequest.Inputs.Payload.Commands.Execution()
                             executionObject.command = executionJson.getString("command")
