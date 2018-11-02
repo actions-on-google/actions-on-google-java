@@ -24,11 +24,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.util.*
 
 internal class AogRequest internal constructor(
         override val appRequest: AppRequest) : ActionRequest {
+
   override val webhookRequest: WebhookRequest? get() = null
 
   override var userStorage: Map<String, Any> = HashMap()
@@ -38,6 +40,7 @@ internal class AogRequest internal constructor(
     get() {
       val inputs = appRequest.inputs
       if (inputs == null || inputs.size == 0) {
+        LOG.warn("Request has no inputs.")
         throw IllegalArgumentException("Request has no inputs")
       }
 
@@ -216,6 +219,7 @@ internal class AogRequest internal constructor(
   }
 
   companion object {
+    private val LOG = LoggerFactory.getLogger(AogRequest::class.java.name)
 
     fun create(appRequest: AppRequest): AogRequest {
       return AogRequest(appRequest)
@@ -292,7 +296,7 @@ internal class AogRequest internal constructor(
             return map["data"] as MutableMap<String, Any>
           }
         } catch (e: Exception) {
-          println("Error parsing conversation/user storage $e")
+          LOG.warn("Error parsing conversation/user storage.", e);
         }
       }
       return HashMap()

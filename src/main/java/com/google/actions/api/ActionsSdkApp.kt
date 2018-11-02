@@ -18,6 +18,7 @@ package com.google.actions.api
 
 import com.google.actions.api.impl.AogRequest
 import com.google.actions.api.response.ResponseBuilder
+import org.slf4j.LoggerFactory
 
 /**
  * Implementation of App for ActionsSDK based webhook. Developers must extend
@@ -40,8 +41,12 @@ import com.google.actions.api.response.ResponseBuilder
  */
 open class ActionsSdkApp : DefaultApp() {
 
+  private companion object {
+    val LOG = LoggerFactory.getLogger(ActionsSdkApp::class.java.name)
+  }
+
   override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
-    println("ActionsSdkApp.createRequest ..")
+    LOG.info("ActionsSdkApp.createRequest..")
     return AogRequest.create(inputJson, null)
   }
 

@@ -20,6 +20,7 @@ import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.DialogflowResponse
 import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
+import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -27,6 +28,10 @@ import java.util.concurrent.CompletableFuture
  * functionality of an App such as request parsing and routing.
  */
 abstract class DefaultApp : App {
+
+  private companion object {
+    val LOG = LoggerFactory.getLogger(DefaultApp::class.java.name)
+  }
 
   /**
    * Creates an ActionRequest for the specified JSON and metadata.
@@ -77,6 +82,7 @@ abstract class DefaultApp : App {
       }
     }
     // Unable to find a method with the annotation matching the intent.
+    LOG.warn("Intent handler not found: {}", intent)
     throw Exception("Intent handler not found - $intent")
   }
 

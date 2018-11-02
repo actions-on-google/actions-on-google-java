@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.slf4j.LoggerFactory
 import org.testng.annotations.Test
 import java.io.IOException
 import java.net.URISyntaxException
@@ -30,6 +31,10 @@ import java.nio.file.Paths
 import java.util.concurrent.CompletableFuture
 
 class DialogflowRequestTest {
+
+  private companion object {
+    val LOG = LoggerFactory.getLogger(DialogflowRequestTest::class.java.name)
+  }
 
   @Throws(IOException::class)
   private fun fromFile(file: String): DialogflowRequest {
@@ -110,7 +115,7 @@ class DialogflowRequestTest {
     @ForIntent("Default Welcome Intent")
     fun handleFooIntent(
             request: ActionRequest): CompletableFuture<ActionResponse> {
-      println("handleFooIntent is invoked")
+      LOG.info("handleFooIntent is invoked.")
       val responseBuilder = ResponseBuilder()
 
       return CompletableFuture.completedFuture(

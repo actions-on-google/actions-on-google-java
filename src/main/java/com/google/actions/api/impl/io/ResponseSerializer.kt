@@ -28,6 +28,7 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.Context
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import org.slf4j.LoggerFactory
 import java.util.HashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -35,12 +36,17 @@ import kotlin.collections.set
 internal class ResponseSerializer(
         private val sessionId: String) {
 
+  private companion object {
+    val LOG = LoggerFactory.getLogger(ResponseSerializer::class.java.name)
+  }
+
   fun toJsonV2(response: ActionResponse): String {
     when (response) {
       is DialogflowResponse -> return serializeDialogflowResponseV2(
               response)
       is AogResponse -> return serializeAogResponse(response)
     }
+    LOG.warn("Unable to serialize the response.")
     throw Exception("Unable to serialize the response")
   }
 
