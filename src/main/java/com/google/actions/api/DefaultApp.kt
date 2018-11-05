@@ -29,6 +29,9 @@ import java.util.concurrent.CompletableFuture
  */
 abstract class DefaultApp : App {
 
+  val errorMsg_badReturnValue = "The return value of an intent handler" +
+          " must be ActionResponse or CompletableFuture<ActionResponse>"
+
   private companion object {
     val LOG = LoggerFactory.getLogger(DefaultApp::class.java.name)
   }
@@ -76,8 +79,15 @@ abstract class DefaultApp : App {
         val annotation = method.getAnnotation(forIntentType)
         val forIntent = annotation as ForIntent
         if (forIntent.value == intent) {
-          return method.invoke(this, request) as
-                  CompletableFuture<ActionResponse>
+          val result = method.invoke(this, request)
+          return if (result is ActionResponse) {
+            CompletableFuture.completedFuture(result)
+          } else if (result is CompletableFuture<*>) {
+            result as CompletableFuture<ActionResponse>
+          } else {
+            LOG.warn(errorMsg_badReturnValue)
+            throw Exception(errorMsg_badReturnValue)
+          }
         }
       }
     }
