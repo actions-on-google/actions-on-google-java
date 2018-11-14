@@ -17,7 +17,6 @@
 package com.google.actions.api
 
 import com.google.actions.api.impl.DialogflowResponse
-import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import com.google.actions.api.response.helperintent.DeepLink
 import com.google.actions.api.response.helperintent.NewSurface
@@ -36,34 +35,27 @@ import kotlin.collections.HashMap
 
 class DialogflowResponseTest {
 
-  private fun toJson(response: ActionResponse): String {
-    val responseSerializer = ResponseSerializer("sessionId")
-    return responseSerializer.toJsonV2(response)
-  }
-
   @Test
   fun testBasicResponse() {
     val responseBuilder = ResponseBuilder()
     responseBuilder.add("this is a test")
     val response = responseBuilder.build()
     assertNotNull(response)
-    val asJson = toJson(response)
+    val asJson = response.toJson()
     assertNotNull(Gson().fromJson(asJson, JsonObject::class.java))
   }
 
   @Test
   fun testConversationData() {
-    val responseBuilder = ResponseBuilder()
-    val response = responseBuilder
-            .endConversation()
-            .build() as DialogflowResponse
-
     val data = HashMap<String, Any>()
     data["count"] = 2
     data["favorite_dish"] = "pizza"
-    response.conversationData = data
 
-    val jsonOutput = toJson(response)
+    val responseBuilder = ResponseBuilder(sessionId = "sessionId", conversationData = data)
+    val response = responseBuilder
+            .endConversation()
+            .build() as DialogflowResponse
+    val jsonOutput = response.toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     assertEquals("sessionId/contexts/_actions_on_google",
@@ -83,18 +75,14 @@ class DialogflowResponseTest {
 
   @Test
   fun testUserStorageIsSet() {
-    val responseBuilder = ResponseBuilder()
-
     val map = HashMap<String, Any>()
     map["favorite_color"] = "white"
-    responseBuilder
-            .endConversation()
-            .add("this is a test")
-            .userStorage = map
+    val responseBuilder = ResponseBuilder(userStorage = map)
 
     val response = responseBuilder.build() as DialogflowResponse
     val aogResponse = response.googlePayload
-    val jsonOutput = toJson(aogResponse!!)
+
+    val jsonOutput = aogResponse!!.toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     val serializedValue = jsonObject.get("userStorage").asString
@@ -131,7 +119,7 @@ class DialogflowResponseTest {
             .use(webhookResponse)
             .build()
 
-    val json = toJson(response)
+    val json = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson<JsonObject>(json, JsonObject::class.java)

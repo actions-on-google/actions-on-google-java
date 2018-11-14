@@ -18,9 +18,11 @@ package com.google.actions.api.impl
 
 import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
+import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
+import com.google.gson.Gson
 import java.util.*
 
 internal class AogResponse internal constructor(
@@ -33,13 +35,16 @@ internal class AogResponse internal constructor(
   internal var helperIntents: List<ExpectedIntent>?
   internal var conversationData: Map<String, Any>? = null
   internal var userStorage: Map<String, Any>? = null
-
+  internal var sessionId: String? = null
   private var textIntent: ExpectedIntent? = null
 
   init {
     this.appResponse = responseBuilder.appResponse
     this.expectUserResponse = responseBuilder.expectUserResponse
     this.richResponse = responseBuilder.richResponse
+    this.sessionId = responseBuilder.sessionId
+    this.conversationData = responseBuilder.conversationData
+    this.userStorage = responseBuilder.userStorage
 
     if (appResponse == null) {
       // If appResponse is provided, that supersedes all other values.
@@ -57,7 +62,6 @@ internal class AogResponse internal constructor(
       }
     }
     this.helperIntents = responseBuilder.helperIntents
-    this.userStorage = responseBuilder.userStorage
     this.textIntent = ExpectedIntent()
     this.textIntent
             ?.setIntent("actions.intent.TEXT")
@@ -82,6 +86,16 @@ internal class AogResponse internal constructor(
         ask()
       } else {
         close()
+      }
+      if (conversationData != null) {
+        val dataMap = HashMap<String, Any?>()
+        dataMap["data"] = conversationData
+        appResponse?.conversationToken = Gson().toJson(dataMap)
+      }
+      if (userStorage != null) {
+        val dataMap = HashMap<String, Any?>()
+        dataMap["data"] = userStorage
+        appResponse?.userStorage = Gson().toJson(dataMap)
       }
     }
   }
@@ -125,5 +139,9 @@ internal class AogResponse internal constructor(
     val expectedInputs = ArrayList<ExpectedInput>()
     expectedInputs.add(expectedInput)
     appResponse?.expectedInputs = expectedInputs
+  }
+
+  override fun toJson(): String {
+    return ResponseSerializer(sessionId).toJsonV2(this)
   }
 }

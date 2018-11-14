@@ -16,9 +16,6 @@
 
 package com.google.actions.api
 
-import com.google.actions.api.impl.AogResponse
-import com.google.actions.api.impl.DialogflowResponse
-import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
@@ -48,7 +45,7 @@ abstract class DefaultApp : App {
   /**
    * @return A ResponseBuilder for this App.
    */
-  abstract fun getResponseBuilder(): ResponseBuilder
+  abstract fun getResponseBuilder(request: ActionRequest): ResponseBuilder
 
   override fun handleRequest(
           inputJson: String?, headers: Map<*, *>?): CompletableFuture<String> {
@@ -66,7 +63,7 @@ abstract class DefaultApp : App {
     }
 
     return future
-            .thenApply { this.getAsJson(it, request) }
+            .thenApply { it.toJson() }
             .exceptionally { throwable -> throwable.message }
   }
 
@@ -105,17 +102,5 @@ abstract class DefaultApp : App {
     val future = CompletableFuture<String>()
     future.completeExceptionally(Exception(message))
     return future
-  }
-
-  private fun getAsJson(
-          response: ActionResponse,
-          request: ActionRequest): String {
-    val responseSerializer = ResponseSerializer(request.sessionId)
-    when (response) {
-      is DialogflowResponse ->
-        response.conversationData = request.conversationData
-      is AogResponse -> response.conversationData = request.conversationData
-    }
-    return responseSerializer.toJsonV2(response)
   }
 }

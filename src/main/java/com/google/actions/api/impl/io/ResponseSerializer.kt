@@ -34,7 +34,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 internal class ResponseSerializer(
-        private val sessionId: String) {
+        private val sessionId: String? = "") {
 
   private companion object {
     val LOG = LoggerFactory.getLogger(ResponseSerializer::class.java.name)
@@ -62,7 +62,7 @@ internal class ResponseSerializer(
       val aogPayload = DialogflowGooglePayload(googlePayload)
 
       val map = HashMap<String, Any>()
-      map.put("google", aogPayload)
+      map["google"] = aogPayload
       webhookResponse.payload = map
     }
 
@@ -100,7 +100,7 @@ internal class ResponseSerializer(
   }
 
   private fun getAsNamespaced(name: String): String {
-    val namespace = sessionId + "/contexts/"
+    val namespace = "$sessionId/contexts/"
     if (name.startsWith(namespace)) {
       return name
     }
@@ -113,8 +113,8 @@ internal class ResponseSerializer(
     internal var richResponse: RichResponse? = null
     internal var noInputPrompts: Array<SimpleResponse>? = null
     internal var isSsml: Boolean = false
-    internal var keyValueStore: Map<String, Any>? = null
     internal var systemIntent: DFHelperIntent? = null
+    internal var userStorage: String? = null
 
     init {
       if (aogResponse.appResponse != null) {
@@ -145,6 +145,12 @@ internal class ResponseSerializer(
                   .setIntent(aogHelperIntent.intent)
                   .setData(aogHelperIntent.inputValueData)
         }
+      }
+      val userStorage = aogResponse.userStorage
+      if (userStorage != null) {
+        val dataMap = HashMap<String, Any?>()
+        dataMap["data"] = userStorage
+        this.userStorage = Gson().toJson(dataMap)
       }
       this.isSsml = false
     }
@@ -179,20 +185,6 @@ internal class ResponseSerializer(
 
   private fun serializeAogResponse(aogResponse: AogResponse): String {
     aogResponse.prepareAppResponse()
-    val conversationData = aogResponse.conversationData
-    val appResponse = aogResponse.appResponse
-    val userStorage = aogResponse.userStorage
-
-    if (conversationData != null) {
-      val dataMap = HashMap<String, Any?>()
-      dataMap["data"] = conversationData
-      appResponse?.conversationToken = Gson().toJson(dataMap)
-    }
-    if (userStorage != null) {
-      val dataMap = HashMap<String, Any?>()
-      dataMap["data"] = userStorage
-      appResponse?.userStorage = Gson().toJson(dataMap)
-    }
-    return Gson().toJson(appResponse)
+    return Gson().toJson(aogResponse.appResponse)
   }
 }

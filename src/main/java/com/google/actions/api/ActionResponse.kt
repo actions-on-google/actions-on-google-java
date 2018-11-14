@@ -69,4 +69,9 @@ interface ActionResponse {
    * See [Dialogflow Contexts](https://dialogflow.com/docs/contexts)
    */
   fun removeContext(name: String)
+
+  /**
+   * Returns the JSON representation of the response.
+   */
+  fun toJson(): String
 }

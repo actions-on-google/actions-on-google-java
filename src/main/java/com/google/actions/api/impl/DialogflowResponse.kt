@@ -18,6 +18,7 @@ package com.google.actions.api.impl
 
 import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
+import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import com.google.api.services.actions_fulfillment.v2.model.AppResponse
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
@@ -35,12 +36,18 @@ internal class DialogflowResponse internal constructor(
   internal var conversationData: Map<String, Any>? = null
   internal var googlePayload: AogResponse? = null
   internal var contexts: List<ActionContext>? = null
+  internal var sessionId: String? = null
 
   init {
+    conversationData = responseBuilder.conversationData
+    sessionId = responseBuilder.sessionId
     if (responseBuilder.webhookResponse != null) {
       webhookResponse = responseBuilder.webhookResponse!!
     } else {
       webhookResponse = WebhookResponse()
+    }
+    if (webhookResponse.fulfillmentText == null) {
+      webhookResponse.fulfillmentText = responseBuilder.fulfillmentText
     }
     googlePayload = responseBuilder.buildAogResponse()
   }
@@ -73,5 +80,9 @@ internal class DialogflowResponse internal constructor(
     if (ctx != null) {
       ctx.lifespanCount = 0
     }
+  }
+
+  override fun toJson(): String {
+    return ResponseSerializer(sessionId).toJsonV2(this)
   }
 }

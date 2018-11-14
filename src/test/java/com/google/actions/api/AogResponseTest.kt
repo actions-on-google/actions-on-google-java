@@ -17,7 +17,6 @@
 package com.google.actions.api
 
 import com.google.actions.api.impl.AogResponse
-import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import com.google.actions.api.response.helperintent.*
 import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
@@ -32,20 +31,14 @@ import org.testng.annotations.Test
 
 class AogResponseTest {
 
-  private fun toJson(response: ActionResponse): String {
-    val responseSerializer = ResponseSerializer("sessionId")
-    return responseSerializer.toJsonV2(response)
-  }
-
   @Test
   fun testBasicResponse() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     responseBuilder.add("this is a test");
     val response = responseBuilder.buildAogResponse()
     assertNotNull(response)
-    val asJson = toJson(response)
+    val asJson = response.toJson()
     assertNotNull(Gson().fromJson(asJson, JsonObject::class.java))
 
     assertEquals("actions.intent.TEXT", response.appResponse
@@ -56,12 +49,12 @@ class AogResponseTest {
 
   @Test
   fun testAskConfirmation() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
     val confirmation = Confirmation().setConfirmationText("Are you sure?")
-    val jsonOutput = toJson(responseBuilder
+    val jsonOutput = responseBuilder
             .add(confirmation)
-            .build())
+            .build()
+            .toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     val inputValueData = jsonObject
@@ -77,17 +70,16 @@ class AogResponseTest {
 
   @Test
   fun testAskDateTime() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
-
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
     val dateTimePrompt = DateTimePrompt()
             .setDatePrompt("What date?")
             .setDateTimePrompt("What date and time?")
             .setTimePrompt("What time?")
 
-    val jsonOutput = toJson(responseBuilder
+    val jsonOutput = responseBuilder
             .add(dateTimePrompt)
-            .build())
+            .build()
+            .toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     val inputValueData = jsonObject
@@ -107,15 +99,13 @@ class AogResponseTest {
 
   @Test
   fun testAskPermission() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
-
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
     responseBuilder.add(Permission()
             .setPermissions(arrayOf(PERMISSION_NAME,
                     PERMISSION_DEVICE_PRECISE_LOCATION))
             .setContext("To get your name"))
     val response = responseBuilder.build()
-    val jsonOutput = toJson(response)
+    val jsonOutput = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
@@ -134,8 +124,7 @@ class AogResponseTest {
 
   @Test
   fun testAskPlace() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     val requestPrompt = "Where do you want to have lunch?"
     val permissionPrompt = "To find lunch locations"
@@ -143,7 +132,7 @@ class AogResponseTest {
             .setRequestPrompt(requestPrompt)
             .setPermissionContext(permissionPrompt))
     val response = responseBuilder.build()
-    val jsonOutput = toJson(response)
+    val jsonOutput = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
@@ -165,12 +154,11 @@ class AogResponseTest {
 
   @Test
   fun testAskSignIn() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     responseBuilder.add(SignIn())
     val response = responseBuilder.build()
-    val jsonOutput = toJson(response)
+    val jsonOutput = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
@@ -183,8 +171,7 @@ class AogResponseTest {
 
   @Test
   fun testListSelect() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     val items = ArrayList<ListSelectListItem>()
     items.add(ListSelectListItem().setTitle("Android"))
@@ -194,7 +181,7 @@ class AogResponseTest {
     val response = responseBuilder
             .add(SelectionList().setTitle("Topics").setItems(items))
             .build()
-    val jsonOutput = toJson(response)
+    val jsonOutput = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
@@ -212,8 +199,7 @@ class AogResponseTest {
 
   @Test
   fun testCarouselSelect() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     val items = ArrayList<CarouselSelectCarouselItem>()
     items.add(CarouselSelectCarouselItem().setTitle("Android"))
@@ -223,7 +209,7 @@ class AogResponseTest {
     val response = responseBuilder
             .add(SelectionCarousel().setItems(items))
             .build()
-    val jsonOutput = toJson(response)
+    val jsonOutput = response.toJson()
 
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
@@ -242,18 +228,16 @@ class AogResponseTest {
 
   @Test
   fun testConversationDataIsSet() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
-
-    responseBuilder
-            .add("this is a test")
-    val aogResponse = responseBuilder.build() as AogResponse
     val data = HashMap<String, Any>()
     data["favorite_color"] = "white"
 
-    aogResponse.conversationData = data
+    val responseBuilder = ResponseBuilder(usesDialogflow = false,
+            conversationData = data)
+    responseBuilder
+            .add("this is a test")
+    val aogResponse = responseBuilder.build() as AogResponse
 
-    val jsonOutput = toJson(aogResponse)
+    val jsonOutput = aogResponse.toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     val serializedValue = jsonObject.get("conversationToken").asString
@@ -265,17 +249,15 @@ class AogResponseTest {
 
   @Test
   fun testUserStorageIsSet() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
-
     val map = HashMap<String, Any>()
     map["favorite_color"] = "white"
+    val responseBuilder = ResponseBuilder(usesDialogflow = false,
+            userStorage = map)
     responseBuilder
             .add("this is a test")
-            .userStorage = map
 
     val aogResponse = responseBuilder.build()
-    val jsonOutput = toJson(aogResponse)
+    val jsonOutput = aogResponse.toJson()
     val gson = Gson()
     val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
     val serializedValue = jsonObject.get("userStorage").asString
@@ -290,8 +272,7 @@ class AogResponseTest {
     val link = "http://www.example.com/link"
     val packageName = "com.example.myAndroidApp"
 
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     val deepLink = DeepLink().setUrl(link).setPackageName(packageName)
     responseBuilder.add(deepLink)
@@ -311,8 +292,7 @@ class AogResponseTest {
   fun testNewSurfaceHelperIntent() {
     val capability = Capability.SCREEN_OUTPUT.value
 
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     responseBuilder.add(NewSurface()
             .setCapability(capability)
@@ -332,8 +312,7 @@ class AogResponseTest {
   fun testRegisterDailyUpdate() {
     val updateIntent = "intent.foo"
 
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     responseBuilder.add(RegisterUpdate().setIntent(updateIntent))
     val response = responseBuilder.buildAogResponse()
@@ -347,8 +326,7 @@ class AogResponseTest {
 
   @Test
   fun testAddSuggestions() {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
     responseBuilder
             .add("this is a test")

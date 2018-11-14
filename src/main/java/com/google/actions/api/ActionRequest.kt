@@ -107,7 +107,7 @@ interface ActionRequest {
   /**
    * @return An identifier that uniquely identifies the conversation.
    */
-  val sessionId: String
+  val sessionId: String?
 
   /**
    * Returns the number of subsequent reprompts related to silent input from the

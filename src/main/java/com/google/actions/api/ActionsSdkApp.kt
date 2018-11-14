@@ -47,12 +47,15 @@ open class ActionsSdkApp : DefaultApp() {
 
   override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
     LOG.info("ActionsSdkApp.createRequest..")
-    return AogRequest.create(inputJson, null)
+    return AogRequest.create(inputJson, headers = null)
   }
 
-  override fun getResponseBuilder(): ResponseBuilder {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = false
+  override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
+    val responseBuilder = ResponseBuilder(
+            usesDialogflow = false,
+            sessionId = request.sessionId,
+            conversationData = request.conversationData,
+            userStorage = request.userStorage)
     return responseBuilder
   }
 }

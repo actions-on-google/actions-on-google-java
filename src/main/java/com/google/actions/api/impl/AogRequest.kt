@@ -25,7 +25,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import org.slf4j.LoggerFactory
-import java.io.BufferedReader
 import java.util.*
 
 internal class AogRequest internal constructor(
@@ -225,20 +224,20 @@ internal class AogRequest internal constructor(
       return AogRequest(appRequest)
     }
 
-    fun create(body: String, headers: Map<*, *>? = HashMap<String, Any>()):
+    fun create(
+            body: String,
+            headers: Map<*, *>? = HashMap<String, Any>(),
+            partOfDialogflowRequest: Boolean = false):
             AogRequest {
       val gson = Gson()
-      return create(gson.fromJson(body, JsonObject::class.java), headers)
+      return create(gson.fromJson(body, JsonObject::class.java), headers,
+              partOfDialogflowRequest)
     }
 
     fun create(
-            bufferedReader: BufferedReader,
-            headers: Map<*, *>? = HashMap<String, Any>()): AogRequest {
-      val gson = Gson()
-      return create(gson.fromJson(bufferedReader, JsonObject::class.java), headers)
-    }
-
-    fun create(json: JsonObject, headers: Map<*, *>? = HashMap<String, Any>()):
+            json: JsonObject,
+            headers: Map<*, *>? = HashMap<String, Any>(),
+            partOfDialogflowRequest: Boolean = false):
             AogRequest {
       val gsonBuilder = GsonBuilder()
       gsonBuilder
@@ -272,14 +271,19 @@ internal class AogRequest internal constructor(
         aogRequest.userStorage = fromJson(user.userStorage)
       }
 
-      val conversation = aogRequest.appRequest.conversation
-      val conversationToken: String? = conversation?.conversationToken
-      if (conversationToken != null) {
-        // Note that if the request is part of a Dialogflow request, the
-        // conversationData is empty here. DialogflowRequest should contain the
-        // values as it is read from outputContext.
-        aogRequest.conversationData = fromJson(
-                conversation.conversationToken)
+      if (!partOfDialogflowRequest) {
+        // Note: If the AogRequest is being created as part of a DF request,
+        // conversationToken is repurposed for some other values and does not
+        // contain conversation data.
+        val conversation = aogRequest.appRequest.conversation
+        val conversationToken: String? = conversation?.conversationToken
+        if (conversationToken != null) {
+          // Note that if the request is part of a Dialogflow request, the
+          // conversationData is empty here. DialogflowRequest should contain the
+          // values as it is read from outputContext.
+          aogRequest.conversationData = fromJson(
+                  conversation.conversationToken)
+        }
       }
       return aogRequest
     }
@@ -296,7 +300,7 @@ internal class AogRequest internal constructor(
             return map["data"] as MutableMap<String, Any>
           }
         } catch (e: Exception) {
-          LOG.warn("Error parsing conversation/user storage.", e);
+          LOG.warn("Error parsing conversation/user storage.", e)
         }
       }
       return HashMap()

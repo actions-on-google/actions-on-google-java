@@ -195,9 +195,11 @@ internal class DialogflowRequest internal constructor(
               webhookRequest.originalDetectIntentRequest
       val payload = originalDetectIntentRequest?.payload
       if (payload != null) {
-        aogRequest = AogRequest.create(gson.toJson(payload), headers)
+        aogRequest = AogRequest.create(gson.toJson(payload), headers,
+                partOfDialogflowRequest = true)
       } else {
-        aogRequest = AogRequest.create(JsonObject(), headers)
+        aogRequest = AogRequest.create(JsonObject(), headers,
+                partOfDialogflowRequest = true)
       }
 
       return DialogflowRequest(webhookRequest, aogRequest)

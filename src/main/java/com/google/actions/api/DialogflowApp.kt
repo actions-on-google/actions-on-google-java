@@ -48,9 +48,12 @@ open class DialogflowApp : DefaultApp() {
     return DialogflowRequest.create(inputJson, null)
   }
 
-  override fun getResponseBuilder(): ResponseBuilder {
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.usesDialogflow = true
+  override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
+    val responseBuilder = ResponseBuilder(
+            usesDialogflow = true,
+            conversationData = request.conversationData,
+            sessionId = request.sessionId,
+            userStorage = request.userStorage)
     return responseBuilder
   }
 }

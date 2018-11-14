@@ -56,9 +56,11 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
  * ActionResponse response = builder.use(appResponse).build();
  * ```
  */
-class ResponseBuilder internal constructor() {
-
-  internal var usesDialogflow: Boolean = true
+class ResponseBuilder internal constructor(
+        val usesDialogflow: Boolean = true,
+        val sessionId: String? = null,
+        val conversationData: Map<String, Any>? = null,
+        val userStorage: Map<String, Any>? = null) {
 
   internal var expectUserResponse: Boolean = true
 
@@ -72,11 +74,11 @@ class ResponseBuilder internal constructor() {
 
   internal var helperIntents: MutableList<ExpectedIntent>? = null
 
-  internal var userStorage: Map<String, Any>? = null
-
   internal var appResponse: AppResponse? = null
 
   internal var webhookResponse: WebhookResponse? = null
+
+  internal var fulfillmentText: String? = null
 
   /**
    * Builds the ActionResponse based on the added artifacts.
@@ -155,6 +157,7 @@ class ResponseBuilder internal constructor() {
   fun add(text: String): ResponseBuilder {
     responseItems.add(RichResponseItem().setSimpleResponse(
             SimpleResponse().setTextToSpeech(text)))
+    fulfillmentText = text
     return this
   }
 
@@ -166,6 +169,7 @@ class ResponseBuilder internal constructor() {
    */
   fun add(simpleResponse: SimpleResponse): ResponseBuilder {
     responseItems.add(RichResponseItem().setSimpleResponse(simpleResponse))
+    fulfillmentText = simpleResponse.displayText
     return this
   }
 
