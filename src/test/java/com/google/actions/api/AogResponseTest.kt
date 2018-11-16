@@ -22,7 +22,6 @@ import com.google.actions.api.response.helperintent.*
 import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
 import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
-import com.google.api.services.actions_fulfillment.v2.model.OpenUrlAction
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import junit.framework.TestCase.assertEquals
@@ -265,27 +264,6 @@ class AogResponseTest {
             gson.fromJson(serializedValue, JsonObject::class.java)
                     .get("data").asJsonObject
                     .get("favorite_color").asString)
-  }
-
-  @Test
-  fun testDeepLinkHelperIntent() {
-    val link = "http://www.example.com/link"
-    val packageName = "com.example.myAndroidApp"
-
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
-
-    val deepLink = DeepLink().setUrl(link).setPackageName(packageName)
-    responseBuilder.add(deepLink)
-    val response = responseBuilder.buildAogResponse()
-    val intent = response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.possibleIntents?.get(0) as ExpectedIntent
-    val openUrlAction = intent.inputValueData?.get("openUrlAction")
-            as OpenUrlAction
-
-    assertEquals("actions.intent.LINK", intent.intent)
-    assertEquals(link, openUrlAction.url)
-    assertEquals(packageName, openUrlAction.androidApp.packageName)
   }
 
   @Test

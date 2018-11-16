@@ -18,7 +18,6 @@ package com.google.actions.api
 
 import com.google.actions.api.impl.DialogflowResponse
 import com.google.actions.api.response.ResponseBuilder
-import com.google.actions.api.response.helperintent.DeepLink
 import com.google.actions.api.response.helperintent.NewSurface
 import com.google.actions.api.response.helperintent.RegisterUpdate
 import com.google.actions.api.response.helperintent.SelectionList
@@ -158,28 +157,6 @@ class DialogflowResponseTest {
     TestCase.assertEquals("Topics", inputValueData.title)
     TestCase.assertEquals("Android",
             inputValueData.items[0].title)
-  }
-
-  @Test
-  fun testDeepLinkHelperIntent() {
-    val link = "http://www.example.com/link"
-    val packageName = "com.example.myAndroidApp"
-
-    val responseBuilder = ResponseBuilder()
-    responseBuilder.expectUserResponse = true
-
-    val deepLink = DeepLink().setUrl(link).setPackageName(packageName)
-    responseBuilder.add(deepLink)
-    val response = responseBuilder.buildDialogflowResponse()
-    val googlePayload = response.googlePayload!!
-
-    val intent = googlePayload.helperIntents!![0]
-    val openUrlAction = intent.inputValueData
-            ?.get("openUrlAction") as OpenUrlAction
-
-    assertEquals("actions.intent.LINK", intent.intent)
-    assertEquals(link, openUrlAction.url)
-    assertEquals(packageName, openUrlAction.androidApp.packageName)
   }
 
   @Test
