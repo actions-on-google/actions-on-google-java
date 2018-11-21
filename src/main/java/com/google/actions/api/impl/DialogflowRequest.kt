@@ -154,9 +154,9 @@ internal class DialogflowRequest internal constructor(
       return webhookRequest.session
     }
 
-  override val locale: Locale?
+  override val locale: Locale
     get() {
-      return aogRequest?.locale
+      return aogRequest?.locale ?: Locale.getDefault()
   }
 
   private fun getAsNamespaced(name: String): String {

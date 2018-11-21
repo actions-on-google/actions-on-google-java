@@ -59,7 +59,7 @@ interface ActionRequest {
   /**
    * Returns the Locale of the user.
    */
-  val locale: Locale?
+  val locale: Locale
 
   /**
    * @return Information about the raw input provided by the user.

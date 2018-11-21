@@ -33,6 +33,11 @@ plugins {
 
 apply plugin: 'org.jetbrains.dokka'
 
+dokka {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
 version = '0.1.0'
 
 dependencies {

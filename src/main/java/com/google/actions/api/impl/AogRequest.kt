@@ -69,7 +69,7 @@ internal class AogRequest internal constructor(
       return null
     }
 
-  override val locale: Locale?
+  override val locale: Locale
     get() {
       val localeString = user?.locale
       val parts = localeString?.split("-")
@@ -80,7 +80,7 @@ internal class AogRequest internal constructor(
           2 -> return Locale(parts[0], parts[1])
         }
       }
-      return null
+      return Locale.getDefault()
     }
 
   override val repromptCount: Int?
