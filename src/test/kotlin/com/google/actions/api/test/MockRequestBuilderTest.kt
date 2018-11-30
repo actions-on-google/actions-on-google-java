@@ -46,7 +46,6 @@ class MockRequestBuilderTest {
             .build()
     assertTrue(request.getUserConfirmation()!!)
 
-
     request = MockRequestBuilder
             .userConfirmation(false)
             .build()
