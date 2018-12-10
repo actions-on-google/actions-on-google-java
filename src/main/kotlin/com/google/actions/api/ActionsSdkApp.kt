@@ -47,7 +47,7 @@ open class ActionsSdkApp : DefaultApp() {
 
   override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
     LOG.info("ActionsSdkApp.createRequest..")
-    return AogRequest.create(inputJson, headers = null)
+    return AogRequest.create(inputJson, headers)
   }
 
   override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {

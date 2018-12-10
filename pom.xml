@@ -177,9 +177,9 @@
             <configuration>
               <tasks>
                 <echo message="prepare phase"/>
-                <unzip src="lib/google-actions-bindings.jar"
+                <unzip src="${project.basedir}/lib/google-actions-bindings.jar"
                   dest="target/classes"/>
-                <unzip src="lib/dialogflow-webhook-bindings.jar"
+                <unzip src="${project.basedir}/lib/dialogflow-webhook-bindings.jar"
                   dest="target/classes"/>
               </tasks>
             </configuration>

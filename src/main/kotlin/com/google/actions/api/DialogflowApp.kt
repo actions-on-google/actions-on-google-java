@@ -45,7 +45,7 @@ import com.google.actions.api.response.ResponseBuilder
 open class DialogflowApp : DefaultApp() {
 
   override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
-    return DialogflowRequest.create(inputJson, null)
+    return DialogflowRequest.create(inputJson, headers)
   }
 
   override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {

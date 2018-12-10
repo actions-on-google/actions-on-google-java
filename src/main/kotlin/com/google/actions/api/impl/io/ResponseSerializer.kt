@@ -29,21 +29,32 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.slf4j.LoggerFactory
-import java.util.HashMap
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 internal class ResponseSerializer(
-        private val sessionId: String? = "") {
+    private val sessionId: String? = "") {
 
   private companion object {
     val LOG = LoggerFactory.getLogger(ResponseSerializer::class.java.name)
+
+    fun getLibraryMetadata(): Map<String, String> {
+      val metadataProperties = ResourceBundle.getBundle("metadata")
+
+      val map = HashMap<String, String>()
+      map["name"] = "actions"
+      map["language"] = "java"
+      map["version"] = metadataProperties.getString("version")
+
+      return map
+    }
   }
 
   fun toJsonV2(response: ActionResponse): String {
     when (response) {
       is DialogflowResponse -> return serializeDialogflowResponseV2(
-              response)
+          response)
       is AogResponse -> return serializeAogResponse(response)
     }
     LOG.warn("Unable to serialize the response.")
@@ -51,7 +62,7 @@ internal class ResponseSerializer(
   }
 
   private fun serializeDialogflowResponseV2(
-          dialogflowResponse: DialogflowResponse): String {
+      dialogflowResponse: DialogflowResponse): String {
     val gson = GsonBuilder().create()
     val googlePayload = dialogflowResponse.googlePayload
     val webhookResponse = dialogflowResponse.webhookResponse
@@ -74,15 +85,19 @@ internal class ResponseSerializer(
 
       setContext(context, webhookResponse)
     }
-
     contexts?.forEach { setContext(it, webhookResponse) }
 
-    return gson.toJson(webhookResponse)
+    val webhookResponseMap = webhookResponse.toMutableMap()
+    val metadata = HashMap<String, Any>()
+    metadata["google_library"] = getLibraryMetadata()
+    webhookResponseMap["metadata"] = metadata
+
+    return gson.toJson(webhookResponseMap)
   }
 
   private fun setContext(
-          context: ActionContext,
-          webhookResponse: WebhookResponse) {
+      context: ActionContext,
+      webhookResponse: WebhookResponse) {
     val ctx = webhookResponse.outputContexts?.find { it.name == context.name }
     if (ctx != null) {
       ctx.lifespanCount = context.lifespan
@@ -108,7 +123,7 @@ internal class ResponseSerializer(
   }
 
   private inner class DialogflowGooglePayload internal constructor(
-          aogResponse: AogResponse) {
+      aogResponse: AogResponse) {
     internal var expectUserResponse: Boolean = aogResponse.expectUserResponse
     internal var richResponse: RichResponse? = null
     internal var noInputPrompts: Array<SimpleResponse>? = null
@@ -121,16 +136,16 @@ internal class ResponseSerializer(
         val appResponse = aogResponse.appResponse
         if (expectUserResponse) {
           richResponse = appResponse
-                  ?.expectedInputs?.get(0)
-                  ?.inputPrompt
-                  ?.richInitialPrompt
+              ?.expectedInputs?.get(0)
+              ?.inputPrompt
+              ?.richInitialPrompt
           val expectedIntent = appResponse
-                  ?.expectedInputs?.get(0)
-                  ?.possibleIntents?.get(0)
+              ?.expectedInputs?.get(0)
+              ?.possibleIntents?.get(0)
           if (expectedIntent != null) {
             systemIntent = DFHelperIntent()
-                    .setIntent(expectedIntent.intent)
-                    .setData(expectedIntent.inputValueData)
+                .setIntent(expectedIntent.intent)
+                .setData(expectedIntent.inputValueData)
           }
         } else {
           richResponse = appResponse?.finalResponse?.richResponse
@@ -142,8 +157,8 @@ internal class ResponseSerializer(
           val aogHelperIntent = helperIntents.get(0)
 
           systemIntent = DFHelperIntent()
-                  .setIntent(aogHelperIntent.intent)
-                  .setData(aogHelperIntent.inputValueData)
+              .setIntent(aogHelperIntent.intent)
+              .setData(aogHelperIntent.inputValueData)
         }
       }
       val userStorage = aogResponse.userStorage
@@ -185,6 +200,14 @@ internal class ResponseSerializer(
 
   private fun serializeAogResponse(aogResponse: AogResponse): String {
     aogResponse.prepareAppResponse()
-    return Gson().toJson(aogResponse.appResponse)
+    val appResponseMap = aogResponse.appResponse!!.toMutableMap()
+
+    val map = HashMap<String, Any>()
+    map["GoogleLibraryInfo"] = getLibraryMetadata()
+    appResponseMap["ResponseMetadata"] = map
+
+    return Gson().toJson(appResponseMap)
   }
+
+
 }

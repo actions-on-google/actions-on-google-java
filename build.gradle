@@ -22,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.10"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.16"
     }
 }
 
@@ -34,7 +34,7 @@ plugins {
 apply plugin: 'org.jetbrains.dokka'
 
 dokka {
-    outputFormat = 'javadoc'
+    outputFormat = 'html'
     outputDirectory = "$buildDir/javadoc"
 }
 
