@@ -16,7 +16,6 @@
 
 package com.google.actions.api.impl
 
-import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
 import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
@@ -70,14 +69,6 @@ internal class AogResponse internal constructor(
 
   override val helperIntent: ExpectedIntent?
     get() = helperIntents?.get(0)
-
-  override fun addContext(context: ActionContext) {
-    // no op as ActionsSDK does not support concept of Context.
-  }
-
-  override fun removeContext(name: String) {
-    // no op as ActionsSDK does not support concept of Context.
-  }
 
   internal fun prepareAppResponse() {
     if (appResponse == null) {

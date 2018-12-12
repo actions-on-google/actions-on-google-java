@@ -185,8 +185,10 @@ class AogRequestTest {
   @Throws(Exception::class)
   fun conversationTokenIsParsed() {
     val aogRequest = fromFile("aog_user_conversation_data.json")
-    assertEquals("1", aogRequest
-            .conversationData["count"])
+    assertEquals(emptyList<String>(), aogRequest
+        .conversationData["history"])
+    val headquarters = aogRequest.conversationData["headquarters"] as List<String>
+    assertEquals("google1", headquarters[0])
   }
 
   @Test

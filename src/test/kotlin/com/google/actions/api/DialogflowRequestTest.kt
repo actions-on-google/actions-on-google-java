@@ -98,6 +98,19 @@ class DialogflowRequestTest {
     assertEquals("first last", conversationData["userName"])
   }
 
+  @Test
+  @Throws(Exception::class)
+  fun conversationDataIsParsed2() {
+    val request = fromFile("dialogflow_with_conv_data.json")
+    val convData = request.conversationData
+    val history = convData["history"] as ArrayList<String>
+    val headquarters = convData["headquarters"] as ArrayList<String>
+    val cats = convData["cats"] as ArrayList<String>
+    assertNotNull(request.webhookRequest)
+    assertEquals("google_headquarters_fact_1", headquarters[0])
+    assertEquals("cat_fact_2", cats[1])
+    assertEquals(0, history.size)
+  }
 
   @Test
   @Throws(Exception::class)

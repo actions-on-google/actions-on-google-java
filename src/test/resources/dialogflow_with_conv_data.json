@@ -1,0 +1,49 @@
+{
+  "responseId": "responseId",
+  "queryResult": {
+    "queryText": "sure",
+    "action": "tell.fact",
+    "parameters": {
+      "category": "history"
+    },
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/choose_fact-followup",
+        "lifespanCount": 5,
+        "parameters": {
+          "category.original": "",
+          "category": "history"
+        }
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/_actions_on_google",
+        "lifespanCount": 98,
+        "parameters": {
+          "data": "{\"headquarters\":[\"google_headquarters_fact_1\",\"google_headquarters_fact_2\",\"google_headquarters_fact_3\"],\"cats\":[\"cat_fact_1\",\"cat_fact_2\",\"cat_fact_3\"],\"history\":[]}",
+          "category.original": "",
+          "category": "history"
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/projectId/agent/intents/intentid",
+      "displayName": "tell_fact"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en"
+  },
+  "originalDetectIntentRequest": {
+    "payload": {}
+  },
+  "session": "projects/projectId/agent/sessions/sessionId"
+}

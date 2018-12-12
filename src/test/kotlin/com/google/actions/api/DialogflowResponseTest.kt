@@ -49,6 +49,7 @@ class DialogflowResponseTest {
     val data = HashMap<String, Any>()
     data["count"] = 2
     data["favorite_dish"] = "pizza"
+    data["history"] = {}
 
     val responseBuilder = ResponseBuilder(sessionId = "sessionId", conversationData = data)
     val response = responseBuilder
@@ -191,5 +192,29 @@ class DialogflowResponseTest {
     val intent = response.googlePayload?.helperIntents?.get(0)
     assertEquals("actions.intent.REGISTER_UPDATE", intent?.intent)
     assertEquals(updateIntent, intent?.inputValueData?.get("intent"))
+  }
+
+  @Test
+  fun testSetContext() {
+    val responseBuilder = ResponseBuilder(usesDialogflow = true, sessionId = "sessionId")
+    responseBuilder.expectUserResponse = true
+
+    val context = ActionContext("test_context", 99)
+    val map = HashMap<String, String>()
+    map["category"] = "headquarters"
+    context.parameters = map
+
+    val response = responseBuilder
+        .add("test")
+        .add(context)
+        .build()
+
+    val json = response.toJson()
+    val gson = Gson()
+    val jsonObject = gson.fromJson<JsonObject>(json, JsonObject::class.java)
+    assertEquals("sessionId/contexts/test_context", jsonObject
+        ?.get("outputContexts")?.asJsonArray
+        ?.get(0)?.asJsonObject
+        ?.get("name")?.asString)
   }
 }

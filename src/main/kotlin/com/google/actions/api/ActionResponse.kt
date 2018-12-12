@@ -59,18 +59,6 @@ interface ActionResponse {
   val helperIntent: ExpectedIntent?
 
   /**
-   * Adds a Context to the response. Only available for Dialogflow.
-   * See [Dialogflow Contexts](https://dialogflow.com/docs/contexts)
-   */
-  fun addContext(context: ActionContext)
-
-  /**
-   * Removes the Context with the specified name. Only available for Dialogflow.
-   * See [Dialogflow Contexts](https://dialogflow.com/docs/contexts)
-   */
-  fun removeContext(name: String)
-
-  /**
    * Returns the JSON representation of the response.
    */
   fun toJson(): String

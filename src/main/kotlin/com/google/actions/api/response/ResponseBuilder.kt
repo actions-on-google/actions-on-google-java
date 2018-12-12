@@ -16,6 +16,7 @@
 
 package com.google.actions.api.response
 
+import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.DialogflowResponse
@@ -79,6 +80,8 @@ class ResponseBuilder internal constructor(
   internal var webhookResponse: WebhookResponse? = null
 
   internal var fulfillmentText: String? = null
+
+  internal var contexts: MutableList<ActionContext> = ArrayList()
 
   /**
    * Builds the ActionResponse based on the added artifacts.
@@ -308,6 +311,17 @@ class ResponseBuilder internal constructor(
   }
 
   /**
+   * Helper method to add an ActionContext to the response. Contexts are supported only on
+   * Dialogflow.
+   * @param context The ActionContext to add.
+   * @return This ResponseBuilder.
+   */
+  fun add(context: ActionContext): ResponseBuilder {
+    this.contexts.add(context)
+    return this
+  }
+
+  /**
    * Marks the response as being the end of the conversation.
    * @return This ResponseBuilder.
    */
@@ -323,7 +337,9 @@ class ResponseBuilder internal constructor(
   }
 
   internal fun buildDialogflowResponse(): DialogflowResponse {
-    return DialogflowResponse(this)
+    val response = DialogflowResponse(this)
+    response.contexts = contexts
+    return response
   }
 
   private fun addHelperIntent(helperIntent: HelperIntent) {
