@@ -36,7 +36,9 @@ import kotlin.collections.set
 internal class ResponseSerializer(
     private val sessionId: String? = "") {
 
+
   private companion object {
+    val includeVersionMetadata = false
     val LOG = LoggerFactory.getLogger(ResponseSerializer::class.java.name)
 
     fun getLibraryMetadata(): Map<String, String> {
@@ -88,10 +90,11 @@ internal class ResponseSerializer(
     contexts?.forEach { setContext(it, webhookResponse) }
 
     val webhookResponseMap = webhookResponse.toMutableMap()
-    val metadata = HashMap<String, Any>()
-    metadata["google_library"] = getLibraryMetadata()
-    webhookResponseMap["metadata"] = metadata
-
+    if (includeVersionMetadata) {
+      val metadata = HashMap<String, Any>()
+      metadata["google_library"] = getLibraryMetadata()
+      webhookResponseMap["metadata"] = metadata
+    }
     return gson.toJson(webhookResponseMap)
   }
 
@@ -202,12 +205,12 @@ internal class ResponseSerializer(
     aogResponse.prepareAppResponse()
     val appResponseMap = aogResponse.appResponse!!.toMutableMap()
 
-    val map = HashMap<String, Any>()
-    map["GoogleLibraryInfo"] = getLibraryMetadata()
-    appResponseMap["ResponseMetadata"] = map
+    if (includeVersionMetadata) {
+      val map = HashMap<String, Any>()
+      map["GoogleLibraryInfo"] = getLibraryMetadata()
+      appResponseMap["ResponseMetadata"] = map
+    }
 
     return Gson().toJson(appResponseMap)
   }
-
-
 }
