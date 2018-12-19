@@ -41,11 +41,11 @@ dokka {
 version = '0.1.0'
 
 dependencies {
-    // Dialogflow JSON bindings
-    compile files('lib/dialogflow-webhook-bindings.jar')
-
     // Actions on Google JSON bindings
-    compile files('lib/google-actions-bindings.jar')
+    compile files('lib/libactions_java_lib.jar')
+
+    // Dialogflow JSON bindings
+    compile files('lib/libdialogflow_java_lib.jar')
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.4'

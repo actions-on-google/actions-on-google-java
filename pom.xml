@@ -62,7 +62,7 @@
       <artifactId>google-actions-bindings</artifactId>
       <version>1.0</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/google-actions-bindings.jar
+      <systemPath>${project.basedir}/lib/libactions_java_lib.jar
       </systemPath>
     </dependency>
     <dependency>
@@ -70,7 +70,7 @@
       <artifactId>dialogflow-bindings</artifactId>
       <version>1.0</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/dialogflow-webhook-bindings.jar
+      <systemPath>${project.basedir}/lib/libdialogflow_java_lib.jar
       </systemPath>
     </dependency>
     <dependency>
@@ -177,9 +177,9 @@
             <configuration>
               <tasks>
                 <echo message="prepare phase"/>
-                <unzip src="${project.basedir}/lib/google-actions-bindings.jar"
+                <unzip src="${project.basedir}/lib/libactions_java_lib.jar"
                   dest="target/classes"/>
-                <unzip src="${project.basedir}/lib/dialogflow-webhook-bindings.jar"
+                <unzip src="${project.basedir}/lib/libdialogflow_java_lib.jar"
                   dest="target/classes"/>
               </tasks>
             </configuration>
