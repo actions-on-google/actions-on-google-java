@@ -322,6 +322,19 @@ class ResponseBuilder internal constructor(
   }
 
   /**
+   * Helper method to remove an existing context. Contexts are supported only on Dialogflow.
+   * @param name Name of the context to remove. Note that the name of the context must not be
+   *    prefixed with the sessionId.
+   * @return This ResponseBuilder.
+   */
+  fun removeContext(name: String): ResponseBuilder {
+    // Contexts with lifespan = 0 is removed by Dialogflow and will not be present in the
+    // following requests.
+    this.add(ActionContext(name, lifespan = 0))
+    return this
+  }
+
+  /**
    * Marks the response as being the end of the conversation.
    * @return This ResponseBuilder.
    */

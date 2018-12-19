@@ -17,7 +17,7 @@
     ],
     "outputContexts": [
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/favoritecolorintent-followup",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/favoritecolorintent-followup",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "color": "yellow",
@@ -26,14 +26,14 @@
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_screen_output",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_screen_output",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "fakeColor.original": "blue grey coffee"
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/_actions_on_google",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/_actions_on_google",
         "lifespanCount": 97,
         "parameters": {
           "fakeColor": "blue grey coffee",
@@ -44,28 +44,28 @@
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_audio_output",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_audio_output",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "fakeColor.original": "blue grey coffee"
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/google_assistant_input_type_keyboard",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/google_assistant_input_type_keyboard",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "fakeColor.original": "blue grey coffee"
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_web_browser",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_web_browser",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "fakeColor.original": "blue grey coffee"
         }
       },
       {
-        "name": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641/contexts/actions_capability_media_response_audio",
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_media_response_audio",
         "parameters": {
           "fakeColor": "blue grey coffee",
           "fakeColor.original": "blue grey coffee"
@@ -73,7 +73,7 @@
       }
     ],
     "intent": {
-      "name": "projects/ksub-aog-codelab-2/agent/intents/efded27e-5d6b-437e-bdb4-09a29d1fcaee",
+      "name": "projects/projectId/agent/intents/efded27e-5d6b-437e-bdb4-09a29d1fcaee",
       "displayName": "favorite fake color"
     },
     "intentDetectionConfidence": 1,
@@ -152,5 +152,5 @@
       ]
     }
   },
-  "session": "projects/ksub-aog-codelab-2/agent/sessions/1525573480641"
+  "session": "projects/projectId/agent/sessions/sessionId"
 }

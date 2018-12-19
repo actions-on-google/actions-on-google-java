@@ -195,7 +195,7 @@ class DialogflowResponseTest {
   }
 
   @Test
-  fun testSetContext() {
+  fun testAddNewContext() {
     val responseBuilder = ResponseBuilder(usesDialogflow = true, sessionId = "sessionId")
     responseBuilder.expectUserResponse = true
 
@@ -216,5 +216,28 @@ class DialogflowResponseTest {
         ?.get("outputContexts")?.asJsonArray
         ?.get(0)?.asJsonObject
         ?.get("name")?.asString)
+  }
+
+  @Test
+  fun testRemoveContext() {
+    val responseBuilder = ResponseBuilder(usesDialogflow = true, sessionId = "sessionId")
+    responseBuilder.expectUserResponse = true
+
+    val response = responseBuilder
+        .add("test")
+        .removeContext("test_context")
+        .build()
+
+    val json = response.toJson()
+    val gson = Gson()
+    val jsonObject = gson.fromJson<JsonObject>(json, JsonObject::class.java)
+    assertEquals("sessionId/contexts/test_context", jsonObject
+        ?.get("outputContexts")?.asJsonArray
+        ?.get(0)?.asJsonObject
+        ?.get("name")?.asString)
+    assertEquals(0, jsonObject
+        ?.get("outputContexts")?.asJsonArray
+        ?.get(0)?.asJsonObject
+        ?.get("lifespanCount")?.asInt)
   }
 }
