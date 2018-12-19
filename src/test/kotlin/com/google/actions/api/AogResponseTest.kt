@@ -22,6 +22,7 @@ import com.google.actions.api.response.helperintent.*
 import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
 import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
+import com.google.api.services.actions_fulfillment.v2.model.SkuId
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import junit.framework.TestCase.assertEquals
@@ -320,5 +321,35 @@ class AogResponseTest {
             ?.expectedInputs?.get(0)
             ?.possibleIntents?.get(0)
             ?.intent)
+  }
+
+  @Test
+  fun testCompletePurchase() {
+    println("testCompletePurchase")
+    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+    responseBuilder.add(CompletePurchase().setSkuId(SkuId()
+        .setId("PRODUCT_SKU_ID")
+        .setSkuType("INAPP")
+        .setPackageName("play.store.package.name"))
+        .setDeveloperPayload("OPTIONAL_DEVELOPER_PAYLOAD"))
+
+    val response = responseBuilder.build()
+    val jsonOutput = response.toJson()
+
+    val gson = Gson()
+    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+    val inputValueData = jsonObject
+        .get("expectedInputs").asJsonArray.get(0).asJsonObject
+        .get("possibleIntents").asJsonArray.get(0).asJsonObject
+        .get("inputValueData").asJsonObject
+    assertEquals("type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec",
+        inputValueData.get("@type").asString)
+    val skuId = inputValueData.get("skuId").asJsonObject
+    assertEquals("PRODUCT_SKU_ID", skuId.get("id").asString)
+    assertEquals("INAPP", skuId.get("skuType").asString)
+    assertEquals("play.store.package.name", skuId.get("packageName").asString)
+    assertEquals("OPTIONAL_DEVELOPER_PAYLOAD",
+        inputValueData.get("developerPayload").asString)
   }
 }
