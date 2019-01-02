@@ -1,3 +1,4 @@
 com.google.actions.api
 com.google.actions.api.response
-com.google.actions.api.response.systemintent
+com.google.actions.api.response.helperintent
+com.google.actions.api.test
