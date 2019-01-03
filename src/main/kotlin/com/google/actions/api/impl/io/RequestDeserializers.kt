@@ -28,241 +28,242 @@ import java.util.*
 internal inline fun <reified T> genericType() = object : TypeToken<T>() {}.type
 
 internal class AppRequestDeserializer : JsonDeserializer<AppRequest> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): AppRequest {
-    val jsonObject = json!!.asJsonObject
-    val appRequest = AppRequest()
-    appRequest.user = context?.deserialize(jsonObject.get("user"),
-            User::class.java)
-    appRequest.device = context?.deserialize(jsonObject.get("device"),
-            Device::class.java)
-    appRequest.surface = context?.deserialize(jsonObject.get("surface"),
-            Surface::class.java)
-    appRequest.conversation = context?.deserialize(
-            jsonObject.get("conversation"),
-            Conversation::class.java)
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): AppRequest {
+        val jsonObject = json!!.asJsonObject
+        val appRequest = AppRequest()
+        appRequest.user = context?.deserialize(jsonObject.get("user"),
+                User::class.java)
+        appRequest.device = context?.deserialize(jsonObject.get("device"),
+                Device::class.java)
+        appRequest.surface = context?.deserialize(jsonObject.get("surface"),
+                Surface::class.java)
+        appRequest.conversation = context?.deserialize(
+                jsonObject.get("conversation"),
+                Conversation::class.java)
 
-    val inputsArray = jsonObject.get("inputs")?.asJsonArray
-    if (inputsArray != null) {
-      val inputsList = ArrayList<Input>()
-      for (input in inputsArray) {
-        inputsList.add(context?.deserialize(input, Input::class.java)!!)
-      }
-      appRequest.inputs = inputsList
-    }
+        val inputsArray = jsonObject.get("inputs")?.asJsonArray
+        if (inputsArray != null) {
+            val inputsList = ArrayList<Input>()
+            for (input in inputsArray) {
+                inputsList.add(context?.deserialize(input, Input::class.java)!!)
+            }
+            appRequest.inputs = inputsList
+        }
 
-    val availableSurfacesArray = jsonObject
-            .get("availableSurfaces")?.asJsonArray
-    if (availableSurfacesArray != null) {
-      val availableSurfaces = ArrayList<Surface>()
-      for (surface in availableSurfacesArray) {
-        availableSurfaces.add(context?.deserialize(surface,
-                Surface::class.java)!!)
-      }
-      appRequest.availableSurfaces = availableSurfaces
+        val availableSurfacesArray = jsonObject
+                .get("availableSurfaces")?.asJsonArray
+        if (availableSurfacesArray != null) {
+            val availableSurfaces = ArrayList<Surface>()
+            for (surface in availableSurfacesArray) {
+                availableSurfaces.add(context?.deserialize(surface,
+                        Surface::class.java)!!)
+            }
+            appRequest.availableSurfaces = availableSurfaces
+        }
+        appRequest.isInSandbox = jsonObject.get("isInSandbox")?.asBoolean
+        return appRequest
     }
-    appRequest.isInSandbox = jsonObject.get("isInSandbox")?.asBoolean
-    return appRequest
-  }
 }
 
 internal class UserDeserializer : JsonDeserializer<User> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): User {
-    val jsonObject = json!!.asJsonObject
-    val user = User()
-            .setUserStorage(jsonObject.get("userStorage")?.asString)
-            .setLastSeen(jsonObject.get("lastSeen")?.asString)
-            .setLocale(jsonObject.get("locale")?.asString)
-            .setAccessToken(jsonObject.get("accessToken")?.asString)
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): User {
+        val jsonObject = json!!.asJsonObject
+        val user = User()
+                .setUserStorage(jsonObject.get("userStorage")?.asString)
+                .setLastSeen(jsonObject.get("lastSeen")?.asString)
+                .setLocale(jsonObject.get("locale")?.asString)
+                .setAccessToken(jsonObject.get("accessToken")?.asString)
+                .setIdToken(jsonObject.get("idToken")?.asString)
 
-    val userProfile = jsonObject.get("profile")?.asJsonObject
-    if (userProfile != null) {
-      user.profile = context?.deserialize(userProfile, UserProfile::class.java)
+        val userProfile = jsonObject.get("profile")?.asJsonObject
+        if (userProfile != null) {
+            user.profile = context?.deserialize(userProfile, UserProfile::class.java)
+        }
+        return user
     }
-    return user
-  }
 }
 
 internal class SurfaceDeserializer : JsonDeserializer<Surface> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): Surface {
-    val surface = Surface()
-    val jsonObject = json!!.asJsonObject
-    val capabilitiesEl = jsonObject.get("capabilities")
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Surface {
+        val surface = Surface()
+        val jsonObject = json!!.asJsonObject
+        val capabilitiesEl = jsonObject.get("capabilities")
 
-    if (capabilitiesEl != null) {
-      val array = capabilitiesEl.asJsonArray
-      val list = ArrayList<Capability>()
-      for (item in array) {
-        list.add(context?.deserialize(item, Capability::class.java)!!)
-      }
-      surface.capabilities = list
+        if (capabilitiesEl != null) {
+            val array = capabilitiesEl.asJsonArray
+            val list = ArrayList<Capability>()
+            for (item in array) {
+                list.add(context?.deserialize(item, Capability::class.java)!!)
+            }
+            surface.capabilities = list
+        }
+
+        return surface
     }
-
-    return surface
-  }
 }
 
 internal class DeviceDeserializer : JsonDeserializer<Device> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): Device {
-    val jsonObject = json!!.asJsonObject
-    val device = Device()
-    if (jsonObject.get("location") != null) {
-      device.location = context?.deserialize(
-              jsonObject.get("location"), Location::class.java)
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Device {
+        val jsonObject = json!!.asJsonObject
+        val device = Device()
+        if (jsonObject.get("location") != null) {
+            device.location = context?.deserialize(
+                    jsonObject.get("location"), Location::class.java)
+        }
+        return device
     }
-    return device
-  }
 }
 
 internal class LocationDeserializer : JsonDeserializer<Location> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): Location {
-    val jsonObject = json!!.asJsonObject
-    val location = Location()
-    if (jsonObject.get("coordinates") != null) {
-      location.coordinates = context?.deserialize(jsonObject.get("coordinates"),
-              LatLng::class.java)
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Location {
+        val jsonObject = json!!.asJsonObject
+        val location = Location()
+        if (jsonObject.get("coordinates") != null) {
+            location.coordinates = context?.deserialize(jsonObject.get("coordinates"),
+                    LatLng::class.java)
+        }
+        location.formattedAddress = jsonObject.get("formattedAddress")?.asString
+        location.zipCode = jsonObject.get("zipCode")?.asString
+        location.city = jsonObject.get("city")?.asString
+        location.name = jsonObject.get("name")?.asString
+        location.phoneNumber = jsonObject.get("phoneNumber")?.asString
+        location.notes = jsonObject.get("notes")?.asString
+        if (jsonObject.get("postalAddress") != null) {
+            location.postalAddress = context?.deserialize(
+                    jsonObject.get("postalAddress"),
+                    PostalAddress::class.java)
+        }
+        return location
     }
-    location.formattedAddress = jsonObject.get("formattedAddress")?.asString
-    location.zipCode = jsonObject.get("zipCode")?.asString
-    location.city = jsonObject.get("city")?.asString
-    location.name = jsonObject.get("name")?.asString
-    location.phoneNumber = jsonObject.get("phoneNumber")?.asString
-    location.notes = jsonObject.get("notes")?.asString
-    if (jsonObject.get("postalAddress") != null) {
-      location.postalAddress = context?.deserialize(
-              jsonObject.get("postalAddress"),
-              PostalAddress::class.java)
-    }
-    return location
-  }
 }
 
 internal class InputDeserializer : JsonDeserializer<Input> {
-  override fun deserialize(
-          json: JsonElement?, typeOfT: Type?,
-          context: JsonDeserializationContext?): Input {
-    val input = Input()
-    val jsonObject = json!!.asJsonObject
+    override fun deserialize(
+            json: JsonElement?, typeOfT: Type?,
+            context: JsonDeserializationContext?): Input {
+        val input = Input()
+        val jsonObject = json!!.asJsonObject
 
-    input.intent = jsonObject.get("intent").asString
+        input.intent = jsonObject.get("intent").asString
 
-    val arguments = jsonObject.get("arguments")?.asJsonArray
-    if (arguments != null) {
-      val list = ArrayList<Argument>()
-      for (arg in arguments) {
-        list.add(context!!.deserialize(arg, Argument::class.java))
-      }
-      input.setArguments(list)
+        val arguments = jsonObject.get("arguments")?.asJsonArray
+        if (arguments != null) {
+            val list = ArrayList<Argument>()
+            for (arg in arguments) {
+                list.add(context!!.deserialize(arg, Argument::class.java))
+            }
+            input.setArguments(list)
+        }
+
+        val rawInputs = jsonObject.get("rawInputs")?.asJsonArray
+        if (rawInputs != null) {
+            val list = ArrayList<RawInput>()
+            for (rawInput in rawInputs) {
+                list.add(context!!.deserialize(rawInput, RawInput::class.java))
+            }
+            input.setRawInputs(list)
+        }
+        return input
     }
-
-    val rawInputs = jsonObject.get("rawInputs")?.asJsonArray
-    if (rawInputs != null) {
-      val list = ArrayList<RawInput>()
-      for (rawInput in rawInputs) {
-        list.add(context!!.deserialize(rawInput, RawInput::class.java))
-      }
-      input.setRawInputs(list)
-    }
-    return input
-  }
 }
 
 internal class ArgumentDeserializer : JsonDeserializer<Argument> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): Argument {
-    val jsonObject = json!!.asJsonObject
-    val argument = Argument()
-    argument.name = jsonObject.get("name")?.asString
-    argument.rawText = jsonObject.get("rawText")?.asString
-    argument.textValue = jsonObject.get("textValue")?.asString
-    argument.intValue = jsonObject.get("intValue")?.asLong
-    argument.floatValue = jsonObject.get("floatValue")?.asDouble
-    argument.boolValue = jsonObject.get("boolValue")?.asBoolean
-    val statusObj = jsonObject.get("status")?.asJsonObject
-    if (statusObj != null) {
-      argument.status = context?.deserialize(statusObj, Status::class.java)
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Argument {
+        val jsonObject = json!!.asJsonObject
+        val argument = Argument()
+        argument.name = jsonObject.get("name")?.asString
+        argument.rawText = jsonObject.get("rawText")?.asString
+        argument.textValue = jsonObject.get("textValue")?.asString
+        argument.intValue = jsonObject.get("intValue")?.asLong
+        argument.floatValue = jsonObject.get("floatValue")?.asDouble
+        argument.boolValue = jsonObject.get("boolValue")?.asBoolean
+        val statusObj = jsonObject.get("status")?.asJsonObject
+        if (statusObj != null) {
+            argument.status = context?.deserialize(statusObj, Status::class.java)
+        }
+        val dateTimeValueObj = jsonObject.get("datetimeValue")?.asJsonObject
+        if (dateTimeValueObj != null) {
+            argument.datetimeValue = context?.deserialize(dateTimeValueObj,
+                    DateTime::class.java)
+        }
+        val placeValueObj = jsonObject.get("placeValue")?.asJsonObject
+        if (placeValueObj != null) {
+            argument.placeValue = context?.deserialize(placeValueObj,
+                    Location::class.java)
+        }
+        val extensionObj = jsonObject.get("extension")?.asJsonObject
+        if (extensionObj != null) {
+            argument.extension = context?.deserialize(extensionObj,
+                    genericType<Map<String, Any>>())
+        }
+        return argument
     }
-    val dateTimeValueObj = jsonObject.get("datetimeValue")?.asJsonObject
-    if (dateTimeValueObj != null) {
-      argument.datetimeValue = context?.deserialize(dateTimeValueObj,
-              DateTime::class.java)
-    }
-    val placeValueObj = jsonObject.get("placeValue")?.asJsonObject
-    if (placeValueObj != null) {
-      argument.placeValue = context?.deserialize(placeValueObj,
-              Location::class.java)
-    }
-    val extensionObj = jsonObject.get("extension")?.asJsonObject
-    if (extensionObj != null) {
-      argument.extension = context?.deserialize(extensionObj,
-              genericType<Map<String, Any>>())
-    }
-    return argument
-  }
 }
 
 internal class DateTimeValueDeserializer : JsonDeserializer<DateTime> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): DateTime {
-    val jsonObject = json!!.asJsonObject
-    val dateTime = DateTime()
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): DateTime {
+        val jsonObject = json!!.asJsonObject
+        val dateTime = DateTime()
 
-    val dateObj = jsonObject.get("date")?.asJsonObject
-    val date = Date()
-    date.day = dateObj?.get("day")?.asInt
-    date.month = dateObj?.get("month")?.asInt
-    date.year = dateObj?.get("year")?.asInt
+        val dateObj = jsonObject.get("date")?.asJsonObject
+        val date = Date()
+        date.day = dateObj?.get("day")?.asInt
+        date.month = dateObj?.get("month")?.asInt
+        date.year = dateObj?.get("year")?.asInt
 
-    val timeObj = jsonObject.get("time")?.asJsonObject
-    val time = TimeOfDay()
-    time.hours = timeObj?.get("hours")?.asInt
-    time.minutes = timeObj?.get("minutes")?.asInt
-    time.seconds = timeObj?.get("seconds")?.asInt
+        val timeObj = jsonObject.get("time")?.asJsonObject
+        val time = TimeOfDay()
+        time.hours = timeObj?.get("hours")?.asInt
+        time.minutes = timeObj?.get("minutes")?.asInt
+        time.seconds = timeObj?.get("seconds")?.asInt
 
-    dateTime.setDate(date).setTime(time)
-    return dateTime
-  }
+        dateTime.setDate(date).setTime(time)
+        return dateTime
+    }
 }
 
 internal class RawInputDeserializer : JsonDeserializer<RawInput> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): RawInput {
-    val jsonObject = json!!.asJsonObject
-    return RawInput()
-            .setInputType(jsonObject?.get("inputType")?.asString)
-            .setQuery(jsonObject?.get("query")?.asString)
-  }
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): RawInput {
+        val jsonObject = json!!.asJsonObject
+        return RawInput()
+                .setInputType(jsonObject?.get("inputType")?.asString)
+                .setQuery(jsonObject?.get("query")?.asString)
+    }
 }
 
 internal class StatusDeserializer : JsonDeserializer<Status> {
-  override fun deserialize(
-          json: JsonElement?,
-          typeOfT: Type?,
-          context: JsonDeserializationContext?): Status {
-    val jsonObject = json!!.asJsonObject
-    val status = Status()
-    status.code = jsonObject.get("code")?.asInt
-    status.message = jsonObject.get("message")?.asString
-    return status
-  }
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Status {
+        val jsonObject = json!!.asJsonObject
+        val status = Status()
+        status.code = jsonObject.get("code")?.asInt
+        status.message = jsonObject.get("message")?.asString
+        return status
+    }
 }

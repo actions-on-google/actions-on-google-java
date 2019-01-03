@@ -31,325 +31,345 @@ import org.testng.annotations.Test
 
 class AogResponseTest {
 
-  @Test
-  fun testBasicResponse() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+    @Test
+    fun testBasicResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    responseBuilder.add("this is a test");
-    val response = responseBuilder.buildAogResponse()
-    assertNotNull(response)
-    val asJson = response.toJson()
-    assertNotNull(Gson().fromJson(asJson, JsonObject::class.java))
+        responseBuilder.add("this is a test");
+        val response = responseBuilder.buildAogResponse()
+        assertNotNull(response)
+        val asJson = response.toJson()
+        assertNotNull(Gson().fromJson(asJson, JsonObject::class.java))
 
-    assertEquals("actions.intent.TEXT", response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.possibleIntents?.get(0)
-            ?.intent)
-  }
+        assertEquals("actions.intent.TEXT", response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0)
+                ?.intent)
+    }
 
-  @Test
-  fun testAskConfirmation() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
-    val confirmation = Confirmation().setConfirmationText("Are you sure?")
-    val jsonOutput = responseBuilder
-            .add(confirmation)
-            .build()
-            .toJson()
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    val dialogSpec = inputValueData.get("dialogSpec").asJsonObject
-    assertEquals("type.googleapis.com/google.actions.v2.ConfirmationValueSpec",
-            inputValueData.get("@type").asString)
-    assertEquals("Are you sure?",
-            dialogSpec.get("requestConfirmationText").asString)
-  }
+    @Test
+    fun testAskConfirmation() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val confirmation = Confirmation().setConfirmationText("Are you sure?")
+        val jsonOutput = responseBuilder
+                .add(confirmation)
+                .build()
+                .toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        val dialogSpec = inputValueData.get("dialogSpec").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.ConfirmationValueSpec",
+                inputValueData.get("@type").asString)
+        assertEquals("Are you sure?",
+                dialogSpec.get("requestConfirmationText").asString)
+    }
 
-  @Test
-  fun testAskDateTime() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
-    val dateTimePrompt = DateTimePrompt()
-            .setDatePrompt("What date?")
-            .setDateTimePrompt("What date and time?")
-            .setTimePrompt("What time?")
+    @Test
+    fun testAskDateTime() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val dateTimePrompt = DateTimePrompt()
+                .setDatePrompt("What date?")
+                .setDateTimePrompt("What date and time?")
+                .setTimePrompt("What time?")
 
-    val jsonOutput = responseBuilder
-            .add(dateTimePrompt)
-            .build()
-            .toJson()
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    val dialogSpec = inputValueData.get("dialogSpec").asJsonObject
-    assertEquals("type.googleapis.com/google.actions.v2.DateTimeValueSpec",
-            inputValueData.get("@type").asString)
-    assertEquals("What date?",
-            dialogSpec.get("requestDateText").asString)
-    assertEquals("What time?",
-            dialogSpec.get("requestTimeText").asString)
-    assertEquals("What date and time?",
-            dialogSpec.get("requestDatetimeText").asString)
-  }
+        val jsonOutput = responseBuilder
+                .add(dateTimePrompt)
+                .build()
+                .toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        val dialogSpec = inputValueData.get("dialogSpec").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.DateTimeValueSpec",
+                inputValueData.get("@type").asString)
+        assertEquals("What date?",
+                dialogSpec.get("requestDateText").asString)
+        assertEquals("What time?",
+                dialogSpec.get("requestTimeText").asString)
+        assertEquals("What date and time?",
+                dialogSpec.get("requestDatetimeText").asString)
+    }
 
-  @Test
-  fun testAskPermission() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
-    responseBuilder.add(Permission()
-            .setPermissions(arrayOf(PERMISSION_NAME,
-                    PERMISSION_DEVICE_PRECISE_LOCATION))
-            .setContext("To get your name"))
-    val response = responseBuilder.build()
-    val jsonOutput = response.toJson()
+    @Test
+    fun testAskPermission() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        responseBuilder.add(Permission()
+                .setPermissions(arrayOf(PERMISSION_NAME,
+                        PERMISSION_DEVICE_PRECISE_LOCATION))
+                .setContext("To get your name"))
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    assertEquals("type.googleapis.com/google.actions.v2.PermissionValueSpec",
-            inputValueData.get("@type").asString)
-    assertEquals("To get your name",
-            inputValueData.get("optContext").asString)
-    assertEquals("NAME",
-            inputValueData.get("permissions").asJsonArray
-                    .get(0).asString)
-  }
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.PermissionValueSpec",
+                inputValueData.get("@type").asString)
+        assertEquals("To get your name",
+                inputValueData.get("optContext").asString)
+        assertEquals("NAME",
+                inputValueData.get("permissions").asJsonArray
+                        .get(0).asString)
+    }
 
-  @Test
-  fun testAskPlace() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+    @Test
+    fun testAskPlace() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    val requestPrompt = "Where do you want to have lunch?"
-    val permissionPrompt = "To find lunch locations"
-    responseBuilder.add(Place()
-            .setRequestPrompt(requestPrompt)
-            .setPermissionContext(permissionPrompt))
-    val response = responseBuilder.build()
-    val jsonOutput = response.toJson()
+        val requestPrompt = "Where do you want to have lunch?"
+        val permissionPrompt = "To find lunch locations"
+        responseBuilder.add(Place()
+                .setRequestPrompt(requestPrompt)
+                .setPermissionContext(permissionPrompt))
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
 
-    val dialogSpec = inputValueData.get("dialog_spec").asJsonObject
-    val extension = dialogSpec.get("extension").asJsonObject
-    assertEquals("type.googleapis.com/google.actions.v2.PlaceValueSpec",
-            inputValueData.get("@type").asString)
-    assertEquals(requestPrompt,
-            extension.get("requestPrompt").asString)
-    assertEquals(permissionPrompt,
-            extension.get("permissionContext").asString)
+        val dialogSpec = inputValueData.get("dialog_spec").asJsonObject
+        val extension = dialogSpec.get("extension").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.PlaceValueSpec",
+                inputValueData.get("@type").asString)
+        assertEquals(requestPrompt,
+                extension.get("requestPrompt").asString)
+        assertEquals(permissionPrompt,
+                extension.get("permissionContext").asString)
 
-  }
+    }
 
-  @Test
-  fun testAskSignIn() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+    @Test
+    fun testAskSignIn() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    responseBuilder.add(SignIn())
-    val response = responseBuilder.build()
-    val jsonOutput = response.toJson()
+        responseBuilder.add(SignIn())
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    assertNotNull(inputValueData)
-  }
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertNotNull(inputValueData)
+    }
 
-  @Test
-  fun testListSelect() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+    @Test
+    fun testAskSignInWithContext() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    val items = ArrayList<ListSelectListItem>()
-    items.add(ListSelectListItem().setTitle("Android"))
-    items.add(ListSelectListItem().setTitle("Actions on Google"))
-    items.add(ListSelectListItem().setTitle("Flutter"))
+        responseBuilder.add(SignIn()
+                .setContext("For testing purposes"))
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
 
-    val response = responseBuilder
-            .add(SelectionList().setTitle("Topics").setItems(items))
-            .build()
-    val jsonOutput = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertNotNull(inputValueData)
+        assertEquals("For testing purposes",
+                inputValueData.get("optContext").asString)
+    }
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    val listSelect = inputValueData.get("listSelect").asJsonObject
-    assertNotNull(listSelect)
-    assertEquals("Android", listSelect.get("items")
-            .asJsonArray.get(0)
-            .asJsonObject
-            .get("title").asString)
-  }
+    @Test
+    fun testListSelect() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-  @Test
-  fun testCarouselSelect() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val items = ArrayList<ListSelectListItem>()
+        items.add(ListSelectListItem().setTitle("Android"))
+        items.add(ListSelectListItem().setTitle("Actions on Google"))
+        items.add(ListSelectListItem().setTitle("Flutter"))
 
-    val items = ArrayList<CarouselSelectCarouselItem>()
-    items.add(CarouselSelectCarouselItem().setTitle("Android"))
-    items.add(CarouselSelectCarouselItem().setTitle("Actions on Google"))
-    items.add(CarouselSelectCarouselItem().setTitle("Flutter"))
+        val response = responseBuilder
+                .add(SelectionList().setTitle("Topics").setItems(items))
+                .build()
+        val jsonOutput = response.toJson()
 
-    val response = responseBuilder
-            .add(SelectionCarousel().setItems(items))
-            .build()
-    val jsonOutput = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        val listSelect = inputValueData.get("listSelect").asJsonObject
+        assertNotNull(listSelect)
+        assertEquals("Android", listSelect.get("items")
+                .asJsonArray.get(0)
+                .asJsonObject
+                .get("title").asString)
+    }
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-            .get("expectedInputs").asJsonArray.get(0).asJsonObject
-            .get("possibleIntents").asJsonArray.get(0).asJsonObject
-            .get("inputValueData").asJsonObject
-    val carouselSelect = inputValueData.get("carouselSelect")
-            .asJsonObject
-    assertNotNull(carouselSelect)
-    assertEquals("Android", carouselSelect.get("items")
-            .asJsonArray.get(0)
-            .asJsonObject
-            .get("title").asString)
-  }
+    @Test
+    fun testCarouselSelect() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-  @Test
-  fun testConversationDataIsSet() {
-    val data = HashMap<String, Any>()
-    data["favorite_color"] = "white"
+        val items = ArrayList<CarouselSelectCarouselItem>()
+        items.add(CarouselSelectCarouselItem().setTitle("Android"))
+        items.add(CarouselSelectCarouselItem().setTitle("Actions on Google"))
+        items.add(CarouselSelectCarouselItem().setTitle("Flutter"))
 
-    val responseBuilder = ResponseBuilder(usesDialogflow = false,
-            conversationData = data)
-    responseBuilder
-            .add("this is a test")
-    val aogResponse = responseBuilder.build() as AogResponse
+        val response = responseBuilder
+                .add(SelectionCarousel().setItems(items))
+                .build()
+        val jsonOutput = response.toJson()
 
-    val jsonOutput = aogResponse.toJson()
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val serializedValue = jsonObject.get("conversationToken").asString
-    assertEquals("white",
-            gson.fromJson(serializedValue, JsonObject::class.java)
-                    .get("data").asJsonObject
-                    .get("favorite_color").asString)
-  }
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        val carouselSelect = inputValueData.get("carouselSelect")
+                .asJsonObject
+        assertNotNull(carouselSelect)
+        assertEquals("Android", carouselSelect.get("items")
+                .asJsonArray.get(0)
+                .asJsonObject
+                .get("title").asString)
+    }
 
-  @Test
-  fun testUserStorageIsSet() {
-    val map = HashMap<String, Any>()
-    map["favorite_color"] = "white"
-    val responseBuilder = ResponseBuilder(usesDialogflow = false,
-            userStorage = map)
-    responseBuilder
-            .add("this is a test")
+    @Test
+    fun testConversationDataIsSet() {
+        val data = HashMap<String, Any>()
+        data["favorite_color"] = "white"
 
-    val aogResponse = responseBuilder.build()
-    val jsonOutput = aogResponse.toJson()
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val serializedValue = jsonObject.get("userStorage").asString
-    assertEquals("white",
-            gson.fromJson(serializedValue, JsonObject::class.java)
-                    .get("data").asJsonObject
-                    .get("favorite_color").asString)
-  }
+        val responseBuilder = ResponseBuilder(usesDialogflow = false,
+                conversationData = data)
+        responseBuilder
+                .add("this is a test")
+        val aogResponse = responseBuilder.build() as AogResponse
 
-  @Test
-  fun testNewSurfaceHelperIntent() {
-    val capability = Capability.SCREEN_OUTPUT.value
+        val jsonOutput = aogResponse.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val serializedValue = jsonObject.get("conversationToken").asString
+        assertEquals("white",
+                gson.fromJson(serializedValue, JsonObject::class.java)
+                        .get("data").asJsonObject
+                        .get("favorite_color").asString)
+    }
 
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+    @Test
+    fun testUserStorageIsSet() {
+        val map = HashMap<String, Any>()
+        map["favorite_color"] = "white"
+        val responseBuilder = ResponseBuilder(usesDialogflow = false,
+                userStorage = map)
+        responseBuilder
+                .add("this is a test")
 
-    responseBuilder.add(NewSurface()
-            .setCapability(capability)
-            .setContext("context")
-            .setNotificationTitle("notification title"))
-    val response = responseBuilder.buildAogResponse()
-    val intent = response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.possibleIntents?.get(0) as ExpectedIntent
-    assertEquals("actions.intent.NEW_SURFACE", intent.intent)
-    val capabilitiesArray =
-            intent.inputValueData["capabilities"] as Array<String>
-    assertEquals(capability, capabilitiesArray[0])
-  }
+        val aogResponse = responseBuilder.build()
+        val jsonOutput = aogResponse.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val serializedValue = jsonObject.get("userStorage").asString
+        assertEquals("white",
+                gson.fromJson(serializedValue, JsonObject::class.java)
+                        .get("data").asJsonObject
+                        .get("favorite_color").asString)
+    }
 
-  @Test
-  fun testRegisterDailyUpdate() {
-    val updateIntent = "intent.foo"
+    @Test
+    fun testNewSurfaceHelperIntent() {
+        val capability = Capability.SCREEN_OUTPUT.value
 
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    responseBuilder.add(RegisterUpdate().setIntent(updateIntent))
-    val response = responseBuilder.buildAogResponse()
+        responseBuilder.add(NewSurface()
+                .setCapability(capability)
+                .setContext("context")
+                .setNotificationTitle("notification title"))
+        val response = responseBuilder.buildAogResponse()
+        val intent = response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0) as ExpectedIntent
+        assertEquals("actions.intent.NEW_SURFACE", intent.intent)
+        val capabilitiesArray =
+                intent.inputValueData["capabilities"] as Array<String>
+        assertEquals(capability, capabilitiesArray[0])
+    }
 
-    val intent = response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.possibleIntents?.get(0) as ExpectedIntent
-    assertEquals("actions.intent.REGISTER_UPDATE", intent.intent)
-    assertEquals(updateIntent, intent.inputValueData.get("intent"))
-  }
+    @Test
+    fun testRegisterDailyUpdate() {
+        val updateIntent = "intent.foo"
 
-  @Test
-  fun testAddSuggestions() {
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    responseBuilder
-            .add("this is a test")
-            .addSuggestions(arrayOf("one", "two", "three"))
-    val response = responseBuilder.buildAogResponse()
-    assertEquals("one", response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.inputPrompt
-            ?.richInitialPrompt
-            ?.suggestions?.get(0)
-            ?.title)
-    assertEquals("actions.intent.TEXT", response.appResponse
-            ?.expectedInputs?.get(0)
-            ?.possibleIntents?.get(0)
-            ?.intent)
-  }
+        responseBuilder.add(RegisterUpdate().setIntent(updateIntent))
+        val response = responseBuilder.buildAogResponse()
 
-  @Test
-  fun testCompletePurchase() {
-    println("testCompletePurchase")
-    val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val intent = response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0) as ExpectedIntent
+        assertEquals("actions.intent.REGISTER_UPDATE", intent.intent)
+        assertEquals(updateIntent, intent.inputValueData.get("intent"))
+    }
 
-    responseBuilder.add(CompletePurchase().setSkuId(SkuId()
-        .setId("PRODUCT_SKU_ID")
-        .setSkuType("INAPP")
-        .setPackageName("play.store.package.name"))
-        .setDeveloperPayload("OPTIONAL_DEVELOPER_PAYLOAD"))
+    @Test
+    fun testAddSuggestions() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-    val response = responseBuilder.build()
-    val jsonOutput = response.toJson()
+        responseBuilder
+                .add("this is a test")
+                .addSuggestions(arrayOf("one", "two", "three"))
+        val response = responseBuilder.buildAogResponse()
+        assertEquals("one", response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.inputPrompt
+                ?.richInitialPrompt
+                ?.suggestions?.get(0)
+                ?.title)
+        assertEquals("actions.intent.TEXT", response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0)
+                ?.intent)
+    }
 
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
-    val inputValueData = jsonObject
-        .get("expectedInputs").asJsonArray.get(0).asJsonObject
-        .get("possibleIntents").asJsonArray.get(0).asJsonObject
-        .get("inputValueData").asJsonObject
-    assertEquals("type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec",
-        inputValueData.get("@type").asString)
-    val skuId = inputValueData.get("skuId").asJsonObject
-    assertEquals("PRODUCT_SKU_ID", skuId.get("id").asString)
-    assertEquals("INAPP", skuId.get("skuType").asString)
-    assertEquals("play.store.package.name", skuId.get("packageName").asString)
-    assertEquals("OPTIONAL_DEVELOPER_PAYLOAD",
-        inputValueData.get("developerPayload").asString)
-  }
+    @Test
+    fun testCompletePurchase() {
+        println("testCompletePurchase")
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        responseBuilder.add(CompletePurchase().setSkuId(SkuId()
+                .setId("PRODUCT_SKU_ID")
+                .setSkuType("INAPP")
+                .setPackageName("play.store.package.name"))
+                .setDeveloperPayload("OPTIONAL_DEVELOPER_PAYLOAD"))
+
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
+
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec",
+                inputValueData.get("@type").asString)
+        val skuId = inputValueData.get("skuId").asJsonObject
+        assertEquals("PRODUCT_SKU_ID", skuId.get("id").asString)
+        assertEquals("INAPP", skuId.get("skuType").asString)
+        assertEquals("play.store.package.name", skuId.get("packageName").asString)
+        assertEquals("OPTIONAL_DEVELOPER_PAYLOAD",
+                inputValueData.get("developerPayload").asString)
+    }
 }

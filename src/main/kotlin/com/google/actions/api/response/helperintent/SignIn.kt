@@ -26,11 +26,26 @@ package com.google.actions.api.response.helperintent
  * ```
  */
 class SignIn : HelperIntent {
-  private val map = HashMap<String, Any>()
+    private val map = HashMap<String, Any?>()
 
-  override val name: String
-    get() = "actions.intent.SIGN_IN"
+    private var context: String? = null
 
-  override val parameters: Map<String, Any>
-    get() = map
+    fun setContext(context: String): SignIn {
+        this.context = context
+        return this
+    }
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.SignInValueSpec")
+        map.put("optContext", context)
+    }
+
+    override val name: String
+        get() = "actions.intent.SIGN_IN"
+
+    override val parameters: Map<String, Any?>
+        get() {
+            prepareMap()
+            return map
+        }
 }

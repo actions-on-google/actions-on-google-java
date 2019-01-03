@@ -26,113 +26,109 @@ import java.util.*
 
 internal class AogResponse internal constructor(
         responseBuilder: ResponseBuilder) : ActionResponse {
-  override var appResponse: AppResponse? = null
-  override val webhookResponse: WebhookResponse? = null
-  override var richResponse: RichResponse? = null
-  override val expectUserResponse: Boolean
+    override var appResponse: AppResponse? = null
+    override val webhookResponse: WebhookResponse? = null
+    override var richResponse: RichResponse? = null
+    override val expectUserResponse: Boolean
 
-  internal var helperIntents: List<ExpectedIntent>?
-  internal var conversationData: Map<String, Any>? = null
-  internal var userStorage: Map<String, Any>? = null
-  internal var sessionId: String? = null
-  private var textIntent: ExpectedIntent? = null
+    internal var helperIntents: List<ExpectedIntent>?
+    internal var conversationData: Map<String, Any>? = null
+    internal var userStorage: Map<String, Any>? = null
+    internal var sessionId: String? = null
+    private var textIntent: ExpectedIntent? = null
 
-  init {
-    this.appResponse = responseBuilder.appResponse
-    this.expectUserResponse = responseBuilder.expectUserResponse
-    this.richResponse = responseBuilder.richResponse
-    this.sessionId = responseBuilder.sessionId
-    this.conversationData = responseBuilder.conversationData
-    this.userStorage = responseBuilder.userStorage
+    init {
+        this.appResponse = responseBuilder.appResponse
+        this.expectUserResponse = responseBuilder.expectUserResponse
+        this.richResponse = responseBuilder.richResponse
+        this.sessionId = responseBuilder.sessionId
+        this.conversationData = responseBuilder.conversationData
+        this.userStorage = responseBuilder.userStorage
 
-    if (appResponse == null) {
-      // If appResponse is provided, that supersedes all other values.
-      if (richResponse == null) {
-        richResponse = RichResponse()
-        if (responseBuilder.responseItems.size > 0) {
-          richResponse?.items = responseBuilder.responseItems
+        if (appResponse == null) {
+            // If appResponse is provided, that supersedes all other values.
+            if (richResponse == null) {
+                richResponse = RichResponse()
+                if (responseBuilder.responseItems.size > 0) {
+                    richResponse?.items = responseBuilder.responseItems
+                }
+                if (responseBuilder.suggestions.size > 0) {
+                    richResponse?.suggestions = responseBuilder.suggestions
+                }
+                if (responseBuilder.linkOutSuggestion != null) {
+                    richResponse?.linkOutSuggestion = responseBuilder.linkOutSuggestion
+                }
+            }
         }
-        if (responseBuilder.suggestions.size > 0) {
-          richResponse?.suggestions = responseBuilder.suggestions
+        this.helperIntents = responseBuilder.helperIntents
+        this.textIntent = ExpectedIntent()
+        this.textIntent
+                ?.setIntent("actions.intent.TEXT")
+                ?.setInputValueData(emptyMap())
+    }
+
+    override val helperIntent: ExpectedIntent?
+        get() = helperIntents?.get(0)
+
+    internal fun prepareAppResponse() {
+        if (appResponse == null) {
+            appResponse = AppResponse()
+            if (expectUserResponse) {
+                ask()
+            } else {
+                close()
+            }
+            if (conversationData != null) {
+                val dataMap = HashMap<String, Any?>()
+                dataMap["data"] = conversationData
+                appResponse?.conversationToken = Gson().toJson(dataMap)
+            }
+            if (userStorage != null) {
+                val dataMap = HashMap<String, Any?>()
+                dataMap["data"] = userStorage
+                appResponse?.userStorage = Gson().toJson(dataMap)
+            }
         }
-        if (responseBuilder.linkOutSuggestion != null) {
-          richResponse?.linkOutSuggestion = responseBuilder.linkOutSuggestion
+    }
+
+    @Throws(IllegalStateException::class)
+    private fun close() {
+        appResponse?.expectUserResponse = expectUserResponse
+        val finalResponse = FinalResponse()
+        if (richResponse != null) {
+            finalResponse.richResponse = richResponse
+        } else {
+            if (richResponse!!.items != null || richResponse!!.suggestions != null) {
+                finalResponse.richResponse = richResponse
+            }
         }
-      }
-    }
-    this.helperIntents = responseBuilder.helperIntents
-    this.textIntent = ExpectedIntent()
-    this.textIntent
-            ?.setIntent("actions.intent.TEXT")
-            ?.setInputValueData(emptyMap())
-  }
-
-  override val helperIntent: ExpectedIntent?
-    get() = helperIntents?.get(0)
-
-  internal fun prepareAppResponse() {
-    if (appResponse == null) {
-      appResponse = AppResponse()
-      if (expectUserResponse) {
-        ask()
-      } else {
-        close()
-      }
-      if (conversationData != null) {
-        val dataMap = HashMap<String, Any?>()
-        dataMap["data"] = conversationData
-        appResponse?.conversationToken = Gson().toJson(dataMap)
-      }
-      if (userStorage != null) {
-        val dataMap = HashMap<String, Any?>()
-        dataMap["data"] = userStorage
-        appResponse?.userStorage = Gson().toJson(dataMap)
-      }
-    }
-  }
-
-  @Throws(IllegalStateException::class)
-  private fun close() {
-    appResponse?.expectUserResponse = expectUserResponse
-    val finalResponse = FinalResponse()
-    if (richResponse != null) {
-      finalResponse.richResponse = richResponse
-    } else {
-      if (richResponse!!.items != null || richResponse!!.suggestions != null) {
-        finalResponse.richResponse = richResponse
-      }
-    }
-    appResponse?.finalResponse = finalResponse
-  }
-
-  @Throws(IllegalStateException::class)
-  private fun ask() {
-    appResponse?.expectUserResponse = true
-    val inputPrompt = InputPrompt()
-    if (richResponse != null) {
-      inputPrompt.richInitialPrompt = richResponse
-    } else {
-      if (richResponse!!.items != null || richResponse!!.suggestions != null) {
-        inputPrompt.richInitialPrompt = richResponse
-      }
-    }
-    val expectedInput = ExpectedInput()
-    if (inputPrompt.richInitialPrompt != null) {
-      expectedInput.inputPrompt = inputPrompt
+        appResponse?.finalResponse = finalResponse
     }
 
-    if (helperIntents != null) {
-      expectedInput.possibleIntents = helperIntents
-    } else {
-      expectedInput.possibleIntents = listOf(textIntent)
+    @Throws(IllegalStateException::class)
+    private fun ask() {
+        appResponse?.expectUserResponse = true
+        val inputPrompt = InputPrompt()
+        if (richResponse != null) {
+            inputPrompt.richInitialPrompt = richResponse
+        }
+        val expectedInput = ExpectedInput()
+        if (inputPrompt.richInitialPrompt != null) {
+            expectedInput.inputPrompt = inputPrompt
+        }
+
+        if (helperIntents != null) {
+            expectedInput.possibleIntents = helperIntents
+        } else {
+            expectedInput.possibleIntents = listOf(textIntent)
+        }
+
+        val expectedInputs = ArrayList<ExpectedInput>()
+        expectedInputs.add(expectedInput)
+        appResponse?.expectedInputs = expectedInputs
     }
 
-    val expectedInputs = ArrayList<ExpectedInput>()
-    expectedInputs.add(expectedInput)
-    appResponse?.expectedInputs = expectedInputs
-  }
-
-  override fun toJson(): String {
-    return ResponseSerializer(sessionId).toJsonV2(this)
-  }
+    override fun toJson(): String {
+        return ResponseSerializer(sessionId).toJsonV2(this)
+    }
 }

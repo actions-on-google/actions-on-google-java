@@ -32,219 +32,219 @@ import java.util.*
 
 class AogRequestTest {
 
-  @Throws(IOException::class)
-  private fun fromFile(file: String): AogRequest {
-    val absolutePath = Paths.get("src", "test", "resources",
-            file)
-    val gson = Gson()
-    val reader = Files.newBufferedReader(absolutePath)
-    val json = gson.fromJson(reader, JsonObject::class.java)
+    @Throws(IOException::class)
+    private fun fromFile(file: String): AogRequest {
+        val absolutePath = Paths.get("src", "test", "resources",
+                file)
+        val gson = Gson()
+        val reader = Files.newBufferedReader(absolutePath)
+        val json = gson.fromJson(reader, JsonObject::class.java)
 
-    return AogRequest.create(json, null)
-  }
+        return AogRequest.create(json, null)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun basicJsonIsParsed() {
-    val request = fromFile("aog_main.json")
-    assertNotNull(request.appRequest)
-    assertEquals("intent.ask.confirmation", request.intent)
-    assertTrue(request.appRequest.isInSandbox!!)
-    assertEquals("Talk to my test app", request.appRequest
-            .inputs[0].rawInputs[0].query)
-    assertEquals("First", request.appRequest.user
-            .profile.givenName)
-    assertEquals(Locale.US, request.locale)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun basicJsonIsParsed() {
+        val request = fromFile("aog_main.json")
+        assertNotNull(request.appRequest)
+        assertEquals("intent.ask.confirmation", request.intent)
+        assertTrue(request.appRequest.isInSandbox!!)
+        assertEquals("Talk to my test app", request.appRequest
+                .inputs[0].rawInputs[0].query)
+        assertEquals("First", request.appRequest.user
+                .profile.givenName)
+        assertEquals(Locale.US, request.locale)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun userObjectIsParsed() {
-    val aogRequest = fromFile("aog_with_arguments.json")
-    val user = aogRequest.appRequest.user
-    assertEquals("fr-FR", user.locale)
-    assertEquals("2018-05-24T19:03:47Z", user.lastSeen)
-    assertEquals(Locale.FRANCE, aogRequest.locale)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun userObjectIsParsed() {
+        val aogRequest = fromFile("aog_with_arguments.json")
+        val user = aogRequest.appRequest.user
+        assertEquals("fr-FR", user.locale)
+        assertEquals("2018-05-24T19:03:47Z", user.lastSeen)
+        assertEquals(Locale.FRANCE, aogRequest.locale)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun inputArrayIsParsed() {
-    val aogRequest = fromFile("aog_with_arguments.json")
-    assertEquals("actions.intent.CONFIRMATION",
-            aogRequest.intent)
-    val inputs = aogRequest.appRequest.inputs
-    assertEquals(1, inputs.size.toLong())
+    @Test
+    @Throws(Exception::class)
+    fun inputArrayIsParsed() {
+        val aogRequest = fromFile("aog_with_arguments.json")
+        assertEquals("actions.intent.CONFIRMATION",
+                aogRequest.intent)
+        val inputs = aogRequest.appRequest.inputs
+        assertEquals(1, inputs.size.toLong())
 
-    val arguments = inputs[0].arguments
-    assertEquals(1, arguments.size.toLong())
-    assertEquals("CONFIRMATION", arguments[0].name)
-    assertTrue(arguments[0].boolValue!!)
-    assertTrue(aogRequest.getUserConfirmation()!!)
+        val arguments = inputs[0].arguments
+        assertEquals(1, arguments.size.toLong())
+        assertEquals("CONFIRMATION", arguments[0].name)
+        assertTrue(arguments[0].boolValue!!)
+        assertTrue(aogRequest.getUserConfirmation()!!)
 
-    // In this case, only the confirmation argument is provided. Hence, all
-    // other user responses must be null.
-    assertNull(aogRequest.getPlace())
-    assertNull(aogRequest.isPermissionGranted())
-    assertNull(aogRequest.isSignedIn())
-    assertNull(aogRequest.getMediaStatus())
-    assertNull(aogRequest.isUpdateRegistered())
+        // In this case, only the confirmation argument is provided. Hence, all
+        // other user responses must be null.
+        assertNull(aogRequest.getPlace())
+        assertNull(aogRequest.isPermissionGranted())
+        assertNull(aogRequest.isSignInGranted())
+        assertNull(aogRequest.getMediaStatus())
+        assertNull(aogRequest.isUpdateRegistered())
 
-    val rawInputs = inputs[0].rawInputs
-    assertEquals("yes", rawInputs[0].query)
-  }
+        val rawInputs = inputs[0].rawInputs
+        assertEquals("yes", rawInputs[0].query)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun conversationObjectIsParsed() {
-    val aogRequest = fromFile("aog_with_arguments.json")
-    val conversation = aogRequest.appRequest.conversation
-    assertNotNull(conversation)
-    assertEquals("1234", conversation.conversationId)
-    assertEquals("ACTIVE", conversation.type)
-    assertEquals("[]", conversation.conversationToken)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun conversationObjectIsParsed() {
+        val aogRequest = fromFile("aog_with_arguments.json")
+        val conversation = aogRequest.appRequest.conversation
+        assertNotNull(conversation)
+        assertEquals("1234", conversation.conversationId)
+        assertEquals("ACTIVE", conversation.type)
+        assertEquals("[]", conversation.conversationToken)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun surfaceObjectIsParsed() {
-    val aogRequest = fromFile("aog_with_arguments.json")
-    val surface = aogRequest.appRequest.surface
-    assertNotNull(surface)
-    val capabilities = surface.capabilities
-    assertEquals(4, capabilities.size.toLong())
-    assertEquals("actions.capability.SCREEN_OUTPUT",
-            capabilities[3].name)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun surfaceObjectIsParsed() {
+        val aogRequest = fromFile("aog_with_arguments.json")
+        val surface = aogRequest.appRequest.surface
+        assertNotNull(surface)
+        val capabilities = surface.capabilities
+        assertEquals(4, capabilities.size.toLong())
+        assertEquals("actions.capability.SCREEN_OUTPUT",
+                capabilities[3].name)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun availableSurfacesIsParsed() {
-    val aogRequest = fromFile("aog_with_arguments.json")
-    val availableSurfaces = aogRequest
-            .appRequest.availableSurfaces
-    assertEquals(1, availableSurfaces.size.toLong())
-    val capabilities = availableSurfaces[0].capabilities
-    assertEquals(3, capabilities.size.toLong())
-    assertEquals("actions.capability.SCREEN_OUTPUT",
-            capabilities[2].name)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun availableSurfacesIsParsed() {
+        val aogRequest = fromFile("aog_with_arguments.json")
+        val availableSurfaces = aogRequest
+                .appRequest.availableSurfaces
+        assertEquals(1, availableSurfaces.size.toLong())
+        val capabilities = availableSurfaces[0].capabilities
+        assertEquals(3, capabilities.size.toLong())
+        assertEquals("actions.capability.SCREEN_OUTPUT",
+                capabilities[2].name)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun jsonWithDateTimeValueIsParsed() {
-    val aogRequest = fromFile("aog_with_datetime.json")
-    val dateTime = aogRequest.getDateTime()
+    @Test
+    @Throws(Exception::class)
+    fun jsonWithDateTimeValueIsParsed() {
+        val aogRequest = fromFile("aog_with_datetime.json")
+        val dateTime = aogRequest.getDateTime()
 
-    assertNotNull(dateTime)
-    assertEquals(2018, dateTime!!.date.year!!.toLong())
-    assertEquals(17, dateTime.time.hours!!.toLong())
-    assertNull(dateTime.time.minutes)
-    assertEquals("5pm", aogRequest.rawInput!!.query)
-    assertNull(aogRequest.getUserConfirmation())
-  }
+        assertNotNull(dateTime)
+        assertEquals(2018, dateTime!!.date.year!!.toLong())
+        assertEquals(17, dateTime.time.hours!!.toLong())
+        assertNull(dateTime.time.minutes)
+        assertEquals("5pm", aogRequest.rawInput!!.query)
+        assertNull(aogRequest.getUserConfirmation())
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun deviceLocationIsParsed() {
-    val aogRequest = fromFile("aog_with_location.json")
-    val location = aogRequest.appRequest.device.location
-    assertNotNull(location.coordinates.latitude)
-    assertNotNull(location.coordinates.longitude)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun deviceLocationIsParsed() {
+        val aogRequest = fromFile("aog_with_location.json")
+        val location = aogRequest.appRequest.device.location
+        assertNotNull(location.coordinates.latitude)
+        assertNotNull(location.coordinates.longitude)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun permissionForUserInfoDeniedIsParsed() {
-    val aogRequest = fromFile("aog_with_permission_denied.json")
-    assertFalse(aogRequest.isPermissionGranted()!!)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun permissionForUserInfoDeniedIsParsed() {
+        val aogRequest = fromFile("aog_with_permission_denied.json")
+        assertFalse(aogRequest.isPermissionGranted()!!)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun placeValueIsParsed() {
-    val aogRequest = fromFile("aog_with_place.json")
-    val location = aogRequest.getPlace()
-    assertEquals("Cascal", location?.name)
-    assertTrue(location!!.formattedAddress!!.contains("Cascal"))
-    assertNull(aogRequest.getUserConfirmation())
-  }
+    @Test
+    @Throws(Exception::class)
+    fun placeValueIsParsed() {
+        val aogRequest = fromFile("aog_with_place.json")
+        val location = aogRequest.getPlace()
+        assertEquals("Cascal", location?.name)
+        assertTrue(location!!.formattedAddress!!.contains("Cascal"))
+        assertNull(aogRequest.getUserConfirmation())
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun placeValuePermissionDeniedIsParsed() {
-    val aogRequest = fromFile("aog_place_error.json")
-    val argument = aogRequest.getArgument("PLACE")
-    val location = aogRequest.getPlace()
-    assertNull(location)
-    val status = argument?.status
-    assertEquals(7, status?.code!!.toInt().toLong())
-  }
+    @Test
+    @Throws(Exception::class)
+    fun placeValuePermissionDeniedIsParsed() {
+        val aogRequest = fromFile("aog_place_error.json")
+        val argument = aogRequest.getArgument("PLACE")
+        val location = aogRequest.getPlace()
+        assertNull(location)
+        val status = argument?.status
+        assertEquals(7, status?.code!!.toInt().toLong())
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun conversationTokenIsParsed() {
-    val aogRequest = fromFile("aog_user_conversation_data.json")
-    assertEquals(emptyList<String>(), aogRequest
-        .conversationData["history"])
-    val headquarters = aogRequest.conversationData["headquarters"] as List<String>
-    assertEquals("google1", headquarters[0])
-  }
+    @Test
+    @Throws(Exception::class)
+    fun conversationTokenIsParsed() {
+        val aogRequest = fromFile("aog_user_conversation_data.json")
+        assertEquals(emptyList<String>(), aogRequest
+                .conversationData["history"])
+        val headquarters = aogRequest.conversationData["headquarters"] as List<String>
+        assertEquals("google1", headquarters[0])
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun argumentsWithExtensionIsParsed() {
-    val aogRequest = fromFile("aog_with_argument_extension.json")
-    val argument = aogRequest.getArgument("MEDIA_STATUS")
-    val extension = argument?.extension
-    val status = extension?.get("status")
-    assertEquals("FINISHED", status)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun argumentsWithExtensionIsParsed() {
+        val aogRequest = fromFile("aog_with_argument_extension.json")
+        val argument = aogRequest.getArgument("MEDIA_STATUS")
+        val extension = argument?.extension
+        val status = extension?.get("status")
+        assertEquals("FINISHED", status)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun registerUpdateIsParsed() {
-    val aogRequest = fromFile("aog_with_register_update.json")
-    val argument = aogRequest.getArgument("REGISTER_UPDATE")
-    val extension = argument?.extension
-    val status = extension?.get("status")
-    assertEquals("OK", status)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun registerUpdateIsParsed() {
+        val aogRequest = fromFile("aog_with_register_update.json")
+        val argument = aogRequest.getArgument("REGISTER_UPDATE")
+        val extension = argument?.extension
+        val status = extension?.get("status")
+        assertEquals("OK", status)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun updatePermissionIsParsed() {
-    val aogRequest = fromFile("aog_with_update_permission.json")
-    assertTrue(aogRequest.isPermissionGranted()!!)
-    val argument = aogRequest.getArgument("UPDATES_USER_ID")
-    assertNotNull(argument)
-    val textValue = argument?.textValue
-    assertEquals("123456", textValue)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun updatePermissionIsParsed() {
+        val aogRequest = fromFile("aog_with_update_permission.json")
+        assertTrue(aogRequest.isPermissionGranted()!!)
+        val argument = aogRequest.getArgument("UPDATES_USER_ID")
+        assertNotNull(argument)
+        val textValue = argument?.textValue
+        assertEquals("123456", textValue)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun repromptCountIsParsed() {
-    val aogRequest = fromFile("aog_with_reprompt.json")
-    val repromptCount = aogRequest.repromptCount
-    assertEquals(1, repromptCount)
-    assertFalse(aogRequest.isFinalPrompt!!)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun repromptCountIsParsed() {
+        val aogRequest = fromFile("aog_with_reprompt.json")
+        val repromptCount = aogRequest.repromptCount
+        assertEquals(1, repromptCount)
+        assertFalse(aogRequest.isFinalPrompt!!)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun finalRepromptIsParsed() {
-    val aogRequest = fromFile("aog_with_final_reprompt.json")
-    val repromptCount = aogRequest.repromptCount
-    assertEquals(2, repromptCount)
-    assertTrue(aogRequest.isFinalPrompt!!)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun finalRepromptIsParsed() {
+        val aogRequest = fromFile("aog_with_final_reprompt.json")
+        val repromptCount = aogRequest.repromptCount
+        assertEquals(2, repromptCount)
+        assertTrue(aogRequest.isFinalPrompt!!)
+    }
 
-  @Test
-  @Throws(Exception::class)
-  fun selectedOptionIsParsed() {
-    val aogRequest = fromFile("aog_with_option.json")
-    val selected = aogRequest.getSelectedOption()
-    assertEquals("2", selected)
-  }
+    @Test
+    @Throws(Exception::class)
+    fun selectedOptionIsParsed() {
+        val aogRequest = fromFile("aog_with_option.json")
+        val selected = aogRequest.getSelectedOption()
+        assertEquals("2", selected)
+    }
 }

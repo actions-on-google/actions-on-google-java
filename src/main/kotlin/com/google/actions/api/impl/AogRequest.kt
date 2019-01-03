@@ -30,280 +30,280 @@ import java.util.*
 internal class AogRequest internal constructor(
         override val appRequest: AppRequest) : ActionRequest {
 
-  override val webhookRequest: WebhookRequest? get() = null
+    override val webhookRequest: WebhookRequest? get() = null
 
-  override var userStorage: Map<String, Any> = HashMap()
-  override var conversationData: Map<String, Any> = HashMap()
+    override var userStorage: Map<String, Any> = HashMap()
+    override var conversationData: Map<String, Any> = HashMap()
 
-  override val intent: String
-    get() {
-      val inputs = appRequest.inputs
-      if (inputs == null || inputs.size == 0) {
-        LOG.warn("Request has no inputs.")
-        throw IllegalArgumentException("Request has no inputs")
-      }
+    override val intent: String
+        get() {
+            val inputs = appRequest.inputs
+            if (inputs == null || inputs.size == 0) {
+                LOG.warn("Request has no inputs.")
+                throw IllegalArgumentException("Request has no inputs")
+            }
 
-      return appRequest.inputs[0].intent
-    }
-
-  override val user: User? get() = appRequest.user
-  override val device: Device? get() = appRequest.device
-  override val surface: Surface? get() = appRequest.surface
-  override val availableSurfaces: List<Surface>?
-    get() =
-      appRequest.availableSurfaces
-  override val isInSandbox: Boolean get() = appRequest.isInSandbox
-
-  override val rawText: String?
-    get() = rawInput?.query
-
-  override val rawInput: RawInput?
-    get() {
-      val inputs = appRequest.inputs
-      if (inputs != null && inputs.size > 0) {
-        val rawInputs = inputs[0].rawInputs
-        if (rawInputs != null && rawInputs.size > 0) {
-          return rawInputs[0]
+            return appRequest.inputs[0].intent
         }
-      }
-      return null
-    }
 
-  override val locale: Locale
-    get() {
-      val localeString = user?.locale
-      val parts = localeString?.split("-")
+    override val user: User? get() = appRequest.user
+    override val device: Device? get() = appRequest.device
+    override val surface: Surface? get() = appRequest.surface
+    override val availableSurfaces: List<Surface>?
+        get() =
+            appRequest.availableSurfaces
+    override val isInSandbox: Boolean get() = appRequest.isInSandbox
 
-      if (parts != null) {
-        when (parts.size) {
-          1 -> return Locale(parts[0])
-          2 -> return Locale(parts[0], parts[1])
+    override val rawText: String?
+        get() = rawInput?.query
+
+    override val rawInput: RawInput?
+        get() {
+            val inputs = appRequest.inputs
+            if (inputs != null && inputs.size > 0) {
+                val rawInputs = inputs[0].rawInputs
+                if (rawInputs != null && rawInputs.size > 0) {
+                    return rawInputs[0]
+                }
+            }
+            return null
         }
-      }
-      return Locale.getDefault()
-    }
 
-  override val repromptCount: Int?
-    get() {
-      val arg = getArgument(ARG_REPROMPT_COUNT)
-      if (arg == null) {
+    override val locale: Locale
+        get() {
+            val localeString = user?.locale
+            val parts = localeString?.split("-")
+
+            if (parts != null) {
+                when (parts.size) {
+                    1 -> return Locale(parts[0])
+                    2 -> return Locale(parts[0], parts[1])
+                }
+            }
+            return Locale.getDefault()
+        }
+
+    override val repromptCount: Int?
+        get() {
+            val arg = getArgument(ARG_REPROMPT_COUNT)
+            if (arg == null) {
+                return null
+            }
+            return arg.intValue?.toInt()
+        }
+
+    override val isFinalPrompt: Boolean?
+        get() {
+            val arg = getArgument(ARG_IS_FINAL_REPROMPT)
+            if (arg == null) {
+                return null
+            }
+            return arg.boolValue
+        }
+
+    override val sessionId: String
+        get() {
+            return appRequest.conversation.conversationId
+        }
+
+    override fun getArgument(name: String): Argument? {
+        val inputs = appRequest.inputs
+        if (inputs == null || inputs.size == 0) {
+            return null
+        }
+
+        val arguments = inputs[0].arguments
+        for (argument in arguments) {
+            if (argument.name == name) {
+                return argument
+            }
+        }
         return null
-      }
-      return arg.intValue?.toInt()
     }
 
-  override val isFinalPrompt: Boolean?
-    get() {
-      val arg = getArgument(ARG_IS_FINAL_REPROMPT)
-      if (arg == null) {
+    override fun getParameter(name: String): Any? {
+        // Only valid for Dialogflow requests.
         return null
-      }
-      return arg.boolValue
     }
 
-  override val sessionId: String
-    get() {
-      return appRequest.conversation.conversationId
-    }
-
-  override fun getArgument(name: String): Argument? {
-    val inputs = appRequest.inputs
-    if (inputs == null || inputs.size == 0) {
-      return null
-    }
-
-    val arguments = inputs[0].arguments
-    for (argument in arguments) {
-      if (argument.name == name) {
-        return argument
-      }
-    }
-    return null
-  }
-
-  override fun getParameter(name: String): Any? {
-    // Only valid for Dialogflow requests.
-    return null
-  }
-
-  override fun hasCapability(capability: String): Boolean {
-    // appRequest can be null for requests from Dialogflow simulator.
-    val surface = appRequest.surface
-    if (surface != null) {
-      val capabilityList = surface.capabilities
-      return capabilityList.stream()
-              .anyMatch { c -> capability == c.name }
-    }
-
-    return false
-  }
-
-  override fun isSignedIn(): Boolean? {
-    val arg = getArgument(ARG_SIGN_IN)
-    if (arg == null) {
-      return null
-    }
-    val map = arg.extension
-    val status = map!!["status"] as String
-    return (status == "OK")
-  }
-
-  override fun isUpdateRegistered(): Boolean? {
-    val arg = getArgument(ARG_REGISTER_UPDATE)
-    if (arg == null) {
-      return null
-    }
-    val map = arg.extension
-    val status = map!!["status"] as String
-    return (status == "OK")
-  }
-
-  override fun getPlace(): Location? {
-    val arg = getArgument(ARG_PLACE)
-    if (arg == null) {
-      return null
-    }
-    return arg.placeValue
-  }
-
-  override fun isPermissionGranted(): Boolean? {
-    val arg = getArgument(ARG_PERMISSION)
-    if (arg == null) {
-      return null
-    }
-    return arg.textValue != null && arg.textValue.equals("true")
-  }
-
-  override fun getUserConfirmation(): Boolean? {
-    val arg = getArgument(ARG_CONFIRMATION)
-    if (arg == null) {
-      return null
-    }
-    return arg.boolValue
-  }
-
-  override fun getDateTime(): DateTime? {
-    val arg = getArgument(ARG_DATETIME)
-    if (arg == null) {
-      return null
-    }
-    return arg.datetimeValue
-  }
-
-  override fun getMediaStatus(): String? {
-    val arg = getArgument(ARG_MEDIA_STATUS)
-    if (arg == null) {
-
-      return null
-    }
-    return arg.extension?.get("status") as String
-  }
-
-  override fun getSelectedOption(): String? {
-    val arg = getArgument(ARG_OPTION)
-    if (arg == null) {
-      return null
-    }
-    return arg.textValue
-  }
-
-  override fun getContext(name: String): ActionContext? {
-    // Actions SDK does not support concept of Context.
-    return null
-  }
-
-  override fun getContexts(): List<ActionContext> {
-    // Actions SDK does not support concept of Context.
-    return ArrayList()
-  }
-
-  companion object {
-    private val LOG = LoggerFactory.getLogger(AogRequest::class.java.name)
-
-    fun create(appRequest: AppRequest): AogRequest {
-      return AogRequest(appRequest)
-    }
-
-    fun create(
-            body: String,
-            headers: Map<*, *>? = HashMap<String, Any>(),
-            partOfDialogflowRequest: Boolean = false):
-            AogRequest {
-      val gson = Gson()
-      return create(gson.fromJson(body, JsonObject::class.java), headers,
-              partOfDialogflowRequest)
-    }
-
-    fun create(
-            json: JsonObject,
-            headers: Map<*, *>? = HashMap<String, Any>(),
-            partOfDialogflowRequest: Boolean = false):
-            AogRequest {
-      val gsonBuilder = GsonBuilder()
-      gsonBuilder
-              .registerTypeAdapter(AppRequest::class.java,
-                      AppRequestDeserializer())
-              .registerTypeAdapter(User::class.java,
-                      UserDeserializer())
-              .registerTypeAdapter(Input::class.java,
-                      InputDeserializer())
-              .registerTypeAdapter(Status::class.java,
-                      StatusDeserializer())
-              .registerTypeAdapter(Surface::class.java,
-                      SurfaceDeserializer())
-              .registerTypeAdapter(Device::class.java,
-                      DeviceDeserializer())
-              .registerTypeAdapter(Location::class.java,
-                      LocationDeserializer())
-              .registerTypeAdapter(Argument::class.java,
-                      ArgumentDeserializer())
-              .registerTypeAdapter(RawInput::class.java,
-                      RawInputDeserializer())
-              .registerTypeAdapter(DateTime::class.java,
-                      DateTimeValueDeserializer())
-
-      val gson = gsonBuilder.create()
-      val appRequest = gson.fromJson<AppRequest>(json, AppRequest::class.java)
-
-      val aogRequest = create(appRequest)
-      val user = aogRequest.appRequest.user
-      if (user != null) {
-        aogRequest.userStorage = fromJson(user.userStorage)
-      }
-
-      if (!partOfDialogflowRequest) {
-        // Note: If the AogRequest is being created as part of a DF request,
-        // conversationToken is repurposed for some other values and does not
-        // contain conversation data.
-        val conversation = aogRequest.appRequest.conversation
-        val conversationToken: String? = conversation?.conversationToken
-        if (conversationToken != null) {
-          // Note that if the request is part of a Dialogflow request, the
-          // conversationData is empty here. DialogflowRequest should contain the
-          // values as it is read from outputContext.
-          aogRequest.conversationData = fromJson(
-                  conversation.conversationToken)
+    override fun hasCapability(capability: String): Boolean {
+        // appRequest can be null for requests from Dialogflow simulator.
+        val surface = appRequest.surface
+        if (surface != null) {
+            val capabilityList = surface.capabilities
+            return capabilityList.stream()
+                    .anyMatch { c -> capability == c.name }
         }
-      }
-      return aogRequest
+
+        return false
     }
 
-    private fun fromJson(serializedValue: String?): Map<String, Any> {
-      if (serializedValue != null && !serializedValue.isEmpty()) {
-        val gson = Gson()
-        try {
-          val map: Map<String, Any> = gson.fromJson(serializedValue,
-                  object : TypeToken<Map<String, Any>>() {}.type)
-          // NOTE: The format of the opaque string is:
-          // keyValueData: {key:value; key:value; }
-          if (map["data"] != null) {
-            return map["data"] as MutableMap<String, Any>
-          }
-        } catch (e: Exception) {
-          LOG.warn("Error parsing conversation/user storage.", e)
+    override fun isSignInGranted(): Boolean? {
+        val arg = getArgument(ARG_SIGN_IN)
+        if (arg == null) {
+            return null
         }
-      }
-      return HashMap()
+        val map = arg.extension
+        val status = map!!["status"] as String
+        return (status == "OK")
     }
-  }
+
+    override fun isUpdateRegistered(): Boolean? {
+        val arg = getArgument(ARG_REGISTER_UPDATE)
+        if (arg == null) {
+            return null
+        }
+        val map = arg.extension
+        val status = map!!["status"] as String
+        return (status == "OK")
+    }
+
+    override fun getPlace(): Location? {
+        val arg = getArgument(ARG_PLACE)
+        if (arg == null) {
+            return null
+        }
+        return arg.placeValue
+    }
+
+    override fun isPermissionGranted(): Boolean? {
+        val arg = getArgument(ARG_PERMISSION)
+        if (arg == null) {
+            return null
+        }
+        return arg.textValue != null && arg.textValue.equals("true")
+    }
+
+    override fun getUserConfirmation(): Boolean? {
+        val arg = getArgument(ARG_CONFIRMATION)
+        if (arg == null) {
+            return null
+        }
+        return arg.boolValue
+    }
+
+    override fun getDateTime(): DateTime? {
+        val arg = getArgument(ARG_DATETIME)
+        if (arg == null) {
+            return null
+        }
+        return arg.datetimeValue
+    }
+
+    override fun getMediaStatus(): String? {
+        val arg = getArgument(ARG_MEDIA_STATUS)
+        if (arg == null) {
+
+            return null
+        }
+        return arg.extension?.get("status") as String
+    }
+
+    override fun getSelectedOption(): String? {
+        val arg = getArgument(ARG_OPTION)
+        if (arg == null) {
+            return null
+        }
+        return arg.textValue
+    }
+
+    override fun getContext(name: String): ActionContext? {
+        // Actions SDK does not support concept of Context.
+        return null
+    }
+
+    override fun getContexts(): List<ActionContext> {
+        // Actions SDK does not support concept of Context.
+        return ArrayList()
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(AogRequest::class.java.name)
+
+        fun create(appRequest: AppRequest): AogRequest {
+            return AogRequest(appRequest)
+        }
+
+        fun create(
+                body: String,
+                headers: Map<*, *>? = HashMap<String, Any>(),
+                partOfDialogflowRequest: Boolean = false):
+                AogRequest {
+            val gson = Gson()
+            return create(gson.fromJson(body, JsonObject::class.java), headers,
+                    partOfDialogflowRequest)
+        }
+
+        fun create(
+                json: JsonObject,
+                headers: Map<*, *>? = HashMap<String, Any>(),
+                partOfDialogflowRequest: Boolean = false):
+                AogRequest {
+            val gsonBuilder = GsonBuilder()
+            gsonBuilder
+                    .registerTypeAdapter(AppRequest::class.java,
+                            AppRequestDeserializer())
+                    .registerTypeAdapter(User::class.java,
+                            UserDeserializer())
+                    .registerTypeAdapter(Input::class.java,
+                            InputDeserializer())
+                    .registerTypeAdapter(Status::class.java,
+                            StatusDeserializer())
+                    .registerTypeAdapter(Surface::class.java,
+                            SurfaceDeserializer())
+                    .registerTypeAdapter(Device::class.java,
+                            DeviceDeserializer())
+                    .registerTypeAdapter(Location::class.java,
+                            LocationDeserializer())
+                    .registerTypeAdapter(Argument::class.java,
+                            ArgumentDeserializer())
+                    .registerTypeAdapter(RawInput::class.java,
+                            RawInputDeserializer())
+                    .registerTypeAdapter(DateTime::class.java,
+                            DateTimeValueDeserializer())
+
+            val gson = gsonBuilder.create()
+            val appRequest = gson.fromJson<AppRequest>(json, AppRequest::class.java)
+
+            val aogRequest = create(appRequest)
+            val user = aogRequest.appRequest.user
+            if (user != null) {
+                aogRequest.userStorage = fromJson(user.userStorage)
+            }
+
+            if (!partOfDialogflowRequest) {
+                // Note: If the AogRequest is being created as part of a DF request,
+                // conversationToken is repurposed for some other values and does not
+                // contain conversation data.
+                val conversation = aogRequest.appRequest.conversation
+                val conversationToken: String? = conversation?.conversationToken
+                if (conversationToken != null) {
+                    // Note that if the request is part of a Dialogflow request, the
+                    // conversationData is empty here. DialogflowRequest should contain the
+                    // values as it is read from outputContext.
+                    aogRequest.conversationData = fromJson(
+                            conversation.conversationToken)
+                }
+            }
+            return aogRequest
+        }
+
+        private fun fromJson(serializedValue: String?): Map<String, Any> {
+            if (serializedValue != null && !serializedValue.isEmpty()) {
+                val gson = Gson()
+                try {
+                    val map: Map<String, Any> = gson.fromJson(serializedValue,
+                            object : TypeToken<Map<String, Any>>() {}.type)
+                    // NOTE: The format of the opaque string is:
+                    // keyValueData: {key:value; key:value; }
+                    if (map["data"] != null) {
+                        return map["data"] as MutableMap<String, Any>
+                    }
+                } catch (e: Exception) {
+                    LOG.warn("Error parsing conversation/user storage.", e)
+                }
+            }
+            return HashMap()
+        }
+    }
 }
