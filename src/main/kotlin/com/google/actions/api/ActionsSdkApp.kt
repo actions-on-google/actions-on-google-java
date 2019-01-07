@@ -41,21 +41,21 @@ import org.slf4j.LoggerFactory
  */
 open class ActionsSdkApp : DefaultApp() {
 
-  private companion object {
-    val LOG = LoggerFactory.getLogger(ActionsSdkApp::class.java.name)
-  }
+    private companion object {
+        val LOG = LoggerFactory.getLogger(ActionsSdkApp::class.java.name)
+    }
 
-  override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
-    LOG.info("ActionsSdkApp.createRequest..")
-    return AogRequest.create(inputJson, headers)
-  }
+    override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
+        LOG.info("ActionsSdkApp.createRequest..")
+        return AogRequest.create(inputJson, headers)
+    }
 
-  override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
-    val responseBuilder = ResponseBuilder(
-            usesDialogflow = false,
-            sessionId = request.sessionId,
-            conversationData = request.conversationData,
-            userStorage = request.userStorage)
-    return responseBuilder
-  }
+    override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
+        val responseBuilder = ResponseBuilder(
+                usesDialogflow = false,
+                sessionId = request.sessionId,
+                conversationData = request.conversationData,
+                userStorage = request.userStorage)
+        return responseBuilder
+    }
 }

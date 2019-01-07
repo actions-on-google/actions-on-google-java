@@ -21,5 +21,5 @@ package com.google.actions.api
  * See [ActionContext](https://dialogflow.com/docs/contexts)
  */
 class ActionContext(val name: String, val lifespan: Int? = 5) {
-  var parameters: Map<String, Any>? = null
+    var parameters: Map<String, Any>? = null
 }

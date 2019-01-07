@@ -7,7 +7,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.3.11'
     repositories {
         mavenCentral()
     }
@@ -22,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.16"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 
@@ -34,7 +34,7 @@ plugins {
 apply plugin: 'org.jetbrains.dokka'
 
 dokka {
-    outputFormat = 'html'
+    outputFormat = 'javadoc'
     outputDirectory = "$buildDir/javadoc"
 }
 
@@ -57,10 +57,10 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20180130'
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
-    compile group: 'org.slf4j', name:'slf4j-log4j12', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'

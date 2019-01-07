@@ -27,39 +27,39 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
  */
 interface ActionResponse {
 
-  /**
-   * Whether a user response is expected.
-   */
-  val expectUserResponse: Boolean?
+    /**
+     * Whether a user response is expected.
+     */
+    val expectUserResponse: Boolean?
 
-  /**
-   * Binding class (POJO) that represents a Dialogflow response. This is set
-   * only if the request is routed through Dialogflow.
-   */
-  val webhookResponse: WebhookResponse?
+    /**
+     * Binding class (POJO) that represents a Dialogflow response. This is set
+     * only if the request is routed through Dialogflow.
+     */
+    val webhookResponse: WebhookResponse?
 
-  /**
-   * The binding class (POJO) that represents an Actions on Google response.
-   */
-  val appResponse: AppResponse?
+    /**
+     * The binding class (POJO) that represents an Actions on Google response.
+     */
+    val appResponse: AppResponse?
 
-  /**
-   * A rich response that can include audio, text, cards, suggestions and
-   * structured data.
-   */
-  val richResponse: RichResponse?
+    /**
+     * A rich response that can include audio, text, cards, suggestions and
+     * structured data.
+     */
+    val richResponse: RichResponse?
 
-  /**
-   * Helper intents tell the Assistant to momentarily take over the conversation
-   * to obtain common data such as a user's full name, a date and time, or a
-   * delivery address. When you request a helper, the Assistant presents a
-   * standard, consistent UI to users to obtain this information, so you don't
-   * have to design your own.
-   */
-  val helperIntent: ExpectedIntent?
+    /**
+     * Helper intents tell the Assistant to momentarily take over the conversation
+     * to obtain common data such as a user's full name, a date and time, or a
+     * delivery address. When you request a helper, the Assistant presents a
+     * standard, consistent UI to users to obtain this information, so you don't
+     * have to design your own.
+     */
+    val helperIntent: ExpectedIntent?
 
-  /**
-   * Returns the JSON representation of the response.
-   */
-  fun toJson(): String
+    /**
+     * Returns the JSON representation of the response.
+     */
+    fun toJson(): String
 }

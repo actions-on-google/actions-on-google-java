@@ -44,16 +44,16 @@ import com.google.actions.api.response.ResponseBuilder
  */
 open class DialogflowApp : DefaultApp() {
 
-  override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
-    return DialogflowRequest.create(inputJson, headers)
-  }
+    override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
+        return DialogflowRequest.create(inputJson, headers)
+    }
 
-  override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
-    val responseBuilder = ResponseBuilder(
-            usesDialogflow = true,
-            conversationData = request.conversationData,
-            sessionId = request.sessionId,
-            userStorage = request.userStorage)
-    return responseBuilder
-  }
+    override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {
+        val responseBuilder = ResponseBuilder(
+                usesDialogflow = true,
+                conversationData = request.conversationData,
+                sessionId = request.sessionId,
+                userStorage = request.userStorage)
+        return responseBuilder
+    }
 }

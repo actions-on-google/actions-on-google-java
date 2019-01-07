@@ -32,5 +32,5 @@ interface App {
    * Actions on Google conversation [protocol](https://developers.google.com/actions/build/json/conversation-webhook-json).
    */
   fun handleRequest(
-          inputJson: String?, headers: Map<*, *>?): CompletableFuture<String>
+      inputJson: String?, headers: Map<*, *>?): CompletableFuture<String>
 }

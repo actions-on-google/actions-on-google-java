@@ -47,35 +47,36 @@ import com.google.api.services.actions_fulfillment.v2.model.SkuId
  * ```
  */
 class CompletePurchase : HelperIntent {
-  private val map:HashMap<String, Any> = HashMap<String, Any>()
-  private var skuId: SkuId? = null
-  private var developerPayload: String? = null
+    private val map: HashMap<String, Any> = HashMap<String, Any>()
+    private var skuId: SkuId? = null
+    private var developerPayload: String? = null
 
-  fun setSkuId(skuId:SkuId): CompletePurchase {
-    this.skuId = skuId
-    return this
-  }
-
-  fun setDeveloperPayload(developerPayload:String): CompletePurchase {
-    this.developerPayload = developerPayload
-    return this
-  }
-  override val name: String
-    get() = "actions.intent.COMPLETE_PURCHASE"
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      map.put("@type",
-          "type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec")
-      return map
+    fun setSkuId(skuId: SkuId): CompletePurchase {
+        this.skuId = skuId
+        return this
     }
 
-  private fun prepareMap() {
-    val spec = CompletePurchaseValueSpec()
-    spec.skuId = skuId
-    spec.developerPayload = developerPayload
+    fun setDeveloperPayload(developerPayload: String): CompletePurchase {
+        this.developerPayload = developerPayload
+        return this
+    }
 
-    spec.toMap(map)
-  }
+    override val name: String
+        get() = "actions.intent.COMPLETE_PURCHASE"
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            map.put("@type",
+                    "type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec")
+            return map
+        }
+
+    private fun prepareMap() {
+        val spec = CompletePurchaseValueSpec()
+        spec.skuId = skuId
+        spec.developerPayload = developerPayload
+
+        spec.toMap(map)
+    }
 }

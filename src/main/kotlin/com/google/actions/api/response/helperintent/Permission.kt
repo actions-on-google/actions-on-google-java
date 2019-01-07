@@ -40,42 +40,42 @@ import com.google.api.services.actions_fulfillment.v2.model.UpdatePermissionValu
  * ```
  */
 open class Permission : HelperIntent {
-  private val map = HashMap<String, Any?>()
+    private val map = HashMap<String, Any?>()
 
-  private var permissions: Array<String>? = null
-  private var context: String? = null
-  private var updatePermissionValueSpec: UpdatePermissionValueSpec? = null
+    private var permissions: Array<String>? = null
+    private var context: String? = null
+    private var updatePermissionValueSpec: UpdatePermissionValueSpec? = null
 
-  fun setPermissions(permissions: Array<String>): Permission {
-    this.permissions = permissions
-    return this
-  }
-
-  fun setContext(context: String): Permission {
-    this.context = context
-    return this
-  }
-
-  protected fun setUpdatePermissionValueSpec(
-          updatePermissionValueSpec: UpdatePermissionValueSpec): Permission {
-    this.updatePermissionValueSpec = updatePermissionValueSpec
-    return this
-  }
-
-  override val name: String
-    get() = "actions.intent.PERMISSION"
-
-  open fun prepareMap() {
-    map.put("@type",
-            "type.googleapis.com/google.actions.v2.PermissionValueSpec")
-    map.put("optContext", context)
-    map.put("permissions", permissions)
-    map.put("updatePermissionValueSpec", updatePermissionValueSpec)
-  }
-
-  override val parameters: Map<String, Any?>
-    get() {
-      prepareMap()
-      return map
+    fun setPermissions(permissions: Array<String>): Permission {
+        this.permissions = permissions
+        return this
     }
+
+    fun setContext(context: String): Permission {
+        this.context = context
+        return this
+    }
+
+    protected fun setUpdatePermissionValueSpec(
+            updatePermissionValueSpec: UpdatePermissionValueSpec): Permission {
+        this.updatePermissionValueSpec = updatePermissionValueSpec
+        return this
+    }
+
+    override val name: String
+        get() = "actions.intent.PERMISSION"
+
+    open fun prepareMap() {
+        map.put("@type",
+                "type.googleapis.com/google.actions.v2.PermissionValueSpec")
+        map.put("optContext", context)
+        map.put("permissions", permissions)
+        map.put("updatePermissionValueSpec", updatePermissionValueSpec)
+    }
+
+    override val parameters: Map<String, Any?>
+        get() {
+            prepareMap()
+            return map
+        }
 }

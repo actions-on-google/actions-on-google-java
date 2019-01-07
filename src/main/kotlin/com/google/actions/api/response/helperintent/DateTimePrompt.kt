@@ -54,42 +54,42 @@ import com.google.api.services.actions_fulfillment.v2.model.DateTimeValueSpecDat
  */
 class DateTimePrompt : HelperIntent {
 
-  private var dateTimePrompt: String? = null
-  private var datePrompt: String? = null
-  private var timePrompt: String? = null
+    private var dateTimePrompt: String? = null
+    private var datePrompt: String? = null
+    private var timePrompt: String? = null
 
-  private val map = HashMap<String, Any>()
+    private val map = HashMap<String, Any>()
 
-  fun setDateTimePrompt(prompt: String): DateTimePrompt {
-    this.dateTimePrompt = prompt
-    return this
-  }
-
-  fun setDatePrompt(prompt: String): DateTimePrompt {
-    this.datePrompt = prompt
-    return this
-  }
-
-  fun setTimePrompt(prompt: String): DateTimePrompt {
-    this.timePrompt = prompt
-    return this
-  }
-
-  private fun prepareMap() {
-    map.put("@type", "type.googleapis.com/google.actions.v2.DateTimeValueSpec")
-    map.put("dialogSpec",
-            DateTimeValueSpecDateTimeDialogSpec()
-                    .setRequestDatetimeText(dateTimePrompt)
-                    .setRequestDateText(datePrompt)
-                    .setRequestTimeText(timePrompt))
-  }
-
-  override val name: String
-    get() = "actions.intent.DATETIME"
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      return map
+    fun setDateTimePrompt(prompt: String): DateTimePrompt {
+        this.dateTimePrompt = prompt
+        return this
     }
+
+    fun setDatePrompt(prompt: String): DateTimePrompt {
+        this.datePrompt = prompt
+        return this
+    }
+
+    fun setTimePrompt(prompt: String): DateTimePrompt {
+        this.timePrompt = prompt
+        return this
+    }
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.DateTimeValueSpec")
+        map.put("dialogSpec",
+                DateTimeValueSpecDateTimeDialogSpec()
+                        .setRequestDatetimeText(dateTimePrompt)
+                        .setRequestDateText(datePrompt)
+                        .setRequestTimeText(timePrompt))
+    }
+
+    override val name: String
+        get() = "actions.intent.DATETIME"
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            return map
+        }
 }

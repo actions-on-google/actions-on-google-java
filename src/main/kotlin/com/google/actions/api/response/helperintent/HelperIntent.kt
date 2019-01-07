@@ -20,6 +20,6 @@ package com.google.actions.api.response.helperintent
  * Interface for objects that represent a system generated response.
  */
 interface HelperIntent {
-  val name: String
-  val parameters: Map<String, Any?>
+    val name: String
+    val parameters: Map<String, Any?>
 }

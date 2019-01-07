@@ -25,45 +25,45 @@ import com.google.api.services.actions_fulfillment.v2.model.TriggerContextTimeCo
  * Helper intent to request for updates (eg: daily update).
  */
 class RegisterUpdate : HelperIntent {
-  private var map: MutableMap<String, Any>? = null
-  private var registerValueSpec: RegisterUpdateValueSpec? = null
+    private var map: MutableMap<String, Any>? = null
+    private var registerValueSpec: RegisterUpdateValueSpec? = null
 
-  private var intent: String? = null
-  private var frequency: String = "DAILY"
-  private var arguments: List<Argument>? = null
+    private var intent: String? = null
+    private var frequency: String = "DAILY"
+    private var arguments: List<Argument>? = null
 
-  fun setIntent(intent: String): RegisterUpdate {
-    this.intent = intent
-    return this
-  }
-
-  fun setFrequency(frequency: String): RegisterUpdate {
-    this.frequency = frequency
-    return this
-  }
-
-  fun setArguments(arguments: List<Argument>): RegisterUpdate {
-    this.arguments = arguments
-    return this
-  }
-
-  private fun prepareMap() {
-    registerValueSpec = RegisterUpdateValueSpec()
-    registerValueSpec!!.intent = intent
-    registerValueSpec!!.arguments = arguments
-    registerValueSpec!!.triggerContext = TriggerContext()
-    registerValueSpec!!.triggerContext.timeContext =
-            TriggerContextTimeContext().setFrequency(frequency)
-    map = registerValueSpec?.toMutableMap()!!
-    map?.put("@type", "type.googleapis.com/google.actions.v2.RegisterUpdateValueSpec")
-  }
-
-  override val name: String
-    get() = "actions.intent.REGISTER_UPDATE"
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      return map?.toMap()!!
+    fun setIntent(intent: String): RegisterUpdate {
+        this.intent = intent
+        return this
     }
+
+    fun setFrequency(frequency: String): RegisterUpdate {
+        this.frequency = frequency
+        return this
+    }
+
+    fun setArguments(arguments: List<Argument>): RegisterUpdate {
+        this.arguments = arguments
+        return this
+    }
+
+    private fun prepareMap() {
+        registerValueSpec = RegisterUpdateValueSpec()
+        registerValueSpec!!.intent = intent
+        registerValueSpec!!.arguments = arguments
+        registerValueSpec!!.triggerContext = TriggerContext()
+        registerValueSpec!!.triggerContext.timeContext =
+                TriggerContextTimeContext().setFrequency(frequency)
+        map = registerValueSpec?.toMutableMap()!!
+        map?.put("@type", "type.googleapis.com/google.actions.v2.RegisterUpdateValueSpec")
+    }
+
+    override val name: String
+        get() = "actions.intent.REGISTER_UPDATE"
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            return map?.toMap()!!
+        }
 }

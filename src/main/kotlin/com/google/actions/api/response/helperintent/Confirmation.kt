@@ -50,27 +50,27 @@ import com.google.api.services.actions_fulfillment.v2.model.ConfirmationValueSpe
  * ```
  */
 class Confirmation : HelperIntent {
-  private var confirmationText: String? = null
+    private var confirmationText: String? = null
 
-  private val map = HashMap<String, Any>()
+    private val map = HashMap<String, Any>()
 
-  fun setConfirmationText(confirmationText: String): Confirmation {
-    this.confirmationText = confirmationText
-    return this
-  }
-
-  override val name: String
-    get() = "actions.intent.CONFIRMATION"
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      return map
+    fun setConfirmationText(confirmationText: String): Confirmation {
+        this.confirmationText = confirmationText
+        return this
     }
 
-  private fun prepareMap() {
-    map.put("@type", "type.googleapis.com/google.actions.v2.ConfirmationValueSpec")
-    map.put("dialogSpec", ConfirmationValueSpecConfirmationDialogSpec()
-            .setRequestConfirmationText(confirmationText))
-  }
+    override val name: String
+        get() = "actions.intent.CONFIRMATION"
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            return map
+        }
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.ConfirmationValueSpec")
+        map.put("dialogSpec", ConfirmationValueSpecConfirmationDialogSpec()
+                .setRequestConfirmationText(confirmationText))
+    }
 }

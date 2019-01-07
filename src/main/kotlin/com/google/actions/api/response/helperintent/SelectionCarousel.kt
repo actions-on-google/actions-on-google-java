@@ -57,27 +57,27 @@ import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarous
  * ```
  */
 class SelectionCarousel : HelperIntent {
-  private val map = HashMap<String, Any>()
-  private var items: List<CarouselSelectCarouselItem>? = null
+    private val map = HashMap<String, Any>()
+    private var items: List<CarouselSelectCarouselItem>? = null
 
-  fun setItems(items: List<CarouselSelectCarouselItem>): SelectionCarousel {
-    this.items = items
-    return this
-  }
-
-  override val name: String
-    get() = "actions.intent.OPTION"
-
-  private fun prepareMap() {
-    map.put("@type", "type.googleapis.com/google.actions.v2.OptionValueSpec")
-    val carouselSelect = CarouselSelect()
-    carouselSelect.items = items
-    map.put("carouselSelect", carouselSelect)
-  }
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      return map
+    fun setItems(items: List<CarouselSelectCarouselItem>): SelectionCarousel {
+        this.items = items
+        return this
     }
+
+    override val name: String
+        get() = "actions.intent.OPTION"
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.OptionValueSpec")
+        val carouselSelect = CarouselSelect()
+        carouselSelect.items = items
+        map.put("carouselSelect", carouselSelect)
+    }
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            return map
+        }
 }

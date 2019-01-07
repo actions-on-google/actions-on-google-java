@@ -35,45 +35,45 @@ package com.google.actions.api.response.helperintent
  * ```
  */
 class NewSurface : HelperIntent {
-  private val map = HashMap<String, Any?>()
+    private val map = HashMap<String, Any?>()
 
-  private var capabilities: List<String>? = null
-  private var context: String? = null
-  private var notificationTitle: String? = null
+    private var capabilities: List<String>? = null
+    private var context: String? = null
+    private var notificationTitle: String? = null
 
-  fun setCapabilities(capabilities: List<String>): NewSurface {
-    this.capabilities = capabilities
-    return this
-  }
-
-  fun setCapability(capability: String): NewSurface {
-    this.capabilities = arrayOf(capability).asList()
-    return this
-  }
-
-  fun setContext(context: String): NewSurface {
-    this.context = context
-    return this
-  }
-
-  fun setNotificationTitle(notificationTitle: String): NewSurface {
-    this.notificationTitle = notificationTitle
-    return this
-  }
-
-  private fun prepareMap() {
-    map.put("@type", "type.googleapis.com/google.actions.v2.NewSurfaceValueSpec")
-    map.put("capabilities", capabilities?.toTypedArray())
-    map.put("context", context)
-    map.put("notificationTitle", notificationTitle)
-  }
-
-  override val name: String
-    get() = "actions.intent.NEW_SURFACE"
-
-  override val parameters: Map<String, Any?>
-    get() {
-      prepareMap()
-      return map
+    fun setCapabilities(capabilities: List<String>): NewSurface {
+        this.capabilities = capabilities
+        return this
     }
+
+    fun setCapability(capability: String): NewSurface {
+        this.capabilities = arrayOf(capability).asList()
+        return this
+    }
+
+    fun setContext(context: String): NewSurface {
+        this.context = context
+        return this
+    }
+
+    fun setNotificationTitle(notificationTitle: String): NewSurface {
+        this.notificationTitle = notificationTitle
+        return this
+    }
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.NewSurfaceValueSpec")
+        map.put("capabilities", capabilities?.toTypedArray())
+        map.put("context", context)
+        map.put("notificationTitle", notificationTitle)
+    }
+
+    override val name: String
+        get() = "actions.intent.NEW_SURFACE"
+
+    override val parameters: Map<String, Any?>
+        get() {
+            prepareMap()
+            return map
+        }
 }

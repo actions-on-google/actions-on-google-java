@@ -27,37 +27,37 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 
 internal class DialogflowResponse internal constructor(
         responseBuilder: ResponseBuilder) : ActionResponse {
-  override val webhookResponse: WebhookResponse
-  override val appResponse: AppResponse? = null
-  override val expectUserResponse: Boolean?
-    get() = googlePayload?.expectUserResponse
+    override val webhookResponse: WebhookResponse
+    override val appResponse: AppResponse? = null
+    override val expectUserResponse: Boolean?
+        get() = googlePayload?.expectUserResponse
 
-  internal var conversationData: Map<String, Any>? = null
-  internal var googlePayload: AogResponse? = null
-  internal var contexts: MutableList<ActionContext>? = ArrayList()
-  internal var sessionId: String? = null
+    internal var conversationData: Map<String, Any>? = null
+    internal var googlePayload: AogResponse? = null
+    internal var contexts: MutableList<ActionContext>? = ArrayList()
+    internal var sessionId: String? = null
 
-  init {
-    conversationData = responseBuilder.conversationData
-    sessionId = responseBuilder.sessionId
-    if (responseBuilder.webhookResponse != null) {
-      webhookResponse = responseBuilder.webhookResponse!!
-    } else {
-      webhookResponse = WebhookResponse()
+    init {
+        conversationData = responseBuilder.conversationData
+        sessionId = responseBuilder.sessionId
+        if (responseBuilder.webhookResponse != null) {
+            webhookResponse = responseBuilder.webhookResponse!!
+        } else {
+            webhookResponse = WebhookResponse()
+        }
+        if (webhookResponse.fulfillmentText == null) {
+            webhookResponse.fulfillmentText = responseBuilder.fulfillmentText
+        }
+        googlePayload = responseBuilder.buildAogResponse()
     }
-    if (webhookResponse.fulfillmentText == null) {
-      webhookResponse.fulfillmentText = responseBuilder.fulfillmentText
+
+    override val richResponse: RichResponse?
+        get() = googlePayload?.richResponse
+
+    override val helperIntent: ExpectedIntent?
+        get() = googlePayload?.helperIntent
+
+    override fun toJson(): String {
+        return ResponseSerializer(sessionId).toJsonV2(this)
     }
-    googlePayload = responseBuilder.buildAogResponse()
-  }
-
-  override val richResponse: RichResponse?
-    get() = googlePayload?.richResponse
-
-  override val helperIntent: ExpectedIntent?
-    get() = googlePayload?.helperIntent
-
-  override fun toJson(): String {
-    return ResponseSerializer(sessionId).toJsonV2(this)
-  }
 }

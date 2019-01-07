@@ -55,35 +55,35 @@ import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
  * ```
  */
 class SelectionList : HelperIntent {
-  private val map = HashMap<String, Any>()
+    private val map = HashMap<String, Any>()
 
-  private var title: String? = null
-  private var items: List<ListSelectListItem?>? = null
+    private var title: String? = null
+    private var items: List<ListSelectListItem?>? = null
 
-  fun setTitle(title: String): SelectionList {
-    this.title = title
-    return this
-  }
-
-  fun setItems(items: List<ListSelectListItem>): SelectionList {
-    this.items = items
-    return this
-  }
-
-  override val name: String
-    get() = "actions.intent.OPTION"
-
-  private fun prepareMap() {
-    map.put("@type", "type.googleapis.com/google.actions.v2.OptionValueSpec")
-    val listSelect = ListSelect()
-    listSelect.title = title
-    listSelect.items = items
-    map.put("listSelect", listSelect)
-  }
-
-  override val parameters: Map<String, Any>
-    get() {
-      prepareMap()
-      return map
+    fun setTitle(title: String): SelectionList {
+        this.title = title
+        return this
     }
+
+    fun setItems(items: List<ListSelectListItem>): SelectionList {
+        this.items = items
+        return this
+    }
+
+    override val name: String
+        get() = "actions.intent.OPTION"
+
+    private fun prepareMap() {
+        map.put("@type", "type.googleapis.com/google.actions.v2.OptionValueSpec")
+        val listSelect = ListSelect()
+        listSelect.title = title
+        listSelect.items = items
+        map.put("listSelect", listSelect)
+    }
+
+    override val parameters: Map<String, Any>
+        get() {
+            prepareMap()
+            return map
+        }
 }

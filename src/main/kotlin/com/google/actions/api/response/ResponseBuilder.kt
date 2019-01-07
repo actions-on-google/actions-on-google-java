@@ -159,7 +159,7 @@ class ResponseBuilder internal constructor(
    */
   fun add(text: String): ResponseBuilder {
     responseItems.add(RichResponseItem().setSimpleResponse(
-            SimpleResponse().setTextToSpeech(text)))
+        SimpleResponse().setTextToSpeech(text)))
     fulfillmentText = text
     return this
   }
@@ -195,7 +195,7 @@ class ResponseBuilder internal constructor(
    */
   fun add(structuredResponse: StructuredResponse): ResponseBuilder {
     responseItems.add(RichResponseItem()
-            .setStructuredResponse(structuredResponse))
+        .setStructuredResponse(structuredResponse))
     return this
   }
 
@@ -264,7 +264,7 @@ class ResponseBuilder internal constructor(
    */
   fun add(image: Image): ResponseBuilder {
     responseItems.add(RichResponseItem().setBasicCard(
-            BasicCard().setImage(image)))
+        BasicCard().setImage(image)))
     return this
   }
 

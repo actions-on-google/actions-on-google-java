@@ -21,34 +21,34 @@ import org.testng.annotations.Test
 
 class MockRequestBuilderTest {
 
-  @Test
-  fun testBasicAogRequest() {
-    val aogRequest = MockRequestBuilder
-            .welcome("welcome", false)
-            .build()
-    assertEquals("welcome", aogRequest.intent)
-    assertNotNull(aogRequest.appRequest?.conversation)
-  }
+    @Test
+    fun testBasicAogRequest() {
+        val aogRequest = MockRequestBuilder
+                .welcome("welcome", false)
+                .build()
+        assertEquals("welcome", aogRequest.intent)
+        assertNotNull(aogRequest.appRequest?.conversation)
+    }
 
-  @Test
-  fun testBasicDialogflowRequest() {
-    val dialogflowRequest = MockRequestBuilder
-            .welcome("welcome")
-            .build()
-    assertEquals("welcome", dialogflowRequest.intent)
-    assertNotNull(dialogflowRequest.webhookRequest?.originalDetectIntentRequest?.payload)
-  }
+    @Test
+    fun testBasicDialogflowRequest() {
+        val dialogflowRequest = MockRequestBuilder
+                .welcome("welcome")
+                .build()
+        assertEquals("welcome", dialogflowRequest.intent)
+        assertNotNull(dialogflowRequest.webhookRequest?.originalDetectIntentRequest?.payload)
+    }
 
-  @Test
-  fun testConfirmationResponse() {
-    var request = MockRequestBuilder
-            .userConfirmation()
-            .build()
-    assertTrue(request.getUserConfirmation()!!)
+    @Test
+    fun testConfirmationResponse() {
+        var request = MockRequestBuilder
+                .userConfirmation()
+                .build()
+        assertTrue(request.getUserConfirmation()!!)
 
-    request = MockRequestBuilder
-            .userConfirmation(false)
-            .build()
-    assertFalse(request.getUserConfirmation()!!)
-  }
+        request = MockRequestBuilder
+                .userConfirmation(false)
+                .build()
+        assertFalse(request.getUserConfirmation()!!)
+    }
 }

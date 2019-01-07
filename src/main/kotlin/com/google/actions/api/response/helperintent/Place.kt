@@ -54,39 +54,39 @@ package com.google.actions.api.response.helperintent
  * ```
  */
 class Place : HelperIntent {
-  private val map = HashMap<String, Any?>()
+    private val map = HashMap<String, Any?>()
 
-  private var requestPrompt: String? = null
-  private var permissionContext: String? = null
+    private var requestPrompt: String? = null
+    private var permissionContext: String? = null
 
-  fun setRequestPrompt(requestPrompt: String): Place {
-    this.requestPrompt = requestPrompt
-    return this
-  }
-
-  fun setPermissionContext(permissionContext: String): Place {
-    this.permissionContext = permissionContext
-    return this
-  }
-
-  override val name: String
-    get() = "actions.intent.PLACE"
-
-  private fun prepareMap() {
-    val extensionMap = HashMap<String, Any?>()
-    extensionMap.put("@type", "type.googleapis.com/google.actions.v2.PlaceValueSpec.PlaceDialogSpec")
-    extensionMap.put("requestPrompt", requestPrompt)
-    extensionMap.put("permissionContext", permissionContext)
-
-    map.put("@type", "type.googleapis.com/google.actions.v2.PlaceValueSpec")
-    map.put("dialog_spec", Extension(extensionMap))
-  }
-
-  override val parameters: Map<String, Any?>
-    get() {
-      prepareMap()
-      return map
+    fun setRequestPrompt(requestPrompt: String): Place {
+        this.requestPrompt = requestPrompt
+        return this
     }
 
-  private inner class Extension(private val extension: Map<String, Any?>)
+    fun setPermissionContext(permissionContext: String): Place {
+        this.permissionContext = permissionContext
+        return this
+    }
+
+    override val name: String
+        get() = "actions.intent.PLACE"
+
+    private fun prepareMap() {
+        val extensionMap = HashMap<String, Any?>()
+        extensionMap.put("@type", "type.googleapis.com/google.actions.v2.PlaceValueSpec.PlaceDialogSpec")
+        extensionMap.put("requestPrompt", requestPrompt)
+        extensionMap.put("permissionContext", permissionContext)
+
+        map.put("@type", "type.googleapis.com/google.actions.v2.PlaceValueSpec")
+        map.put("dialog_spec", Extension(extensionMap))
+    }
+
+    override val parameters: Map<String, Any?>
+        get() {
+            prepareMap()
+            return map
+        }
+
+    private inner class Extension(private val extension: Map<String, Any?>)
 }
