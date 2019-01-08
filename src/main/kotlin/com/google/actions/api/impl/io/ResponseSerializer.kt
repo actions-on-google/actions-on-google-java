@@ -51,6 +51,17 @@ internal class ResponseSerializer(
 
             return map
         }
+
+        val HELPER_INTENTS_REQUIRING_SIMPLE_RESPONSE = listOf(
+                "actions.intent.COMPLETE_PURCHASE",
+                "actions.intent.CONFIRMATION",
+                "actions.intent.DATETIME",
+                "actions.intent.PLACE",
+                "actions.intent.PERMISSION",
+                "actions.intent.NEW_SURFACE",
+                "actions.intent.OPTION",
+                "actions.intent.SIGN_IN"
+        )
     }
 
     fun toJsonV2(response: ActionResponse): String {
@@ -136,6 +147,7 @@ internal class ResponseSerializer(
 
         init {
             if (aogResponse.appResponse != null) {
+                checkSimpleResponseIsPresent(aogResponse)
                 val appResponse = aogResponse.appResponse
                 if (expectUserResponse) {
                     richResponse = appResponse
@@ -201,8 +213,10 @@ internal class ResponseSerializer(
         }
     }
 
+    @Throws(Exception::class)
     private fun serializeAogResponse(aogResponse: AogResponse): String {
         aogResponse.prepareAppResponse()
+        checkSimpleResponseIsPresent(aogResponse)
         val appResponseMap = aogResponse.appResponse!!.toMutableMap()
 
         if (includeVersionMetadata) {
@@ -212,5 +226,57 @@ internal class ResponseSerializer(
         }
 
         return Gson().toJson(appResponseMap)
+    }
+
+    @Throws(Exception::class)
+    private fun checkSimpleResponseIsPresent(aogResponse: AogResponse) {
+        val appResponse = aogResponse.appResponse ?: return
+
+        var requireSimpleResponse = false
+        var hasSimpleResponse = false
+
+        val helperIntents = appResponse.expectedInputs?.get(0)?.possibleIntents
+        if (helperIntents != null) {
+            for (helperIntent in helperIntents) {
+                if (HELPER_INTENTS_REQUIRING_SIMPLE_RESPONSE.contains(helperIntent.intent)) {
+                    requireSimpleResponse = true
+                }
+            }
+        }
+
+        var richResponse: RichResponse?
+        if (appResponse.expectUserResponse != null) {
+            richResponse = appResponse.expectedInputs?.get(0)?.inputPrompt?.richInitialPrompt
+        } else {
+            richResponse = appResponse.finalResponse.richResponse
+        }
+
+        val numSuggestions = richResponse?.suggestions?.size ?: 0
+        if (numSuggestions > 0) {
+            requireSimpleResponse = true
+        }
+
+        if (richResponse?.linkOutSuggestion != null) {
+            requireSimpleResponse = true
+        }
+
+        if (richResponse?.items != null) {
+            for (item in richResponse?.items) {
+                if (item.basicCard != null
+                        || item.carouselBrowse != null
+                        || item.tableCard != null
+                        || item.mediaResponse != null
+                        || item.structuredResponse?.orderUpdate != null) {
+                    requireSimpleResponse = true
+                }
+                if (item.simpleResponse != null) {
+                    hasSimpleResponse = true
+                }
+            }
+        }
+
+        if (requireSimpleResponse && !hasSimpleResponse) {
+            throw Exception("A simple response is required in addition to this type of response")
+        }
     }
 }

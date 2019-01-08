@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import org.junit.jupiter.api.assertThrows
 import org.testng.annotations.Test
 
 class AogResponseTest {
@@ -52,6 +53,7 @@ class AogResponseTest {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
         val confirmation = Confirmation().setConfirmationText("Are you sure?")
         val jsonOutput = responseBuilder
+                .add("placeholder text")
                 .add(confirmation)
                 .build()
                 .toJson()
@@ -69,6 +71,19 @@ class AogResponseTest {
     }
 
     @Test
+    fun testAskConfirmationWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val confirmation = Confirmation().setConfirmationText("Are you sure?")
+
+        assertThrows<Exception> {
+            responseBuilder
+                    .add(confirmation)
+                    .build()
+                    .toJson()
+        }
+    }
+
+    @Test
     fun testAskDateTime() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
         val dateTimePrompt = DateTimePrompt()
@@ -77,6 +92,7 @@ class AogResponseTest {
                 .setTimePrompt("What time?")
 
         val jsonOutput = responseBuilder
+                .add("placeholder")
                 .add(dateTimePrompt)
                 .build()
                 .toJson()
@@ -98,12 +114,30 @@ class AogResponseTest {
     }
 
     @Test
+    fun testAskDateTimeWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        val dateTimePrompt = DateTimePrompt()
+                .setDatePrompt("What date?")
+                .setDateTimePrompt("What date and time?")
+                .setTimePrompt("What time?")
+
+        assertThrows<Exception> {
+            responseBuilder
+                    .add(dateTimePrompt)
+                    .build()
+                    .toJson()
+        }
+    }
+
+    @Test
     fun testAskPermission() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
-        responseBuilder.add(Permission()
-                .setPermissions(arrayOf(PERMISSION_NAME,
-                        PERMISSION_DEVICE_PRECISE_LOCATION))
-                .setContext("To get your name"))
+        responseBuilder
+                .add("placeholder")
+                .add(Permission()
+                        .setPermissions(arrayOf(PERMISSION_NAME,
+                                PERMISSION_DEVICE_PRECISE_LOCATION))
+                        .setContext("To get your name"))
         val response = responseBuilder.build()
         val jsonOutput = response.toJson()
 
@@ -123,14 +157,29 @@ class AogResponseTest {
     }
 
     @Test
+    fun testAskPermissionWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        responseBuilder.add(Permission()
+                .setPermissions(arrayOf(PERMISSION_NAME,
+                        PERMISSION_DEVICE_PRECISE_LOCATION))
+                .setContext("To get your name"))
+        val response = responseBuilder.build()
+        assertThrows<Exception> {
+            response.toJson()
+        }
+    }
+
+    @Test
     fun testAskPlace() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         val requestPrompt = "Where do you want to have lunch?"
         val permissionPrompt = "To find lunch locations"
-        responseBuilder.add(Place()
-                .setRequestPrompt(requestPrompt)
-                .setPermissionContext(permissionPrompt))
+        responseBuilder
+                .add("placeholder")
+                .add(Place()
+                        .setRequestPrompt(requestPrompt)
+                        .setPermissionContext(permissionPrompt))
         val response = responseBuilder.build()
         val jsonOutput = response.toJson()
 
@@ -153,11 +202,29 @@ class AogResponseTest {
     }
 
     @Test
+    fun testAskPlaceWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        val requestPrompt = "Where do you want to have lunch?"
+        val permissionPrompt = "To find lunch locations"
+        responseBuilder
+                .add(Place()
+                        .setRequestPrompt(requestPrompt)
+                        .setPermissionContext(permissionPrompt))
+        val response = responseBuilder.build()
+        assertThrows<Exception> {
+            response.toJson()
+        }
+    }
+
+    @Test
     fun testAskSignIn() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         responseBuilder.add(SignIn())
-        val response = responseBuilder.build()
+        val response = responseBuilder
+                .add("placeholder")
+                .build()
         val jsonOutput = response.toJson()
 
         val gson = Gson()
@@ -170,12 +237,26 @@ class AogResponseTest {
     }
 
     @Test
+    fun testAskSignInWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        responseBuilder.add(SignIn())
+        val response = responseBuilder
+                .build()
+        assertThrows<Exception> {
+            response.toJson()
+        }
+    }
+
+    @Test
     fun testAskSignInWithContext() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         responseBuilder.add(SignIn()
                 .setContext("For testing purposes"))
-        val response = responseBuilder.build()
+        val response = responseBuilder
+                .add("placeholder")
+                .build()
         val jsonOutput = response.toJson()
 
         val gson = Gson()
@@ -199,6 +280,7 @@ class AogResponseTest {
         items.add(ListSelectListItem().setTitle("Flutter"))
 
         val response = responseBuilder
+                .add("placeholder")
                 .add(SelectionList().setTitle("Topics").setItems(items))
                 .build()
         val jsonOutput = response.toJson()
@@ -218,6 +300,23 @@ class AogResponseTest {
     }
 
     @Test
+    fun testListSelectWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        val items = ArrayList<ListSelectListItem>()
+        items.add(ListSelectListItem().setTitle("Android"))
+        items.add(ListSelectListItem().setTitle("Actions on Google"))
+        items.add(ListSelectListItem().setTitle("Flutter"))
+
+        val response = responseBuilder
+                .add(SelectionList().setTitle("Topics").setItems(items))
+                .build()
+        assertThrows<Exception> {
+            response.toJson()
+        }
+    }
+
+    @Test
     fun testCarouselSelect() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
@@ -227,6 +326,7 @@ class AogResponseTest {
         items.add(CarouselSelectCarouselItem().setTitle("Flutter"))
 
         val response = responseBuilder
+                .add("placeholder")
                 .add(SelectionCarousel().setItems(items))
                 .build()
         val jsonOutput = response.toJson()
@@ -244,6 +344,23 @@ class AogResponseTest {
                 .asJsonArray.get(0)
                 .asJsonObject
                 .get("title").asString)
+    }
+
+    @Test
+    fun testCarouselSelectWithoutSimpleResponse() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        val items = ArrayList<CarouselSelectCarouselItem>()
+        items.add(CarouselSelectCarouselItem().setTitle("Android"))
+        items.add(CarouselSelectCarouselItem().setTitle("Actions on Google"))
+        items.add(CarouselSelectCarouselItem().setTitle("Flutter"))
+
+        val response = responseBuilder
+                .add(SelectionCarousel().setItems(items))
+                .build()
+        assertThrows<Exception> {
+            response.toJson()
+        }
     }
 
     @Test
@@ -348,11 +465,13 @@ class AogResponseTest {
         println("testCompletePurchase")
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
-        responseBuilder.add(CompletePurchase().setSkuId(SkuId()
-                .setId("PRODUCT_SKU_ID")
-                .setSkuType("INAPP")
-                .setPackageName("play.store.package.name"))
-                .setDeveloperPayload("OPTIONAL_DEVELOPER_PAYLOAD"))
+        responseBuilder
+                .add("placeholder")
+                .add(CompletePurchase().setSkuId(SkuId()
+                        .setId("PRODUCT_SKU_ID")
+                        .setSkuType("INAPP")
+                        .setPackageName("play.store.package.name"))
+                        .setDeveloperPayload("OPTIONAL_DEVELOPER_PAYLOAD"))
 
         val response = responseBuilder.build()
         val jsonOutput = response.toJson()
