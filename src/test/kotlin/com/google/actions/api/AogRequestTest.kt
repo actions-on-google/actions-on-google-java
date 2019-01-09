@@ -213,6 +213,40 @@ class AogRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun transactionRequirementsCheckResultIsParsed() {
+        val aogRequest = fromFile("aog_with_transaction_requirements_check.json")
+        val argument = aogRequest.getArgument("TRANSACTION_REQUIREMENTS_CHECK_RESULT")
+        val extension = argument?.extension
+        val status = extension?.get("resultType")
+        assertEquals("OK", status)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun deliveryAddressIsParsed() {
+        val aogRequest = fromFile("aog_with_delivery_address.json")
+        val argument = aogRequest.getArgument("DELIVERY_ADDRESS_VALUE")
+        val extension = argument?.extension
+        val userDecision = extension?.get("userDecision")
+        assertEquals("ACCEPTED", userDecision)
+        val location = extension?.get("location")
+        assertNotNull(location)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun transactionDecisionIsParsed() {
+        val aogRequest = fromFile("aog_with_transaction_decision.json")
+        val argument = aogRequest.getArgument("TRANSACTION_DECISION_VALUE")
+        val extension = argument?.extension
+        val userDecision = extension?.get("userDecision")
+        assertEquals("ORDER_ACCEPTED", userDecision)
+        val order = extension?.get("order")
+        assertNotNull(order)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun updatePermissionIsParsed() {
         val aogRequest = fromFile("aog_with_update_permission.json")
         assertTrue(aogRequest.isPermissionGranted()!!)

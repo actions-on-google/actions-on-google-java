@@ -1,0 +1,140 @@
+{
+  "user": {
+    "userId": "abcde",
+    "locale": "en-US",
+    "userStorage": "{\"data\":{}}"
+  },
+  "conversation": {
+    "conversationId": "1234",
+    "type": "ACTIVE",
+    "conversationToken": "[]"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.TRANSACTION_DECISION",
+      "rawInputs": [
+        {
+          "inputType": "KEYBOARD"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "TRANSACTION_DECISION_VALUE",
+          "extension": {
+            "@type": "type.googleapis.com/google.actions.v2.TransactionDecisionValue",
+            "userDecision": "ORDER_ACCEPTED",
+            "order": {
+              "finalOrder": {
+                "cart": {
+                  "merchant": {
+                    "id": "merchant_id",
+                    "name": "merchant_name"
+                  },
+                  "otherItems": [
+                  ],
+                  "lineItems": [
+                    {
+                      "name": "item_name",
+                      "type": "REGULAR",
+                      "id": "item_id",
+                      "quantity": 1,
+                      "price": {
+                        "type": "ACTUAL",
+                        "amount": {
+                          "currencyCode": "USD",
+                          "units": "1",
+                          "nanos": 990000000
+                        }
+                      },
+                      "subLines": [
+                        {
+                          "note": "Note"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "totalPrice": {
+                  "type": "ESTIMATE",
+                  "amount": {
+                    "currencyCode": "USD",
+                    "units": "1",
+                    "nanos": 990000000
+                  }
+                },
+                "id": "",
+                "extension": {
+                  "@type": "type.googleapis.com/google.actions.v2.orders.GenericExtension",
+                  "locations": [
+                    {
+                      "type": "DELIVERY",
+                      "location": {
+                        "postalAddress": {
+                          "regionCode": "US",
+                          "postalCode": "94043",
+                          "administrativeArea": "CA",
+                          "locality": "MOUNTAIN VIEW",
+                          "addressLines": [
+                            "1600 AMPHITHEATRE PKWY"
+                          ],
+                          "recipients": [
+                            "FirstName LastName"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "googleOrderId": "1234",
+              "orderDate": "2019-01-11T00:14:39.661Z",
+              "paymentInfo": {
+                "displayName": "VISA-1234",
+                "paymentType": "PAYMENT_CARD"
+              }
+            },
+            "checkResult": {
+              "resultType": "OK"
+            }
+          }
+        },
+        {
+          "name": "text"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      },
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.WEB_BROWSER"
+        },
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        },
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        }
+      ]
+    }
+  ],
+  "requestType": "SIMULATOR"
+}
