@@ -261,7 +261,7 @@ internal class ResponseSerializer(
         }
 
         if (richResponse?.items != null) {
-            for (item in richResponse?.items) {
+            for (item in richResponse.items) {
                 if (item.basicCard != null
                         || item.carouselBrowse != null
                         || item.tableCard != null

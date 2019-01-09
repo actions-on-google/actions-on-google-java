@@ -44,11 +44,11 @@ class MockRequestBuilderTest {
         var request = MockRequestBuilder
                 .userConfirmation()
                 .build()
-        assertTrue(request.getUserConfirmation()!!)
+        assertTrue(request.getUserConfirmation())
 
         request = MockRequestBuilder
                 .userConfirmation(false)
                 .build()
-        assertFalse(request.getUserConfirmation()!!)
+        assertFalse(request.getUserConfirmation())
     }
 }

@@ -86,18 +86,14 @@ internal class AogRequest internal constructor(
     override val repromptCount: Int?
         get() {
             val arg = getArgument(ARG_REPROMPT_COUNT)
-            if (arg == null) {
-                return null
-            }
+            arg ?: return null
             return arg.intValue?.toInt()
         }
 
     override val isFinalPrompt: Boolean?
         get() {
             val arg = getArgument(ARG_IS_FINAL_REPROMPT)
-            if (arg == null) {
-                return null
-            }
+            arg ?: return false
             return arg.boolValue
         }
 
@@ -113,6 +109,8 @@ internal class AogRequest internal constructor(
         }
 
         val arguments = inputs[0].arguments
+        arguments ?: return null
+
         for (argument in arguments) {
             if (argument.name == name) {
                 return argument
@@ -138,21 +136,17 @@ internal class AogRequest internal constructor(
         return false
     }
 
-    override fun isSignInGranted(): Boolean? {
+    override fun isSignInGranted(): Boolean {
         val arg = getArgument(ARG_SIGN_IN)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return false
         val map = arg.extension
         val status = map!!["status"] as String
         return (status == "OK")
     }
 
-    override fun isUpdateRegistered(): Boolean? {
+    override fun isUpdateRegistered(): Boolean {
         val arg = getArgument(ARG_REGISTER_UPDATE)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return false
         val map = arg.extension
         val status = map!!["status"] as String
         return (status == "OK")
@@ -160,50 +154,37 @@ internal class AogRequest internal constructor(
 
     override fun getPlace(): Location? {
         val arg = getArgument(ARG_PLACE)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return null
         return arg.placeValue
     }
 
-    override fun isPermissionGranted(): Boolean? {
+    override fun isPermissionGranted(): Boolean {
         val arg = getArgument(ARG_PERMISSION)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return false
         return arg.textValue != null && arg.textValue.equals("true")
     }
 
-    override fun getUserConfirmation(): Boolean? {
+    override fun getUserConfirmation(): Boolean {
         val arg = getArgument(ARG_CONFIRMATION)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return false
         return arg.boolValue
     }
 
     override fun getDateTime(): DateTime? {
         val arg = getArgument(ARG_DATETIME)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return null
         return arg.datetimeValue
     }
 
     override fun getMediaStatus(): String? {
         val arg = getArgument(ARG_MEDIA_STATUS)
-        if (arg == null) {
-
-            return null
-        }
+        arg ?: return null
         return arg.extension?.get("status") as String
     }
 
     override fun getSelectedOption(): String? {
         val arg = getArgument(ARG_OPTION)
-        if (arg == null) {
-            return null
-        }
+        arg ?: return null
         return arg.textValue
     }
 

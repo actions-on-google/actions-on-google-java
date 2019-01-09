@@ -55,6 +55,10 @@ class AogRequestTest {
         assertEquals("First", request.appRequest.user
                 .profile.givenName)
         assertEquals(Locale.US, request.locale)
+        assertFalse(request.isPermissionGranted())
+        assertFalse(request.isSignInGranted())
+        assertNull(request.getDateTime())
+        assertNull(request.getMediaStatus())
     }
 
     @Test
@@ -80,15 +84,15 @@ class AogRequestTest {
         assertEquals(1, arguments.size.toLong())
         assertEquals("CONFIRMATION", arguments[0].name)
         assertTrue(arguments[0].boolValue!!)
-        assertTrue(aogRequest.getUserConfirmation()!!)
+        assertTrue(aogRequest.getUserConfirmation())
 
         // In this case, only the confirmation argument is provided. Hence, all
         // other user responses must be null.
         assertNull(aogRequest.getPlace())
-        assertNull(aogRequest.isPermissionGranted())
-        assertNull(aogRequest.isSignInGranted())
+        assertFalse(aogRequest.isPermissionGranted())
+        assertFalse(aogRequest.isSignInGranted())
         assertNull(aogRequest.getMediaStatus())
-        assertNull(aogRequest.isUpdateRegistered())
+        assertFalse(aogRequest.isUpdateRegistered())
 
         val rawInputs = inputs[0].rawInputs
         assertEquals("yes", rawInputs[0].query)
@@ -141,7 +145,7 @@ class AogRequestTest {
         assertEquals(17, dateTime.time.hours!!.toLong())
         assertNull(dateTime.time.minutes)
         assertEquals("5pm", aogRequest.rawInput!!.query)
-        assertNull(aogRequest.getUserConfirmation())
+        assertFalse(aogRequest.getUserConfirmation())
     }
 
     @Test
@@ -157,7 +161,7 @@ class AogRequestTest {
     @Throws(Exception::class)
     fun permissionForUserInfoDeniedIsParsed() {
         val aogRequest = fromFile("aog_with_permission_denied.json")
-        assertFalse(aogRequest.isPermissionGranted()!!)
+        assertFalse(aogRequest.isPermissionGranted())
     }
 
     @Test
@@ -167,7 +171,7 @@ class AogRequestTest {
         val location = aogRequest.getPlace()
         assertEquals("Cascal", location?.name)
         assertTrue(location!!.formattedAddress!!.contains("Cascal"))
-        assertNull(aogRequest.getUserConfirmation())
+        assertFalse(aogRequest.getUserConfirmation())
     }
 
     @Test
@@ -215,7 +219,7 @@ class AogRequestTest {
     @Throws(Exception::class)
     fun updatePermissionIsParsed() {
         val aogRequest = fromFile("aog_with_update_permission.json")
-        assertTrue(aogRequest.isPermissionGranted()!!)
+        assertTrue(aogRequest.isPermissionGranted())
         val argument = aogRequest.getArgument("UPDATES_USER_ID")
         assertNotNull(argument)
         val textValue = argument?.textValue

@@ -88,24 +88,24 @@ internal class DialogflowRequest internal constructor(
         return aogRequest?.hasCapability(capability) ?: false
     }
 
-    override fun isSignInGranted(): Boolean? {
-        return aogRequest?.isSignInGranted()
+    override fun isSignInGranted(): Boolean {
+        return aogRequest?.isSignInGranted() ?: false
     }
 
-    override fun isUpdateRegistered(): Boolean? {
-        return aogRequest?.isUpdateRegistered()
+    override fun isUpdateRegistered(): Boolean {
+        return aogRequest?.isUpdateRegistered() ?: false
     }
 
     override fun getPlace(): Location? {
         return aogRequest?.getPlace()
     }
 
-    override fun isPermissionGranted(): Boolean? {
-        return aogRequest?.isPermissionGranted()
+    override fun isPermissionGranted(): Boolean {
+        return aogRequest?.isPermissionGranted() ?: false
     }
 
-    override fun getUserConfirmation(): Boolean? {
-        return aogRequest?.getUserConfirmation()
+    override fun getUserConfirmation(): Boolean {
+        return aogRequest?.getUserConfirmation() ?: false
     }
 
     override fun getDateTime(): DateTime? {

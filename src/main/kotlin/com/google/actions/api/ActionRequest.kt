@@ -192,17 +192,17 @@ interface ActionRequest {
 
     /**
      * Returns the status of a sign in request.
-     * @return Whether user is signed in or null if the request has no
+     * @return Whether user is signed in or false if the request has no
      * information about sign in status.
      */
-    fun isSignInGranted(): Boolean?
+    fun isSignInGranted(): Boolean
 
     /**
      * Returns the status of a register updates request.
-     * @return Whether updates have been registered or null if the request has no
+     * @return Whether updates have been registered or false if the request has no
      * information about update registration.
      */
-    fun isUpdateRegistered(): Boolean?
+    fun isUpdateRegistered(): Boolean
 
     /**
      * @return User provided location or null if request has no information
@@ -212,15 +212,15 @@ interface ActionRequest {
 
     /**
      * @return Whether user has granted permission based on a previous permission
-     * request or null if request has no information about permission.
+     * request or false if request has no information about permission.
      */
-    fun isPermissionGranted(): Boolean?
+    fun isPermissionGranted(): Boolean
 
     /**
      * @return Whether user has confirmed or not based on a previous confirmation
-     * request or null if request has no information about confirmation.
+     * request or false if request has no information about confirmation.
      */
-    fun getUserConfirmation(): Boolean?
+    fun getUserConfirmation(): Boolean
 
     /**
      * @return DateTimePrompt provided by the user based on a previous permission
