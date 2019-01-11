@@ -242,6 +242,36 @@ internal class AogRequest internal constructor(
                             RawInputDeserializer())
                     .registerTypeAdapter(DateTime::class.java,
                             DateTimeValueDeserializer())
+                    .registerTypeAdapter(Order::class.java,
+                            OrderDeserializer())
+                    .registerTypeAdapter(CustomerInfo::class.java,
+                            CustomerInfoDeserializer())
+                    .registerTypeAdapter(ProposedOrder::class.java,
+                            ProposedOrderDeserializer())
+                    .registerTypeAdapter(Cart::class.java,
+                            CartDeserializer())
+                    .registerTypeAdapter(LineItem::class.java,
+                            LineItemDeserializer())
+                    .registerTypeAdapter(LineItemSubLine::class.java,
+                            LineItemSubLineDeserializer())
+                    .registerTypeAdapter(Promotion::class.java,
+                            PromotionDeserializer())
+                    .registerTypeAdapter(Merchant::class.java,
+                            MerchantDeserializer())
+                    .registerTypeAdapter(Image::class.java,
+                            ImageDeserializer())
+                    .registerTypeAdapter(Price::class.java,
+                            PriceDeserializer())
+                    .registerTypeAdapter(Money::class.java,
+                            MoneyDeserializer())
+                    .registerTypeAdapter(PaymentInfo::class.java,
+                            PaymentInfoDeserializer())
+                    .registerTypeAdapter(PaymentInfoGoogleProvidedPaymentInstrument::class.java,
+                            PaymentInfoGoogleProvidedPaymentInstrumentDeserializer())
+                    .registerTypeAdapter(TransactionRequirementsCheckResult::class.java,
+                            TransactionRequirementsCheckResultDeserializer())
+                    .registerTypeAdapter(genericType<Map<String, Any>>(),
+                            ExtensionDeserializer())
 
             val gson = gsonBuilder.create()
             val appRequest = gson.fromJson<AppRequest>(json, AppRequest::class.java)

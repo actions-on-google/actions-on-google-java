@@ -1,0 +1,67 @@
+{
+  "user": {
+    "userId": "abcde",
+    "locale": "en-US",
+    "userStorage": "{\"data\":{}}"
+  },
+  "conversation": {
+    "conversationId": "1234",
+    "type": "ACTIVE",
+    "conversationToken": "[]"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.TRANSACTION_REQUIREMENTS_CHECK",
+      "rawInputs": [
+        {
+          "inputType": "TOUCH"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "TRANSACTION_REQUIREMENTS_CHECK_RESULT",
+          "extension": {
+            "@type": "type.googleapis.com/google.actions.v2.TransactionRequirementsCheckResult",
+            "resultType": "OK"
+          }
+        },
+        {
+          "name": "text"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      },
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      },
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.WEB_BROWSER"
+        },
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        },
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        }
+      ]
+    }
+  ],
+  "requestType": "SIMULATOR"
+}

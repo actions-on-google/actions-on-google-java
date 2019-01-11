@@ -19,10 +19,7 @@ package com.google.actions.api
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.response.ResponseBuilder
 import com.google.actions.api.response.helperintent.*
-import com.google.api.services.actions_fulfillment.v2.model.CarouselSelectCarouselItem
-import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
-import com.google.api.services.actions_fulfillment.v2.model.ListSelectListItem
-import com.google.api.services.actions_fulfillment.v2.model.SkuId
+import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import junit.framework.TestCase.assertEquals
@@ -490,5 +487,189 @@ class AogResponseTest {
         assertEquals("play.store.package.name", skuId.get("packageName").asString)
         assertEquals("OPTIONAL_DEVELOPER_PAYLOAD",
                 inputValueData.get("developerPayload").asString)
+    }
+
+    @Test
+    fun testTransactionRequirementsCheck() {
+        val orderOptions = OrderOptions().setRequestDeliveryAddress(false)
+        val actionProvidedPaymentOptions = ActionProvidedPaymentOptions().setDisplayName("VISA-1234")
+                .setPaymentType("PAYMENT_CARD")
+        val paymentOptions = PaymentOptions()
+                .setActionProvidedOptions(actionProvidedPaymentOptions)
+
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        responseBuilder.add(TransactionRequirements()
+                .setOrderOptions(orderOptions)
+                .setPaymentOptions(paymentOptions))
+        val response = responseBuilder.buildAogResponse()
+
+        val jsonOutput = response.toJson()
+        val intent = response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0) as ExpectedIntent
+        assertEquals("actions.intent.TRANSACTION_REQUIREMENTS_CHECK", intent.intent)
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertNotNull(inputValueData)
+    }
+
+    @Test
+    fun testDeliveryAddress() {
+        val reason = "Reason"
+        val options = DeliveryAddressValueSpecAddressOptions()
+                .setReason(reason)
+
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        responseBuilder.add(DeliveryAddress()
+                .setAddressOptions(options))
+        val response = responseBuilder.buildAogResponse()
+
+        val jsonOutput = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.DeliveryAddressValueSpec",
+                inputValueData.get("@type").asString)
+        val addressOptions = inputValueData.get("addressOptions").asJsonObject
+        assertEquals(reason, addressOptions.get("reason").asString)
+    }
+
+    @Test
+    fun testTransactionDecision() {
+        val orderOptions = OrderOptions().setRequestDeliveryAddress(true)
+        val paymentType = "PAYMENT_CARD"
+        val paymentDisplayName = "VISA-1234"
+        val actionProvidedPaymentOptions = ActionProvidedPaymentOptions()
+                .setPaymentType(paymentType)
+                .setDisplayName(paymentDisplayName)
+        val paymentOptions = PaymentOptions()
+                .setActionProvidedOptions(actionProvidedPaymentOptions)
+
+        val merchantId = "merchant_id"
+        val merchantName = "merchant_name"
+        val merchant = Merchant().setId(merchantId).setName(merchantName)
+        val amount = Money()
+                .setCurrencyCode("USD")
+                .setUnits(1L)
+                .setNanos(990000000)
+        val price = Price().setAmount(amount).setType("ACTUAL")
+        val lineItemName = "item_name"
+        val lineItemId = "item_id"
+        val lineItemType = "REGULAR"
+        val lineItem = LineItem().setName(lineItemName)
+                .setId(lineItemId)
+                .setPrice(price).setQuantity(1).setType(lineItemType)
+        val cart = Cart()
+                .setMerchant(merchant)
+                .setLineItems(listOf(lineItem))
+        val totalAmount = Money().setCurrencyCode("USD").setNanos(1)
+                .setUnits(99L)
+        val totalPrice = Price().setAmount(totalAmount).setType("ESTIMATE")
+        val orderId = "order_id"
+        val proposedOrder = ProposedOrder().setId(orderId)
+                .setCart(cart).setTotalPrice(totalPrice)
+
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+        responseBuilder.add(TransactionDecision()
+                .setOrderOptions(orderOptions)
+                .setPaymentOptions(paymentOptions)
+                .setProposedOrder(proposedOrder))
+        val response = responseBuilder.buildAogResponse()
+
+        val jsonOutput = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.v2.TransactionDecisionValueSpec",
+                inputValueData.get("@type").asString)
+        val orderOptionsJson = inputValueData.get("orderOptions").asJsonObject
+        assertEquals(true, orderOptionsJson.get("requestDeliveryAddress").asBoolean)
+        val actionProvidedOptionsJson = inputValueData
+                .get("paymentOptions").asJsonObject
+                .get("actionProvidedOptions").asJsonObject
+        assertEquals(paymentDisplayName, actionProvidedOptionsJson.get("displayName").asString)
+        assertEquals(paymentType, actionProvidedOptionsJson.get("paymentType").asString)
+        val proposedOrderJson = inputValueData.get("proposedOrder").asJsonObject
+        assertNotNull(proposedOrderJson)
+        assertEquals(orderId, proposedOrderJson.get("id").asString)
+        val cartJson = proposedOrderJson.get("cart").asJsonObject
+        assertNotNull(cartJson)
+        val lineItemsJson = cartJson.get("lineItems").asJsonArray
+        assertNotNull(lineItemsJson)
+        assert(lineItemsJson.size() == 1)
+        val lineItemJson = lineItemsJson.get(0).asJsonObject
+        assertEquals(lineItemId, lineItemJson.get("id").asString)
+        assertEquals(lineItemName, lineItemJson.get("name").asString)
+        assertEquals(lineItemType, lineItemJson.get("type").asString)
+    }
+
+    @Test
+    fun testOrderUpdate() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        val orderId = "order_id"
+        val actionOrderId = "action_order_id"
+        val actionUrl = "http://example.com/customer-service"
+        val actionTitle = "Customer Service"
+        val actionType = "CUSTOMER_SERVICE"
+        val notificationText = "Notification text."
+        val notificationTitle = "Notification Title"
+        val orderState = "CREATED"
+        val orderLabel = "Order created"
+        val orderUpdate = OrderUpdate().setActionOrderId(actionOrderId)
+                .setOrderState(
+                        OrderState().setLabel(orderLabel).setState(orderState))
+                .setReceipt(Receipt().setConfirmedActionOrderId(orderId))
+                .setOrderManagementActions(
+                        listOf(OrderUpdateAction()
+                                .setButton(Button().setOpenUrlAction(OpenUrlAction()
+                                        .setUrl(actionUrl))
+                                        .setTitle(actionTitle))
+                                .setType(actionType)))
+                .setUserNotification(OrderUpdateUserNotification()
+                        .setText(notificationText).setTitle(notificationTitle))
+
+        responseBuilder.add(StructuredResponse().setOrderUpdate(orderUpdate))
+        val response = responseBuilder.buildAogResponse()
+
+        val jsonOutput = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertNotNull(inputValueData)
+        val richInitialPrompt = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("inputPrompt").asJsonObject.get("richInitialPrompt").asJsonObject
+        val items = richInitialPrompt.get("items").asJsonArray
+        assertNotNull(items)
+        assert(items.size() == 1)
+        val structuredResponse = items.get(0).asJsonObject.get("structuredResponse").asJsonObject
+        assertNotNull(structuredResponse)
+        val orderUpdateJson = structuredResponse.get("orderUpdate").asJsonObject
+        assertNotNull(orderUpdateJson)
+        val orderStateJson = orderUpdateJson.get("orderState").asJsonObject
+        assertEquals(orderState, orderStateJson.get("state").asString)
+        assertEquals(orderLabel, orderStateJson.get("label").asString)
+        val orderManagementUpdateActions = orderUpdateJson.get("orderManagementActions").asJsonArray
+        assertNotNull(orderManagementUpdateActions)
+        assert(orderManagementUpdateActions.size() == 1)
+        val updateAction = orderManagementUpdateActions.get(0).asJsonObject
+        assertEquals(actionType, updateAction.get("type").asString)
+        val button = updateAction.get("button").asJsonObject
+        assertEquals(actionTitle, button.get("title").asString)
+        assertEquals(actionUrl, button.get("openUrlAction").asJsonObject.get("url").asString)
     }
 }

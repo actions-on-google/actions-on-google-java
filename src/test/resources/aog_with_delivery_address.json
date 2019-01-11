@@ -1,0 +1,91 @@
+{
+  "user": {
+    "userId": "abcde",
+    "locale": "en-US",
+    "userStorage": "{\"data\":{}}"
+  },
+  "conversation": {
+    "conversationId": "1234",
+    "type": "ACTIVE",
+    "conversationToken": "[]"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.DELIVERY_ADDRESS",
+      "rawInputs": [
+        {
+          "inputType": "KEYBOARD",
+          "query": "1600 AMPHITHEATRE PKWY"
+        }
+      ],
+      "arguments": [
+        {
+          "name": "DELIVERY_ADDRESS_VALUE",
+          "extension": {
+            "@type": "type.googleapis.com/google.actions.v2.DeliveryAddressValue",
+            "userDecision": "ACCEPTED",
+            "location": {
+              "coordinates": {
+                "latitude": 37.432524,
+                "longitude": -122.098545
+              },
+              "zipCode": "94043",
+              "city": "MOUNTAIN VIEW",
+              "postalAddress": {
+                "regionCode": "US",
+                "postalCode": "94043",
+                "administrativeArea": "CA",
+                "locality": "MOUNTAIN VIEW",
+                "addressLines": [
+                  "1600 AMPHITHEATRE PKWY"
+                ],
+                "recipients": [
+                  "FirstName LastName"
+                ]
+              },
+              "phoneNumber": "+0 123-456-7890"
+            }
+          }
+        },
+        {
+          "name": "text",
+          "rawText": "1600 AMPHITHEATRE PKWY",
+          "textValue": "1600 AMPHITHEATRE PKWY"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      },
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        },
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        },
+        {
+          "name": "actions.capability.WEB_BROWSER"
+        }
+      ]
+    }
+  ],
+  "requestType": "SIMULATOR"
+}
