@@ -479,7 +479,7 @@ class AogResponseTest {
                 .get("expectedInputs").asJsonArray.get(0).asJsonObject
                 .get("possibleIntents").asJsonArray.get(0).asJsonObject
                 .get("inputValueData").asJsonObject
-        assertEquals("type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec",
+        assertEquals("type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec",
                 inputValueData.get("@type").asString)
         val skuId = inputValueData.get("skuId").asJsonObject
         assertEquals("PRODUCT_SKU_ID", skuId.get("id").asString)

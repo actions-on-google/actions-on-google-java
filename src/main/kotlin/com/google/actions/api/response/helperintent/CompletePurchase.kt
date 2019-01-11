@@ -68,7 +68,7 @@ class CompletePurchase : HelperIntent {
         get() {
             prepareMap()
             map.put("@type",
-                    "type.googleapis.com/google.actions.transactions.v2.CompletePurchaseValueSpec")
+                    "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValueSpec")
             return map
         }
 
