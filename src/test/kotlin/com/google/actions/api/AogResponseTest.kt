@@ -640,7 +640,9 @@ class AogResponseTest {
                         .setText(notificationText).setTitle(notificationTitle))
 
         responseBuilder.add(StructuredResponse().setOrderUpdate(orderUpdate))
-        val response = responseBuilder.buildAogResponse()
+        val response = responseBuilder
+                .add("placeholder text")
+                .buildAogResponse()
 
         val jsonOutput = response.toJson()
         val gson = Gson()
@@ -655,7 +657,7 @@ class AogResponseTest {
                 .get("inputPrompt").asJsonObject.get("richInitialPrompt").asJsonObject
         val items = richInitialPrompt.get("items").asJsonArray
         assertNotNull(items)
-        assert(items.size() == 1)
+        assert(items.size() == 2)
         val structuredResponse = items.get(0).asJsonObject.get("structuredResponse").asJsonObject
         assertNotNull(structuredResponse)
         val orderUpdateJson = structuredResponse.get("orderUpdate").asJsonObject
