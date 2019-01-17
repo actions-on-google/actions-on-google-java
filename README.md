@@ -50,7 +50,7 @@ If using maven, add the following to your pom.xml file.
 We recommend that you start your project from the library [boilerplate](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java). The boilerplate is a self-contained project that sets up all the build dependencies using Gradle and allows you to import it easily into IntelliJ or other IDE of choice. It also includes artifacts that make it easy to deploy your project on Google Cloud Platform or AWS.
 
 ```
-git clone https://github.com/actions-on-google/boilerplate-java.git
+git clone https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java.git
 ```
 
 ### Instructions for IntelliJ
@@ -169,7 +169,7 @@ You can use the [Actions on Google testing library](https://github.com/actions-o
 * If you find any issues, please open a bug on [GitHub](https://github.com/actions-on-google/actions-on-google-java).
 * Questions are answered on [StackOverflow](https://stackoverflow.com/questions/tagged/actions-on-google).
 * [Reference docs](https://actions-on-google.github.io/actions-on-google-java/)
-* [Boilerplate](https://github.com/actions-on-google/boilerplate-java)
+* [Boilerplate](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java)
 
 Here are some samples to get you started.
 
