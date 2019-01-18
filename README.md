@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.0.0’
+   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.0.0'
 }
 ```
 
@@ -89,11 +89,11 @@ Your Action may also respond with one of the helper intents supported by the Ass
 The ```ResponseBuilder``` class provides a variety of helper methods to assemble a response. In the simplest case, your Action responds back with text:
 
 ```java
-@ForIntent("welcome")
+@ForIntent("Default Welcome Intent")
  public ActionResponse welcome(ActionRequest request) {
    ResponseBuilder responseBuilder = getResponseBuilder(request);
    responseBuilder.add("Welcome to my app");
-   Return responseBuilder.build();
+   return responseBuilder.build();
  }
  ```
 
