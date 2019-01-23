@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.actions</groupId>
   <artifactId>actions-on-google</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
   <name>actions-on-google-java</name>
   <url>http://actions.google.com</url>
@@ -57,6 +57,13 @@
     <dokka.version>0.9.17</dokka.version>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>local-repo</id>
+      <url>file://${project.basedir}/local-repo</url>
+    </repository>
+  </repositories>
+
   <pluginRepositories>
     <pluginRepository>
       <id>jcenter</id>
@@ -72,20 +79,16 @@
       <version>${kotlin.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.google.actions.v2</groupId>
-      <artifactId>google-actions-bindings</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/libactions_java_lib.jar
-      </systemPath>
+      <groupId>com.google.actions</groupId>
+      <artifactId>actions-bindings</artifactId>
+      <version>2.0.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.dialogflow.bindings</groupId>
+      <groupId>com.google.actions</groupId>
       <artifactId>dialogflow-bindings</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/libdialogflow_java_lib.jar
-      </systemPath>
+      <version>2.0.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -162,6 +165,44 @@
 
     <plugins>
       <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>install-actions-bindings</id>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <groupId>com.google.actions</groupId>
+              <artifactId>actions-bindings</artifactId>
+              <packaging>jar</packaging>
+              <version>2.0.0</version>
+              <file>${basedir}/lib/libactions_java_lib.jar</file>
+              <localRepositoryPath>${basedir}/local-repo</localRepositoryPath>
+            </configuration>
+          </execution>
+          <execution>
+            <id>install-dialogflow-bindings</id>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <file>${basedir}/lib/libdialogflow_java_lib.jar</file>
+              <groupId>com.google.actions</groupId>
+              <packaging>jar</packaging>
+              <artifactId>dialogflow-bindings</artifactId>
+              <version>2.0.0</version>
+              <localRepositoryPath>${basedir}/local-repo</localRepositoryPath>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <artifactId>kotlin-maven-plugin</artifactId>
         <groupId>org.jetbrains.kotlin</groupId>
         <version>${kotlin.version}</version>
@@ -211,7 +252,6 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>${main.class}</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -219,6 +259,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -235,7 +276,7 @@
         <version>${dokka.version}</version>
         <executions>
           <execution>
-            <phase>pre-site</phase>
+            <phase>package</phase>
             <goals>
               <goal>dokka</goal>
             </goals>

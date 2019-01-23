@@ -53,14 +53,7 @@ internal class ResponseSerializer(
         }
 
         val HELPER_INTENTS_REQUIRING_SIMPLE_RESPONSE = listOf(
-                "actions.intent.COMPLETE_PURCHASE",
-                "actions.intent.CONFIRMATION",
-                "actions.intent.DATETIME",
-                "actions.intent.PLACE",
-                "actions.intent.PERMISSION",
-                "actions.intent.NEW_SURFACE",
-                "actions.intent.OPTION",
-                "actions.intent.SIGN_IN"
+                "actions.intent.OPTION"
         )
     }
 

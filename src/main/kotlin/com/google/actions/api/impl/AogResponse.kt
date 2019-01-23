@@ -48,15 +48,19 @@ internal class AogResponse internal constructor(
         if (appResponse == null) {
             // If appResponse is provided, that supersedes all other values.
             if (richResponse == null) {
-                richResponse = RichResponse()
-                if (responseBuilder.responseItems.size > 0) {
-                    richResponse?.items = responseBuilder.responseItems
-                }
-                if (responseBuilder.suggestions.size > 0) {
-                    richResponse?.suggestions = responseBuilder.suggestions
-                }
-                if (responseBuilder.linkOutSuggestion != null) {
-                    richResponse?.linkOutSuggestion = responseBuilder.linkOutSuggestion
+                if (responseBuilder.responseItems.size > 0
+                        || responseBuilder.suggestions.size > 0
+                        || responseBuilder.linkOutSuggestion != null) {
+                    richResponse = RichResponse()
+                    if (responseBuilder.responseItems.size > 0) {
+                        richResponse?.items = responseBuilder.responseItems
+                    }
+                    if (responseBuilder.suggestions.size > 0) {
+                        richResponse?.suggestions = responseBuilder.suggestions
+                    }
+                    if (responseBuilder.linkOutSuggestion != null) {
+                        richResponse?.linkOutSuggestion = responseBuilder.linkOutSuggestion
+                    }
                 }
             }
         }
@@ -98,7 +102,7 @@ internal class AogResponse internal constructor(
         if (richResponse != null) {
             finalResponse.richResponse = richResponse
         } else {
-            if (richResponse!!.items != null || richResponse!!.suggestions != null) {
+            if (richResponse?.items != null || richResponse?.suggestions != null) {
                 finalResponse.richResponse = richResponse
             }
         }

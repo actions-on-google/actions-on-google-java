@@ -50,7 +50,6 @@ class AogResponseTest {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
         val confirmation = Confirmation().setConfirmationText("Are you sure?")
         val jsonOutput = responseBuilder
-                .add("placeholder text")
                 .add(confirmation)
                 .build()
                 .toJson()
@@ -68,19 +67,6 @@ class AogResponseTest {
     }
 
     @Test
-    fun testAskConfirmationWithoutSimpleResponse() {
-        val responseBuilder = ResponseBuilder(usesDialogflow = false)
-        val confirmation = Confirmation().setConfirmationText("Are you sure?")
-
-        assertThrows<Exception> {
-            responseBuilder
-                    .add(confirmation)
-                    .build()
-                    .toJson()
-        }
-    }
-
-    @Test
     fun testAskDateTime() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
         val dateTimePrompt = DateTimePrompt()
@@ -89,7 +75,6 @@ class AogResponseTest {
                 .setTimePrompt("What time?")
 
         val jsonOutput = responseBuilder
-                .add("placeholder")
                 .add(dateTimePrompt)
                 .build()
                 .toJson()
@@ -111,26 +96,9 @@ class AogResponseTest {
     }
 
     @Test
-    fun testAskDateTimeWithoutSimpleResponse() {
-        val responseBuilder = ResponseBuilder(usesDialogflow = false)
-        val dateTimePrompt = DateTimePrompt()
-                .setDatePrompt("What date?")
-                .setDateTimePrompt("What date and time?")
-                .setTimePrompt("What time?")
-
-        assertThrows<Exception> {
-            responseBuilder
-                    .add(dateTimePrompt)
-                    .build()
-                    .toJson()
-        }
-    }
-
-    @Test
     fun testAskPermission() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
         responseBuilder
-                .add("placeholder")
                 .add(Permission()
                         .setPermissions(arrayOf(PERMISSION_NAME,
                                 PERMISSION_DEVICE_PRECISE_LOCATION))
@@ -154,26 +122,12 @@ class AogResponseTest {
     }
 
     @Test
-    fun testAskPermissionWithoutSimpleResponse() {
-        val responseBuilder = ResponseBuilder(usesDialogflow = false)
-        responseBuilder.add(Permission()
-                .setPermissions(arrayOf(PERMISSION_NAME,
-                        PERMISSION_DEVICE_PRECISE_LOCATION))
-                .setContext("To get your name"))
-        val response = responseBuilder.build()
-        assertThrows<Exception> {
-            response.toJson()
-        }
-    }
-
-    @Test
     fun testAskPlace() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         val requestPrompt = "Where do you want to have lunch?"
         val permissionPrompt = "To find lunch locations"
         responseBuilder
-                .add("placeholder")
                 .add(Place()
                         .setRequestPrompt(requestPrompt)
                         .setPermissionContext(permissionPrompt))
@@ -199,28 +153,11 @@ class AogResponseTest {
     }
 
     @Test
-    fun testAskPlaceWithoutSimpleResponse() {
-        val responseBuilder = ResponseBuilder(usesDialogflow = false)
-
-        val requestPrompt = "Where do you want to have lunch?"
-        val permissionPrompt = "To find lunch locations"
-        responseBuilder
-                .add(Place()
-                        .setRequestPrompt(requestPrompt)
-                        .setPermissionContext(permissionPrompt))
-        val response = responseBuilder.build()
-        assertThrows<Exception> {
-            response.toJson()
-        }
-    }
-
-    @Test
     fun testAskSignIn() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         responseBuilder.add(SignIn())
         val response = responseBuilder
-                .add("placeholder")
                 .build()
         val jsonOutput = response.toJson()
 
@@ -234,25 +171,12 @@ class AogResponseTest {
     }
 
     @Test
-    fun testAskSignInWithoutSimpleResponse() {
-        val responseBuilder = ResponseBuilder(usesDialogflow = false)
-
-        responseBuilder.add(SignIn())
-        val response = responseBuilder
-                .build()
-        assertThrows<Exception> {
-            response.toJson()
-        }
-    }
-
-    @Test
     fun testAskSignInWithContext() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         responseBuilder.add(SignIn()
                 .setContext("For testing purposes"))
         val response = responseBuilder
-                .add("placeholder")
                 .build()
         val jsonOutput = response.toJson()
 
@@ -440,7 +364,6 @@ class AogResponseTest {
     @Test
     fun testAddSuggestions() {
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
-
         responseBuilder
                 .add("this is a test")
                 .addSuggestions(arrayOf("one", "two", "three"))
@@ -459,7 +382,6 @@ class AogResponseTest {
 
     @Test
     fun testCompletePurchase() {
-        println("testCompletePurchase")
         val responseBuilder = ResponseBuilder(usesDialogflow = false)
 
         responseBuilder
