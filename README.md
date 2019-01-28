@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.0.0'
+   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.0.2'
 }
 ```
 
