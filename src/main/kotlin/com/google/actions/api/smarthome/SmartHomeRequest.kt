@@ -58,7 +58,9 @@ open class SmartHomeRequest {
                         val deviceJson = devicesJsonArray.getJSONObject(i)
                         val deviceObject = QueryRequest.Inputs.Payload.Device()
                         deviceObject.id = deviceJson.getString("id")
-                        deviceObject.customData = deviceJson.getJSONObject("customData")?.toMap()
+                        if (deviceJson.has("customData")) {
+                            deviceObject.customData = deviceJson.getJSONObject("customData").toMap()
+                        }
                         devicesList.add(deviceObject)
                     }
 
@@ -85,7 +87,9 @@ open class SmartHomeRequest {
                             val deviceJson = devicesJsonArray.getJSONObject(j)
                             val deviceObject = ExecuteRequest.Inputs.Payload.Commands.Devices()
                             deviceObject.id = deviceJson.getString("id")
-                            deviceObject.customData = deviceJson.getJSONObject("customData")?.toMap()
+                            if (deviceJson.has("customData")) {
+                                deviceObject.customData = deviceJson.getJSONObject("customData").toMap()
+                            }
                             devicesList.add(deviceObject)
                         }
 

@@ -4,19 +4,9 @@
     "intent": "action.devices.QUERY",
     "payload": {
       "devices": [{
-        "id": "123",
-        "customData": {
-          "fooValue": 74,
-          "barValue": true,
-          "bazValue": "foo"
-        }
+        "id": "123"
       },{
-        "id": "456",
-        "customData": {
-          "fooValue": 12,
-          "barValue": false,
-          "bazValue": "bar"
-        }
+        "id": "456"
       }]
     }
   }]

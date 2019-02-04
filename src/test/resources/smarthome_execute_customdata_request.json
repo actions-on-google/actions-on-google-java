@@ -5,9 +5,19 @@
     "payload": {
       "commands": [{
         "devices": [{
-          "id": "123"
+          "id": "123",
+          "customData": {
+            "fooValue": 74,
+            "barValue": true,
+            "bazValue": "sheepdip"
+          }
         },{
-          "id": "456"
+          "id": "456",
+          "customData": {
+            "fooValue": 36,
+            "barValue": false,
+            "bazValue": "moarsheep"
+          }
         }],
         "execution": [{
           "command": "action.devices.commands.OnOff",
