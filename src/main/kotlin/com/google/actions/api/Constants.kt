@@ -22,14 +22,13 @@ internal const val APP_DATA_CONTEXT_LIFESPAN = 99
 /** Permission to request user's first and last name */
 const val PERMISSION_NAME = "NAME"
 /**
- * Permission to request user's precise location, lat/lng and formatted
- * address. Returns only lat/lng on phones.
+ * Permission to request user's precise location, latitude/longitude, and
+ * formatted address.
  */
 const val PERMISSION_DEVICE_PRECISE_LOCATION = "DEVICE_PRECISE_LOCATION"
 /**
- * Permission to request user's coarse location, zip code, city and country
- * code. Please check documentation for devices that support this
- * permission.
+ * Permission to request user's coarse location, zip code, city, and
+ * country code.
  */
 const val PERMISSION_DEVICE_COARSE_LOCATION = "DEVICE_COARSE_LOCATION"
 /** Permission to send updates to the user */
