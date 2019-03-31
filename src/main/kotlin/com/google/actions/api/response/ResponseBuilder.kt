@@ -33,7 +33,8 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
  * ActionsSdkApp):
  *
  * ``` Java
- * ResponseBuilder builder = getResponseBuilder()
+ * ActionRequest request = ...;
+ * ResponseBuilder builder = getResponseBuilder(request);
  * ActionResponse response = builder
  *        .add("some text")
  *        .add(suggestions)
@@ -43,7 +44,8 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
  * To end a conversation,
  *
  * ``` Java
- * ResponseBuilder builder = getResponseBuilder()
+ * ActionRequest request = ...;
+ * ResponseBuilder builder = getResponseBuilder(request);
  * ActionResponse response = builder
  *        .add("some text")
  *        .endConversation()
@@ -138,7 +140,8 @@ class ResponseBuilder internal constructor(
    *
    * Usage:
    * ``` Java
-   * ResponseBuilder builder = getResponseBuilder();
+   * ActionRequest request = ...;
+   * ResponseBuilder builder = getResponseBuilder(request);
    * WebhookResponse webhookResponse = new WebhookResponse();
    * webhookResponse.setFulfillmentText("Dialogflow fulfillment text");
    * builder.use(webhookResponse);
