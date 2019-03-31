@@ -140,7 +140,8 @@ class ResponseBuilder internal constructor(
    *
    * Usage:
    * ``` Java
-   * ResponseBuilder builder = getResponseBuilder();
+   * ActionRequest request = ...;
+   * ResponseBuilder builder = getResponseBuilder(request);
    * WebhookResponse webhookResponse = new WebhookResponse();
    * webhookResponse.setFulfillmentText("Dialogflow fulfillment text");
    * builder.use(webhookResponse);
