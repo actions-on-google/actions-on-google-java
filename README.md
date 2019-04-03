@@ -163,26 +163,19 @@ During active development, you may start a local server to run your Action as a 
 ### Integration Tests
 You can use the [Actions on Google testing library](https://github.com/actions-on-google/actions-on-google-testing-nodejs) to test your Action end to end. Note that the testing library requires tests to be written in Node.js. The webhook fulfillment can be in Node.js/Java/Kotlin or any other language.
 
-## References and How to report bugs
-* Actions on Google documentation: [https://developers.google.com/actions/](https://developers.google.com/actions/).
-* If you find any issues, please open a bug on [GitHub](https://github.com/actions-on-google/actions-on-google-java).
-* Questions are answered on [StackOverflow](https://stackoverflow.com/questions/tagged/actions-on-google).
-* [Reference docs](https://actions-on-google.github.io/actions-on-google-java/)
-* [Boilerplate](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java)
-
-Here are some samples to get you started.
-
-* [Conversation components](https://github.com/actions-on-google/dialogflow-conversation-components-java)
-* [Helper intents](https://github.com/actions-on-google/dialogflow-helper-intents-java)
-* [Updates sample](https://github.com/actions-on-google/dialogflow-updates-java)
-* [Transactions](https://github.com/actions-on-google/dialogflow-transactions-java)
-* [Sign in](https://github.com/actions-on-google/dialogflow-google-sign-in-java)
-
-## How to make contributions?
-Please read and follow the steps in the CONTRIBUTING.md.
-
-## License
-See LICENSE.md.
-
-## Terms
-Your use of this library is subject to, and by using or downloading the sample files you agree to comply with, the [Google APIs Terms of Service](https://developers.google.com/terms/).
+### References & Issues
++ Questions? Go to [StackOverflow](https://stackoverflow.com/questions/tagged/actions-on-google), [Assistant Developer Community on Reddit](https://www.reddit.com/r/GoogleAssistantDev/) or [Support](https://developers.google.com/actions/support/).
++ For bugs, please report an issue on Github.
++ Actions on Google [Documentation](https://developers.google.com/actions/extending-the-assistant)
++ [Webhook Boilerplate Template](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java) for Actions on Google.
++ More info about [Gradle & the App Engine Plugin](https://cloud.google.com/appengine/docs/flexible/java/using-gradle).
++ More info about deploying [Java apps with App Engine](https://cloud.google.com/appengine/docs/standard/java/quickstart).
+ 
+### Make Contributions
+Please read and follow the steps in the [CONTRIBUTING.md](CONTRIBUTING.md).
+ 
+### License
+See [LICENSE](LICENSE).
+ 
+### Terms
+Your use of this sample is subject to, and by using or downloading the sample files you agree to comply with, the [Google APIs Terms of Service](https://developers.google.com/terms/).
