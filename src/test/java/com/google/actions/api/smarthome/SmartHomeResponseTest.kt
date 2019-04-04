@@ -17,6 +17,7 @@
 package com.google.actions.api.smarthome
 
 import com.google.home.graph.v1.DeviceProto
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import java.io.IOException
@@ -79,10 +80,10 @@ class SmartHomeResponseTest {
                 response.payload = SyncResponse.Payload()
                 response.payload.agentUserId = "1836.15267389"
                 response.payload.devices = arrayOf(
-                        DeviceProto.Device.newBuilder()
+                        SyncResponse.Payload.Device.Builder()
                                 .setId("123")
                                 .setType("action.devices.types.OUTLET")
-                                .addTraits("action.devices.traits.OnOff")
+                                .addTrait("action.devices.traits.OnOff")
                                 .setName(DeviceProto.DeviceNames.newBuilder()
                                         .addDefaultNames("My Outlet 1234")
                                         .setName("Night light")
@@ -98,13 +99,13 @@ class SmartHomeResponseTest {
                                         .build())
                                 .setCustomData("{\"fooValue\":74, \"barValue\":true, \"bazValue\":\"foo\"}")
                                 .build(),
-                        DeviceProto.Device.newBuilder()
+                        SyncResponse.Payload.Device.Builder()
                                 .setId("456")
                                 .setType("action.devices.types.LIGHT")
-                                .addTraits("action.devices.traits.OnOff")
-                                .addTraits("action.devices.traits.Brightness")
-                                .addTraits("action.devices.traits.ColorTemperature")
-                                .addTraits("action.devices.traits.ColorSpectrum")
+                                .addTrait("action.devices.traits.OnOff")
+                                .addTrait("action.devices.traits.Brightness")
+                                .addTrait("action.devices.traits.ColorTemperature")
+                                .addTrait("action.devices.traits.ColorSpectrum")
                                 .setName(DeviceProto.DeviceNames.newBuilder()
                                         .addDefaultNames("lights out inc. bulb A19 color hyperglow")
                                         .setName("lamp1")
@@ -119,6 +120,41 @@ class SmartHomeResponseTest {
                                         .setSwVersion("5.4")
                                         .build())
                                 .setCustomData("{\"fooValue\":12, \"barValue\":false, \"bazValue\":\"bar\"}")
+                                .build(),
+                        SyncResponse.Payload.Device.Builder()
+                                .setId("789")
+                                .setType("action.devices.types.AC_UNIT")
+                                .addTrait("action.devices.traits.OnOff")
+                                .addTrait("action.devices.traits.FanSpeed")
+                                .setName(
+                                        listOf("Sirius Cybernetics Corporation 33321"),
+                                        "AC Unit",
+                                        listOf("living room AC")
+                                )
+                                .setWillReportState(true)
+                                .setAttributes(JSONObject()
+                                        .put("availableFanSpeeds", JSONObject()
+                                                .put("speeds", arrayOf(JSONObject()
+                                                        .put("speed_name", "S1")
+                                                        .put("speed_values", arrayOf(JSONObject()
+                                                                .put("speed_synonym",
+                                                                        arrayOf("low", "speed 1"))
+                                                                .put("lang", "en"))), JSONObject()
+                                                        .put("speed_name", "S2")
+                                                        .put("speed_values", arrayOf(JSONObject()
+                                                                .put("speed_synonym",
+                                                                        arrayOf("high", "speed 2"))
+                                                                .put("lang", "en")))))
+                                                .put("ordered", true)
+                                        )
+                                )
+                                .setDeviceInfo("Sirius Cybernetics Corporation", "492134", "3.2",
+                                        "11.4")
+                                .setCustomData(JSONObject()
+                                        .put("fooValue", 74)
+                                        .put("barValue", true)
+                                        .put("bazValue", "lambtwirl")
+                                        .toString())
                                 .build()
                 )
 

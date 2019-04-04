@@ -66,13 +66,13 @@ class SmartHomeRequestTest {
     @Test
     @Throws(Exception::class)
     fun customDataQueryJsonIsParsed() {
-        val request = fromFile("smarthome_query_customdata_request.json") as SmartHomeRequest.QueryRequest
+        val request = fromFile("smarthome_query_customdata_request.json") as QueryRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)
         Assert.assertEquals(request.inputs[0].intent, "action.devices.QUERY")
 
-        val payload = (request.inputs[0] as SmartHomeRequest.QueryRequest.Inputs).payload
+        val payload = (request.inputs[0] as QueryRequest.Inputs).payload
         Assert.assertEquals(payload.devices.size, 2)
         Assert.assertEquals(payload.devices[0].id, "123")
         Assert.assertEquals(payload.devices[0].customData!!["fooValue"], 74)
@@ -103,13 +103,13 @@ class SmartHomeRequestTest {
     @Test
     @Throws(Exception::class)
     fun customDataExecuteJsonIsParsed() {
-        val request = fromFile("smarthome_execute_customdata_request.json") as SmartHomeRequest.ExecuteRequest
+        val request = fromFile("smarthome_execute_customdata_request.json") as ExecuteRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)
         Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
 
-        val payload = (request.inputs[0] as SmartHomeRequest.ExecuteRequest.Inputs).payload
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
         Assert.assertEquals(payload.commands.size, 1)
         Assert.assertEquals(payload.commands[0].devices.size, 2)
         Assert.assertEquals(payload.commands[0].devices[0].id, "123")

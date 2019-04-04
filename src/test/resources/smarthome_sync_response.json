@@ -49,6 +49,49 @@
         "manufacturer":"lights out inc.",
         "hwVersion":"1.2"
       }
+    },{
+      "traits": [
+        "action.devices.traits.OnOff",
+        "action.devices.traits.FanSpeed"
+      ],
+      "willReportState": true,
+      "name": {
+        "defaultNames": [
+          "Sirius Cybernetics Corporation 33321"
+        ],
+        "name": "AC Unit",
+        "nicknames": [
+          "living room AC"
+        ]
+      },
+      "attributes": {
+        "availableFanSpeeds": {
+          "ordered": true,
+          "speeds": [{
+            "speed_values": [{
+              "lang": "en",
+              "speed_synonym": ["low","speed 1"]
+            }],
+            "speed_name": "S1"
+          },
+            {
+              "speed_values": [{
+                "lang": "en",
+                "speed_synonym": ["high","speed 2"]
+              }],
+              "speed_name": "S2"
+            }]
+        }
+      },
+      "customData": "{\"fooValue\":74,\"bazValue\":\"lambtwirl\",\"barValue\":true}",
+      "id": "789",
+      "type": "action.devices.types.AC_UNIT",
+      "deviceInfo": {
+        "swVersion": "11.4",
+        "model": "492134",
+        "manufacturer": "Sirius Cybernetics Corporation",
+        "hwVersion": "3.2"
+      }
     }]
   },
   "requestId":"ff36a3cc-ec34-11e6-b1a0-64510650abcf"

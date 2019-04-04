@@ -17,6 +17,8 @@
 package com.google.actions.api.smarthome
 
 import com.google.home.graph.v1.DeviceProto
+import com.google.protobuf.ProtocolStringList
+import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
 import org.json.JSONObject
 
@@ -26,9 +28,14 @@ open class SmartHomeResponse {
     }
 }
 
-class SyncResponse : SmartHomeResponse() {
+class SyncResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
+
+    constructor(requestId: String, payload: Payload) : this() {
+        this.requestId = requestId
+        this.payload = payload
+    }
 
     override fun build(): JSONObject {
         val json = JSONObject()
@@ -37,26 +44,251 @@ class SyncResponse : SmartHomeResponse() {
         return json
     }
 
-    class Payload {
+    class Payload() {
         lateinit var agentUserId: String
-        lateinit var devices: Array<DeviceProto.Device>
+        lateinit var devices: Array<Device>
+
+        constructor(agentUserId: String, devices: Array<Device>) : this() {
+            this.agentUserId = agentUserId
+            this.devices = devices
+        }
 
         fun build(): JSONObject {
             val json = JSONObject()
             val devicesJson = devices.map {
-                val jsonString = JsonFormat.printer().omittingInsignificantWhitespace().print(it)
-                JSONObject(jsonString)
+                it.build()
             }
             json.put("agentUserId", agentUserId)
             json.put("devices", devicesJson)
             return json
         }
+
+        /**
+         * The container class for the payload device
+         */
+        class Device(var device: DeviceProto.Device) {
+
+            fun build(): JSONObject {
+                val jsonString = JsonFormat.printer()
+                        .omittingInsignificantWhitespace()
+                        .print(device)
+                return JSONObject(jsonString)
+            }
+
+            /**
+             * A Builder for a Device
+             */
+            class Builder {
+                var protoBuilder: DeviceProto.Device.Builder = DeviceProto.Device.newBuilder()
+
+                /**
+                 * Get device id
+                 */
+                fun getId(): String {
+                    return protoBuilder.id
+                }
+
+                /**
+                 * Set device id
+                 */
+                fun setId(id: String): Builder {
+                    protoBuilder.id = id
+                    return this
+                }
+
+                /**
+                 * Get device type
+                 */
+                fun getType(): String {
+                    return protoBuilder.type
+                }
+
+                /**
+                 * Set device type
+                 */
+                fun setType(type: String): Builder {
+                    protoBuilder.type = type
+                    return this
+                }
+
+                /**
+                 * Get list of device traits
+                 */
+                fun getTraits(): ProtocolStringList {
+                    return protoBuilder.traitsList
+                }
+
+                /**
+                 * Sets list of device traits
+                 */
+                fun setTraits(traits: List<String>): Builder {
+                    protoBuilder.traitsList.clear()
+                    protoBuilder.traitsList.addAll(traits)
+                    return this
+                }
+
+                /**
+                 * Adds a trait to the list of device traits
+                 */
+                fun addTrait(trait: String): Builder {
+                    protoBuilder.addTraits(trait)
+                    return this
+                }
+
+                /**
+                 * Gets the names of the device
+                 */
+                fun getName(): DeviceProto.DeviceNames {
+                    return protoBuilder.name
+                }
+
+                /**
+                 * Sets the names of the device
+                 */
+                fun setName(name: DeviceProto.DeviceNames): Builder {
+                    protoBuilder.name = name
+                    return this
+                }
+
+                /**
+                 * Sets each field for the names of the device
+                 */
+                fun setName(defaultNames: List<String>?, name: String?, nicknames: List<String>?):
+                        Builder {
+                    protoBuilder.name = DeviceProto.DeviceNames.newBuilder()
+                            .addAllDefaultNames(defaultNames)
+                            .setName(name)
+                            .addAllNicknames(nicknames)
+                            .build()
+                    return this
+                }
+
+                /**
+                 * Gets whether the device will report its state
+                 */
+                fun getWillReportState(): Boolean {
+                    return protoBuilder.willReportState
+                }
+
+                /**
+                 * Sets whether the device will report its state
+                 */
+                fun setWillReportState(willReportState: Boolean): Builder {
+                    protoBuilder.willReportState = willReportState
+                    return this
+                }
+
+                /**
+                 * Get the attributes of the device
+                 */
+                fun getAttributes(): Struct {
+                    return protoBuilder.attributes
+                }
+
+                /**
+                 * Set the attributes of the device
+                 */
+                fun setAttributes(attributes: Struct): Builder {
+                    protoBuilder.attributes = attributes
+                    return this
+                }
+
+                /**
+                 * Sets the attributes of the device
+                 */
+                fun setAttributes(attributesJson: JSONObject): Builder {
+                    val attributeBuilder = Struct.newBuilder()
+                    try {
+                        JsonFormat.parser()
+                                .ignoringUnknownFields()
+                                .merge(attributesJson.toString(), attributeBuilder)
+                    } catch (e: Exception) {
+                        throw RuntimeException(e)
+                    }
+
+                    protoBuilder.setAttributes(attributeBuilder)
+                    return this
+                }
+
+                /**
+                 * Gets the device room hint
+                 */
+                fun getRoomHint(): String {
+                    return protoBuilder.roomHint
+                }
+
+                /**
+                 * Sets the device room hint
+                 */
+                fun setRoomHint(roomHint: String): Builder {
+                    protoBuilder.roomHint = roomHint
+                    return this
+                }
+
+                /**
+                 * Gets the device info
+                 */
+                fun getDeviceInfo(): DeviceProto.DeviceInfo {
+                    return protoBuilder.deviceInfo
+                }
+
+                /**
+                 * Sets the device info
+                 */
+                fun setDeviceInfo(deviceInfo: DeviceProto.DeviceInfo): Builder {
+                    protoBuilder.deviceInfo = deviceInfo
+                    return this
+                }
+
+                /**
+                 * Sets each field of the device info
+                 */
+                fun setDeviceInfo(manufacturer: String, model: String, hwVersion: String,
+                                  swVersion: String): Builder {
+                    protoBuilder.deviceInfo = DeviceProto.DeviceInfo.newBuilder()
+                            .setManufacturer(manufacturer)
+                            .setModel(model)
+                            .setHwVersion(hwVersion)
+                            .setSwVersion(swVersion)
+                            .build()
+                    return this
+                }
+
+                /**
+                 * Gets the custom data of the device
+                 */
+                fun getCustomData(): String {
+                    return protoBuilder.customData
+                }
+
+                /**
+                 * Sets the custom data of the device
+                 */
+                fun setCustomData(customData: String): Builder {
+                    protoBuilder.customData = customData
+                    return this
+                }
+
+                /**
+                 * Generates the underlying DeviceProto for the device
+                 */
+                fun build(): Device {
+                    // Set
+                    return Device(protoBuilder.build())
+                }
+            }
+        }
     }
 }
 
-class QueryResponse : SmartHomeResponse() {
+class QueryResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
+
+    constructor(requestId: String, payload: Payload) : this() {
+        this.requestId = requestId
+        this.payload = payload
+    }
 
     override fun build(): JSONObject {
         val json = JSONObject()
@@ -65,8 +297,12 @@ class QueryResponse : SmartHomeResponse() {
         return json
     }
 
-    class Payload {
+    class Payload() {
         lateinit var devices: Map<String, Map<String, kotlin.Any>>
+
+        constructor(devices: Map<String, Map<String, kotlin.Any>>) : this() {
+            this.devices = devices
+        }
 
         fun build(): JSONObject {
             val json = JSONObject()
@@ -76,9 +312,14 @@ class QueryResponse : SmartHomeResponse() {
     }
 }
 
-class ExecuteResponse : SmartHomeResponse() {
+class ExecuteResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
+
+    constructor(requestId: String, payload: Payload) : this() {
+        this.requestId = requestId
+        this.payload = payload
+    }
 
     override fun build(): JSONObject {
         val json = JSONObject()
@@ -87,8 +328,12 @@ class ExecuteResponse : SmartHomeResponse() {
         return json
     }
 
-    class Payload {
+    class Payload() {
         lateinit var commands: Array<Commands>
+
+        constructor(commands: Array<Commands>) : this() {
+            this.commands = commands
+        }
 
         fun build(): JSONObject {
             val json = JSONObject()
@@ -96,12 +341,20 @@ class ExecuteResponse : SmartHomeResponse() {
             return json
         }
 
-        class Commands {
+        class Commands() {
             lateinit var ids: Array<String>
             lateinit var status: String
 
             var states: Map<String, kotlin.Any>? = null
             var errorCode: String? = null
+
+            constructor(ids: Array<String>, status: String, states: Map<String, kotlin.Any>?,
+                        errorCode: String?) : this() {
+                this.ids = ids
+                this.status = status
+                this.states = states
+                this.errorCode = errorCode
+            }
 
             fun build(): JSONObject {
                 val json = JSONObject()

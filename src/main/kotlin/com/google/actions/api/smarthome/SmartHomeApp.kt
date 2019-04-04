@@ -23,7 +23,6 @@ import com.google.home.graph.v1.HomeGraphApiServiceProto
 import io.grpc.ManagedChannelBuilder
 import io.grpc.auth.MoreCallCredentials
 import java.io.FileInputStream
-import java.io.IOException
 import java.util.concurrent.CompletableFuture
 
 abstract class SmartHomeApp : App {
