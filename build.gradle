@@ -39,7 +39,7 @@ dokka {
     outputDirectory = "$buildDir/javadoc"
 }
 
-version = '1.0.0'
+version = '1.0.2'
 
 dependencies {
     // Actions on Google JSON bindings
@@ -73,6 +73,7 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.2.0'
 
     compileClasspath group: "com.github.rholder", name: "gradle-one-jar", version: "1.0.4"
+
     compile group: "org.jetbrains.kotlin", name: "kotlin-stdlib-jdk8", version: "$kotlin_version"
 }
 

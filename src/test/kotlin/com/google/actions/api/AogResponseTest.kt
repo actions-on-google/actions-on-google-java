@@ -412,6 +412,29 @@ class AogResponseTest {
     }
 
     @Test
+    fun testDigitalPurchaseCheck() {
+        println("testDigitalPurchaseCheck")
+        val responseBuilder = ResponseBuilder(usesDialogflow = false)
+
+        responseBuilder.add(DigitalPurchaseCheck())
+
+        val response = responseBuilder.build()
+        val jsonOutput = response.toJson()
+        val intent = response.appResponse
+                ?.expectedInputs?.get(0)
+                ?.possibleIntents?.get(0) as ExpectedIntent
+        assertEquals("actions.intent.DIGITAL_PURCHASE_CHECK", intent.intent)
+        val gson = Gson()
+        val jsonObject = gson.fromJson(jsonOutput, JsonObject::class.java)
+        val inputValueData = jsonObject
+                .get("expectedInputs").asJsonArray.get(0).asJsonObject
+                .get("possibleIntents").asJsonArray.get(0).asJsonObject
+                .get("inputValueData").asJsonObject
+        assertEquals("type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec",
+                inputValueData.get("@type").asString)
+    }
+
+    @Test
     fun testTransactionRequirementsCheck() {
         val orderOptions = OrderOptions().setRequestDeliveryAddress(false)
         val actionProvidedPaymentOptions = ActionProvidedPaymentOptions().setDisplayName("VISA-1234")

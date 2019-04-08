@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.2.0'
+   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.3.0'
 }
 ```
 
@@ -40,7 +40,7 @@ If using maven, add the following to your pom.xml file.
 <dependency>
 	<groupId>com.google.actions</groupId>
 	<artifactId>actions-on-google</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.0</version>
 </dependency>
 ```
 
