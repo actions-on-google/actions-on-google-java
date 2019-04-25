@@ -306,15 +306,25 @@ class QueryResponse() : SmartHomeResponse() {
     }
 
     class Payload() {
-        lateinit var devices: Map<String, Map<String, kotlin.Any>>
+        var devices: Map<String, Map<String, kotlin.Any>>? = null
+        var errorCode: String? = null
 
         constructor(devices: Map<String, Map<String, kotlin.Any>>) : this() {
             this.devices = devices
         }
 
+        constructor(errorCode: String): this() {
+            this.errorCode = errorCode
+        }
+
         fun build(): JSONObject {
             val json = JSONObject()
-            json.put("devices", devices)
+            if (devices != null) {
+                json.put("devices", devices)
+            }
+            if (errorCode != null) {
+                json.put("errorCode", errorCode)
+            }
             return json
         }
     }
@@ -337,15 +347,25 @@ class ExecuteResponse() : SmartHomeResponse() {
     }
 
     class Payload() {
-        lateinit var commands: Array<Commands>
+        var commands: Array<Commands>? = null
+        var errorCode: String? = null
 
         constructor(commands: Array<Commands>) : this() {
             this.commands = commands
         }
 
+        constructor(errorCode: String) : this() {
+            this.errorCode = errorCode
+        }
+
         fun build(): JSONObject {
             val json = JSONObject()
-            json.put("commands", commands.map { command -> command.build() })
+            if (commands != null) {
+                json.put("commands", requireNotNull(commands).map { command -> command.build() })
+            }
+            if (errorCode != null) {
+                json.put("errorCode", errorCode)
+            }
             return json
         }
 
