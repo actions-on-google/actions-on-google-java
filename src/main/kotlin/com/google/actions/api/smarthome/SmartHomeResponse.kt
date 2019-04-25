@@ -270,6 +270,14 @@ class SyncResponse() : SmartHomeResponse() {
                 }
 
                 /**
+                 * Sets the custom data of the device
+                 */
+                fun setCustomData(customData: JSONObject): Builder {
+                    protoBuilder.customData = customData.toString()
+                    return this
+                }
+
+                /**
                  * Generates the underlying DeviceProto for the device
                  */
                 fun build(): Device {
