@@ -102,6 +102,21 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun twoFactorExecuteJsonIsParsed() {
+        val request = fromFile("smarthome_execute_2fa_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands[0].execution.size, 2)
+        Assert.assertEquals(payload.commands[0].execution[0].challenge!!["pin"], "333222")
+        Assert.assertEquals(payload.commands[0].execution[1].challenge!!["ack"], true)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun customDataExecuteJsonIsParsed() {
         val request = fromFile("smarthome_execute_customdata_request.json") as ExecuteRequest
         Assert.assertNotNull(request)

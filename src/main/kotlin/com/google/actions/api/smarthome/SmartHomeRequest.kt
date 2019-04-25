@@ -100,6 +100,8 @@ open class SmartHomeRequest {
                             val executionObject = ExecuteRequest.Inputs.Payload.Commands.Execution()
                             executionObject.command = executionJson.getString("command")
                             executionObject.params = executionJson.getJSONObject("params")?.toMap()
+                            executionObject.challenge =
+                                    executionJson.optJSONObject("challenge")?.toMap()
                             executionsList.add(executionObject)
                         }
 
@@ -173,6 +175,7 @@ class ExecuteRequest : SmartHomeRequest() {
                 class Execution {
                     lateinit var command: String
                     var params: Map<String, kotlin.Any>? = null
+                    var challenge: Map<String, kotlin.Any>? = null
                 }
             }
         }

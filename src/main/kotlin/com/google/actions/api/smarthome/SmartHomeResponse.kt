@@ -375,13 +375,19 @@ class ExecuteResponse() : SmartHomeResponse() {
 
             var states: Map<String, kotlin.Any>? = null
             var errorCode: String? = null
+            var challengeNeeded: Map<String, String>? = null
 
             constructor(ids: Array<String>, status: String, states: Map<String, kotlin.Any>?,
-                        errorCode: String?) : this() {
+                        errorCode: String?, challengeType: ChallengeType?) : this() {
                 this.ids = ids
                 this.status = status
                 this.states = states
                 this.errorCode = errorCode
+                if (challengeType != null) {
+                    this.challengeNeeded = mapOf(
+                        Pair("type", challengeType.challenge)
+                    )
+                }
             }
 
             fun build(): JSONObject {
@@ -394,8 +400,17 @@ class ExecuteResponse() : SmartHomeResponse() {
                 if (errorCode != null) {
                     json.put("errorCode", errorCode)
                 }
+                if (challengeNeeded != null) {
+                    json.put("challengeNeeded", challengeNeeded)
+                }
                 return json
             }
         }
     }
+}
+
+enum class ChallengeType(val challenge: String) {
+    ACK("ackNeeded"),
+    PIN("pinNeeded"),
+    WRONG_PIN("challengeFailedPinNeeded")
 }

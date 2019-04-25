@@ -282,7 +282,6 @@ class SmartHomeResponseTest {
         app.handleRequest(request, null) // This should call onExecute, or it will fail
     }
 
-
     @Test
     fun testExecuteResponse() {
         val request = fromFile("smarthome_execute_request.json")
@@ -330,6 +329,61 @@ class SmartHomeResponseTest {
 
         val jsonString = app.handleRequest(request, null).get() // This should call onSync
         val expectedJson = fromFile("smarthome_execute_response.json")
+                .replace(Regex("\n\\s*"), "") // Remove newlines
+                .replace(Regex(":\\s"), ":") // Remove space after colon
+        Assert.assertEquals(expectedJson, jsonString)
+    }
+
+    @Test
+    fun testExecute2FAResponse() {
+        val request = fromFile("smarthome_execute_request.json")
+        Assert.assertNotNull(request)
+
+        val app = object : SmartHomeApp() {
+            override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
+                TODO("not implemented")
+            }
+
+            override fun onQuery(request: QueryRequest, headers: Map<*, *>?): QueryResponse {
+                TODO("not implemented")
+            }
+
+            override fun onExecute(request: ExecuteRequest, headers: Map<*, *>?): ExecuteResponse {
+                val response = ExecuteResponse()
+                response.requestId = request.requestId
+                response.payload = ExecuteResponse.Payload()
+
+                val commandSuccess = ExecuteResponse.Payload.Commands()
+                commandSuccess.ids = arrayOf("123")
+                commandSuccess.status = "SUCCESS"
+                commandSuccess.states = mapOf(
+                        Pair("on", true),
+                        Pair("online", true)
+                )
+
+                val commandFailed = ExecuteResponse.Payload.Commands(
+                        ids = arrayOf("456"),
+                        status = "ERROR",
+                        states = null,
+                        errorCode = "challengeNeeded",
+                        challengeType = ChallengeType.ACK
+                )
+
+                response.payload.commands = arrayOf(
+                        commandSuccess,
+                        commandFailed
+                )
+
+                return response
+            }
+
+            override fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit {
+                TODO("not implemented")
+            }
+        }
+
+        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val expectedJson = fromFile("smarthome_execute_2fa_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)

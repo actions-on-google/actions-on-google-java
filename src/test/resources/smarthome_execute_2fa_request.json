@@ -1,0 +1,32 @@
+{
+  "requestId": "ff36a3cc-ec34-11e6-b1a0-64510650abcf",
+  "inputs": [{
+    "intent": "action.devices.EXECUTE",
+    "payload": {
+      "commands": [{
+        "devices": [{
+          "id": "123"
+        },{
+          "id": "456"
+        }],
+        "execution": [{
+          "command": "action.devices.commands.OnOff",
+          "params": {
+            "on": true
+          },
+          "challenge": {
+            "pin": "333222"
+          }
+        }, {
+          "command": "action.devices.commands.OnOff",
+          "params": {
+            "on": false
+          },
+          "challenge": {
+            "ack": true
+          }
+        }]
+      }]
+    }
+  }]
+}
