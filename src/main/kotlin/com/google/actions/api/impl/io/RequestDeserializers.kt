@@ -85,7 +85,94 @@ internal class UserDeserializer : JsonDeserializer<User> {
         if (userProfile != null) {
             user.profile = context?.deserialize(userProfile, UserProfile::class.java)
         }
+
+        val packageEntitlements= jsonObject.get("packageEntitlements")
+
+        if (packageEntitlements != null) {
+            val array = packageEntitlements.asJsonArray
+            val list = ArrayList<PackageEntitlement>()
+            for (item in array) {
+                list.add(context?.deserialize(item, PackageEntitlement::class.java)!!)
+            }
+            user.packageEntitlements = list
+        }
+
         return user
+    }
+}
+
+internal class PackageEntitlementDeserializer : JsonDeserializer<PackageEntitlement> {
+    override fun deserialize(
+            json: JsonElement?, typeOfT: Type?,
+            context: JsonDeserializationContext?): PackageEntitlement {
+        val packageEntitlement = PackageEntitlement()
+        val jsonObject = json!!.asJsonObject
+
+        packageEntitlement.packageName = jsonObject.get("packageName").asString
+
+        val entitlements = jsonObject.get("entitlements")?.asJsonArray
+        if (entitlements != null) {
+            val list = ArrayList<Entitlement>()
+            for (entitlement in entitlements) {
+                list.add(context!!.deserialize(entitlement, Entitlement::class.java))
+            }
+            packageEntitlement.entitlements = list
+        }
+
+        return packageEntitlement
+    }
+}
+
+internal class EntitlementDeserializer : JsonDeserializer<Entitlement> {
+    override fun deserialize(
+            json: JsonElement?, typeOfT: Type?,
+            context: JsonDeserializationContext?): Entitlement {
+        val entitlement = Entitlement()
+        val jsonObject = json!!.asJsonObject
+
+        entitlement.sku = jsonObject.get("sku").asString
+        entitlement.skuType = jsonObject.get("skuType").asString
+
+        val inAppDetails = jsonObject.get("inAppDetails")?.asJsonObject
+        if (inAppDetails != null) {
+            entitlement.inAppDetails = context?.deserialize(inAppDetails, SignedData::class.java)
+        }
+
+        return entitlement
+    }
+}
+
+internal class SignedDataDeserializer : JsonDeserializer<SignedData> {
+    override fun deserialize(
+            json: JsonElement?, typeOfT: Type?,
+            context: JsonDeserializationContext?): SignedData {
+        val signedData = SignedData()
+        val jsonObject = json!!.asJsonObject
+
+        signedData.inAppDataSignature = jsonObject.get("inAppDataSignature").asString
+
+        val inAppPurchaseData = jsonObject.get("inAppPurchaseData")?.asJsonObject
+
+        if (inAppPurchaseData != null) {
+            val map = mutableMapOf<String, Any>()
+            inAppPurchaseData.entrySet().forEach { (key) ->
+                val jsonElement = inAppPurchaseData.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            signedData.inAppPurchaseData = map
+        }
+
+        return signedData
     }
 }
 

@@ -240,6 +240,12 @@ internal class AogRequest internal constructor(
                             ArgumentDeserializer())
                     .registerTypeAdapter(RawInput::class.java,
                             RawInputDeserializer())
+                    .registerTypeAdapter(PackageEntitlement::class.java,
+                            PackageEntitlementDeserializer())
+                    .registerTypeAdapter(Entitlement::class.java,
+                            EntitlementDeserializer())
+                    .registerTypeAdapter(SignedData::class.java,
+                            SignedDataDeserializer())
                     .registerTypeAdapter(DateTime::class.java,
                             DateTimeValueDeserializer())
                     .registerTypeAdapter(Order::class.java,

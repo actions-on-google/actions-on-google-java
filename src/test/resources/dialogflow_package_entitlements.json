@@ -1,0 +1,184 @@
+{
+  "responseId": "d12a1036-2cfd-4e8d-ba98-c2031ad23f64",
+  "queryResult": {
+    "queryText": "actions_intent_COMPLETE_PURCHASE",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "",
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_intent_complete_purchase",
+        "parameters": {
+          "text": "",
+          "COMPLETE_PURCHASE_VALUE": {
+            "@type": "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValue",
+            "purchaseStatus": "PURCHASE_STATUS_ALREADY_OWNED"
+          }
+        }
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/build-the-order",
+        "lifespanCount": 3,
+        "parameters": {
+          "SKU.original": "",
+          "SKU": ""
+        }
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/_actions_on_google",
+        "lifespanCount": 98,
+        "parameters": {
+          "data": "{\"skuDetailsList\":\"{\\\"gold_monthly\\\":{\\\"title\\\":\\\"Title\\\",\\\"description\\\":\\\"Description \\\",\\\"skuId\\\":{\\\"id\\\":\\\"gold_monthly\\\",\\\"packageName\\\":\\\"package.name\\\",\\\"skuType\\\":\\\"SKU_TYPE_SUBSCRIPTION\\\"},\\\"formattedPrice\\\":\\\"$8.99\\\"},\\\"premium\\\":{\\\"title\\\":\\\"Title\\\",\\\"description\\\":\\\"Description!\\\",\\\"skuId\\\":{\\\"id\\\":\\\"premium\\\",\\\"packageName\\\":\\\"package.name\\\",\\\"skuType\\\":\\\"SKU_TYPE_IN_APP\\\"},\\\"formattedPrice\\\":\\\"$0.99\\\"},\\\"gas\\\":{\\\"title\\\":\\\"Title\\\",\\\"description\\\":\\\"Description\\\",\\\"skuId\\\":{\\\"id\\\":\\\"gas\\\",\\\"packageName\\\":\\\"package.name\\\",\\\"skuType\\\":\\\"SKU_TYPE_IN_APP\\\"},\\\"formattedPrice\\\":\\\"$1.99\\\"},\\\"gold_yearly\\\":{\\\"title\\\":\\\"Title\\\",\\\"description\\\":\\\"Description\\\",\\\"skuId\\\":{\\\"id\\\":\\\"gold_yearly\\\",\\\"packageName\\\":\\\"package.name\\\",\\\"skuType\\\":\\\"SKU_TYPE_SUBSCRIPTION\\\"},\\\"formattedPrice\\\":\\\"$89.99\\\"}}\",\"purchasedItemSku\":{\"title\":\"Title\",\"description\":\"Description\",\"skuId\":{\"id\":\"gas\",\"packageName\":\"package.name\",\"skuType\":\"SKU_TYPE_IN_APP\"},\"formattedPrice\":\"$1.99\"}}",
+          "SKU.original": "",
+          "SKU": ""
+        }
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_account_linking"
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/projectId/agent/sessions/sessionId/contexts/actions_capability_media_response_audio"
+      }
+    ],
+    "intent": {
+      "name": "projects/projectId/agent/intents/id",
+      "displayName": "Describe the Purchase Status"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en-us"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "isInSandbox": true,
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.ACCOUNT_LINKING"
+          },
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      },
+      "requestType": "SIMULATOR",
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "inputType": "KEYBOARD"
+            }
+          ],
+          "arguments": [
+            {
+              "extension": {
+                "@type": "type.googleapis.com/google.actions.transactions.v3.CompletePurchaseValue",
+                "purchaseStatus": "PURCHASE_STATUS_ALREADY_OWNED"
+              },
+              "name": "COMPLETE_PURCHASE_VALUE"
+            },
+            {
+              "name": "text"
+            }
+          ],
+          "intent": "actions.intent.COMPLETE_PURCHASE"
+        }
+      ],
+      "user": {
+        "packageEntitlements": [
+          {
+            "entitlements": [
+              {
+                "inAppDetails": {
+                  "inAppPurchaseData": {
+                    "purchaseToken": "purchaseToken",
+                    "productId": "productId",
+                    "orderId": "orderId",
+                    "purchaseTime": 1557772151801,
+                    "packageName": "package.name",
+                    "purchaseState": 0
+                  },
+                  "inAppDataSignature": "signature"
+                },
+                "sku": "sku",
+                "skuType": "IN_APP"
+              },
+              {
+                "inAppDetails": {
+                  "inAppPurchaseData": {
+                    "purchaseToken": "purchaseToken",
+                    "productId": "productId",
+                    "orderId": "orderId",
+                    "purchaseTime": 1557772151801,
+                    "packageName": "package.name",
+                    "purchaseState": 0
+                  },
+                  "inAppDataSignature": "signature"
+                },
+                "sku": "sku",
+                "skuType": "IN_APP"
+              }
+            ],
+            "packageName": "package.name"
+          }
+        ],
+        "userStorage": "{\"data\":{}}",
+        "lastSeen": "2019-05-13T22:19:56Z",
+        "locale": "en-US",
+        "userId": "userId"
+      },
+      "conversation": {
+        "conversationId": "conversationId",
+        "type": "ACTIVE",
+        "conversationToken": "[\"_actions_on_google\",\"build-the-order\"]"
+      },
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "session": "projects/projectId/agent/sessions/id"
+}

@@ -91,6 +91,39 @@ class DialogflowRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun testPackageEntitlements() {
+        val dialogflowRequest = fromFile(
+                "dialogflow_package_entitlements.json")
+        val aogRequest = dialogflowRequest.aogRequest
+        assertNotNull(dialogflowRequest.webhookRequest)
+        assertNotNull(aogRequest)
+        val packageEntitlements = dialogflowRequest.user?.packageEntitlements
+        assertEquals(1, packageEntitlements?.size)
+        val packageEntitlement = dialogflowRequest.user?.packageEntitlements?.get(0)!!
+        assertEquals("package.name", packageEntitlement.packageName)
+        val entitlements = packageEntitlement.entitlements
+        assertNotNull(entitlements)
+        assertEquals(2, entitlements!!.size)
+
+        for (entitlement in entitlements) {
+            assertEquals("sku", entitlement.sku)
+            assertEquals("IN_APP", entitlement.skuType)
+            val inAppDetails = entitlement.inAppDetails
+            assertNotNull(inAppDetails)
+            assertEquals("signature", inAppDetails.inAppDataSignature)
+            val inAppPurchaseData = inAppDetails.inAppPurchaseData
+            assertNotNull(inAppPurchaseData)
+            assertEquals("purchaseToken", inAppPurchaseData.get("purchaseToken"))
+            assertEquals("productId", inAppPurchaseData.get("productId"))
+            assertEquals("orderId", inAppPurchaseData.get("orderId"))
+            assertEquals(1557772151801, (inAppPurchaseData.get("purchaseTime") as Number).toLong())
+            assertEquals("package.name", inAppPurchaseData.get("packageName"))
+            assertEquals(0, (inAppPurchaseData.get("purchaseState") as Number).toInt())
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun conversationDataIsParsed() {
         val dialogflowRequest = fromFile(
                 "dialogflow_complete.json")
