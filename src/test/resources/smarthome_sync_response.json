@@ -27,8 +27,7 @@
       "traits":[
         "action.devices.traits.OnOff",
         "action.devices.traits.Brightness",
-        "action.devices.traits.ColorTemperature",
-        "action.devices.traits.ColorSpectrum"
+        "action.devices.traits.ColorSetting"
       ],
       "roomHint":"office",
       "name":{

@@ -104,8 +104,123 @@ class SmartHomeResponseTest {
                                 .setType("action.devices.types.LIGHT")
                                 .addTrait("action.devices.traits.OnOff")
                                 .addTrait("action.devices.traits.Brightness")
-                                .addTrait("action.devices.traits.ColorTemperature")
-                                .addTrait("action.devices.traits.ColorSpectrum")
+                                .addTrait("action.devices.traits.ColorSetting")
+                                .setName(DeviceProto.DeviceNames.newBuilder()
+                                        .addDefaultNames("lights out inc. bulb A19 color hyperglow")
+                                        .setName("lamp1")
+                                        .addNicknames("reading lamp")
+                                        .build())
+                                .setWillReportState(false)
+                                .setRoomHint("office")
+                                .setDeviceInfo(DeviceProto.DeviceInfo.newBuilder()
+                                        .setManufacturer("lights out inc.")
+                                        .setModel("hg11")
+                                        .setHwVersion("1.2")
+                                        .setSwVersion("5.4")
+                                        .build())
+                                .setCustomData("{\"fooValue\":12, \"barValue\":false, \"bazValue\":\"bar\"}")
+                                .build(),
+                        SyncResponse.Payload.Device.Builder()
+                                .setId("789")
+                                .setType("action.devices.types.AC_UNIT")
+                                .addTrait("action.devices.traits.OnOff")
+                                .addTrait("action.devices.traits.FanSpeed")
+                                .setName(
+                                        listOf("Sirius Cybernetics Corporation 33321"),
+                                        "AC Unit",
+                                        listOf("living room AC")
+                                )
+                                .setWillReportState(true)
+                                .setAttributes(JSONObject()
+                                        .put("availableFanSpeeds", JSONObject()
+                                                .put("speeds", arrayOf(JSONObject()
+                                                        .put("speed_name", "S1")
+                                                        .put("speed_values", arrayOf(JSONObject()
+                                                                .put("speed_synonym",
+                                                                        arrayOf("low", "speed 1"))
+                                                                .put("lang", "en"))), JSONObject()
+                                                        .put("speed_name", "S2")
+                                                        .put("speed_values", arrayOf(JSONObject()
+                                                                .put("speed_synonym",
+                                                                        arrayOf("high", "speed 2"))
+                                                                .put("lang", "en")))))
+                                                .put("ordered", true)
+                                        )
+                                )
+                                .setDeviceInfo("Sirius Cybernetics Corporation", "492134", "3.2",
+                                        "11.4")
+                                .setCustomData(JSONObject()
+                                        .put("fooValue", 74)
+                                        .put("barValue", true)
+                                        .put("bazValue", "lambtwirl")
+                                        .toString())
+                                .build()
+                )
+
+                return response
+            }
+
+            override fun onQuery(request: QueryRequest, headers: Map<*, *>?): QueryResponse {
+                TODO("not implemented")
+            }
+
+            override fun onExecute(request: ExecuteRequest, headers: Map<*, *>?): ExecuteResponse {
+                TODO("not implemented")
+            }
+
+            override fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit {
+                TODO("not implemented")
+            }
+        }
+
+        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val expectedJson = fromFile("smarthome_sync_response.json")
+                .replace(Regex("\n\\s*"), "") // Remove newlines
+                .replace(Regex(":\\s"), ":") // Remove space after colon
+        Assert.assertEquals(expectedJson, jsonString)
+    }
+
+    @Test
+    fun testSyncResponseWithTraitList() {
+        val request = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(request)
+        val traitListOutlet = mutableListOf("action.devices.traits.OnOff")
+        val traitListLight = mutableListOf(
+                "action.devices.traits.OnOff",
+                "action.devices.traits.Brightness",
+                "action.devices.traits.ColorSetting"
+        )
+
+        val app = object : SmartHomeApp() {
+            override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
+                val response = SyncResponse()
+                response.requestId = request.requestId
+                response.payload = SyncResponse.Payload()
+                response.payload.agentUserId = "1836.15267389"
+                response.payload.devices = arrayOf(
+                        SyncResponse.Payload.Device.Builder()
+                                .setId("123")
+                                .setType("action.devices.types.OUTLET")
+                                .setTraits(traitListOutlet)
+                                .setName(DeviceProto.DeviceNames.newBuilder()
+                                        .addDefaultNames("My Outlet 1234")
+                                        .setName("Night light")
+                                        .addNicknames("wall plug")
+                                        .build())
+                                .setWillReportState(false)
+                                .setRoomHint("kitchen")
+                                .setDeviceInfo(DeviceProto.DeviceInfo.newBuilder()
+                                        .setManufacturer("lights-out-inc")
+                                        .setModel("hs1234")
+                                        .setHwVersion("3.2")
+                                        .setSwVersion("11.4")
+                                        .build())
+                                .setCustomData("{\"fooValue\":74, \"barValue\":true, \"bazValue\":\"foo\"}")
+                                .build(),
+                        SyncResponse.Payload.Device.Builder()
+                                .setId("456")
+                                .setType("action.devices.types.LIGHT")
+                                .setTraits(traitListLight)
                                 .setName(DeviceProto.DeviceNames.newBuilder()
                                         .addDefaultNames("lights out inc. bulb A19 color hyperglow")
                                         .setName("lamp1")

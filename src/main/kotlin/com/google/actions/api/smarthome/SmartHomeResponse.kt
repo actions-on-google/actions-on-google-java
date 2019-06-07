@@ -122,8 +122,8 @@ class SyncResponse() : SmartHomeResponse() {
                  * Sets list of device traits
                  */
                 fun setTraits(traits: List<String>): Builder {
-                    protoBuilder.traitsList.clear()
-                    protoBuilder.traitsList.addAll(traits)
+                    protoBuilder.clearTraits()
+                    protoBuilder.addAllTraits(traits)
                     return this
                 }
 
