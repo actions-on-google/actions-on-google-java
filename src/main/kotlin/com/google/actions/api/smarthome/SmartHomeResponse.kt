@@ -278,6 +278,28 @@ class SyncResponse() : SmartHomeResponse() {
                 }
 
                 /**
+                 * Adds an additional device ID
+                 */
+                fun addOtherDeviceId(deviceId: String, agentUserId: String? = null): Builder {
+                    val builder = DeviceProto.AgentOtherDeviceId.newBuilder()
+                            .setDeviceId(deviceId)
+                    if (agentUserId != null) {
+                        builder.agentId = agentUserId
+                    }
+                    protoBuilder.addOtherDeviceIds(builder.build())
+                    return this
+                }
+
+                /**
+                 * Sets a list of otherDeviceIds
+                 */
+                fun setOtherDeviceIds(otherDeviceIds: List<DeviceProto.AgentOtherDeviceId>): Builder {
+                    protoBuilder.clearOtherDeviceIds()
+                    protoBuilder.addAllOtherDeviceIds(otherDeviceIds)
+                    return this
+                }
+
+                /**
                  * Generates the underlying DeviceProto for the device
                  */
                 fun build(): Device {
