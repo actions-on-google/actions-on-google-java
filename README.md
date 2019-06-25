@@ -14,7 +14,7 @@ request processing logic letting you focus on your Action’s business logic.
 * __Java__: The Actions on Google Java fulfillment library requires __Java 8__ or higher.
 You can download the JDK from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 * __Kotlin__: This library is written in Kotlin. Kotlin is bundled with IntelliJ IDEA version 15+.
-* __Google Cloud SDK__ (if deploying to Google Cloud App Engine): 
+* __Google Cloud SDK__ (if deploying to Google Cloud App Engine):
 You can initialize and deploy your project to App Engine using the Google Cloud SDK (provides the gcloud CLI).
 You can download the Google Cloud SDK [here](https://cloud.google.com/sdk/docs/).
 
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.1.0'
+   compile group: 'com.google.actions', name: 'actions-on-google', version: '1.2.0'
 }
 ```
 
@@ -40,7 +40,7 @@ If using maven, add the following to your pom.xml file.
 <dependency>
 	<groupId>com.google.actions</groupId>
 	<artifactId>actions-on-google</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 </dependency>
 ```
 
@@ -65,10 +65,10 @@ The project should now be setup.
 
 The Java/Kotlin library makes it easy to implement a fulfillment webhook for your Action. You implement your Action’s logic in intent handlers as explained below.
 
-### Intent handler 
+### Intent handler
 An intent is a goal or action that the user wants to do, such as listening to a song or ordering coffee. Actions on Google represents the intent as a unique identifier. Your Action webhook provides handlers for intents it wants to handle dynamically. In the Java library, this is implemented as a Java class that extends either ```DialogflowApp``` or ```ActionsSdkApp```.
 
-Intent handlers are public methods in this class that are marked with a special annotation - ```@ForIntent``` as shown below. Intent handlers accept an ```ActionRequest``` as a parameter and return an ```ActionResponse```. 
+Intent handlers are public methods in this class that are marked with a special annotation - ```@ForIntent``` as shown below. Intent handlers accept an ```ActionRequest``` as a parameter and return an ```ActionResponse```.
 
 ```java
 public class MyActionsApp extends DialogflowApp {
@@ -145,7 +145,7 @@ The Java/Kotlin library includes the following core API classes:
 * __```DialogflowApp```__ and __```ActionsSdkApp```__: These sub-classes of ```DefaultApp``` provide specific implementations to handle requests from Dialogflow or directly from Google Assistant (Actions SDK).
 * __```ActionRequest```__: ```ActionRequest``` parses and encapsulates the JSON request body.
 * __```ActionResponse```__: Encapsulates the webhook response.
-* __```ResponseBuilder```__: Provides many helper methods to assemble a response. 
+* __```ResponseBuilder```__: Provides many helper methods to assemble a response.
 
 You can read more about the classes in the [library reference](https://actions-on-google.github.io/actions-on-google-java/).
 
@@ -170,12 +170,12 @@ You can use the [Actions on Google testing library](https://github.com/actions-o
 + [Webhook Boilerplate Template](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java) for Actions on Google.
 + More info about [Gradle & the App Engine Plugin](https://cloud.google.com/appengine/docs/flexible/java/using-gradle).
 + More info about deploying [Java apps with App Engine](https://cloud.google.com/appengine/docs/standard/java/quickstart).
- 
+
 ### Make Contributions
 Please read and follow the steps in the [CONTRIBUTING.md](CONTRIBUTING.md).
- 
+
 ### License
 See [LICENSE](LICENSE).
- 
+
 ### Terms
 Your use of this sample is subject to, and by using or downloading the sample files you agree to comply with, the [Google APIs Terms of Service](https://developers.google.com/terms/).

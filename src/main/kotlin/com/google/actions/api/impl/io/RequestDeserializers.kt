@@ -80,6 +80,7 @@ internal class UserDeserializer : JsonDeserializer<User> {
                 .setLocale(jsonObject.get("locale")?.asString)
                 .setAccessToken(jsonObject.get("accessToken")?.asString)
                 .setIdToken(jsonObject.get("idToken")?.asString)
+                .setUserVerificationStatus(jsonObject.get("userVerificationStatus")?.asString)
 
         val userProfile = jsonObject.get("profile")?.asJsonObject
         if (userProfile != null) {
