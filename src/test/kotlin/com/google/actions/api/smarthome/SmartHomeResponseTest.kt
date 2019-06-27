@@ -181,6 +181,67 @@ class SmartHomeResponseTest {
     }
 
     @Test
+    fun testLocalSyncResponse() {
+        val request = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(request)
+
+        val app = object : SmartHomeApp() {
+            override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
+                val response = SyncResponse()
+                response.requestId = request.requestId
+                response.payload = SyncResponse.Payload()
+                response.payload.agentUserId = "1836.15267389"
+                response.payload.devices = arrayOf(
+                        SyncResponse.Payload.Device.Builder()
+                                .setId("123")
+                                .setType("action.devices.types.OUTLET")
+                                .addTrait("action.devices.traits.OnOff")
+                                .setName(DeviceProto.DeviceNames.newBuilder()
+                                        .addDefaultNames("My Outlet 1234")
+                                        .setName("Night light")
+                                        .addNicknames("wall plug")
+                                        .build())
+                                .setWillReportState(false)
+                                .setRoomHint("kitchen")
+                                .setDeviceInfo(DeviceProto.DeviceInfo.newBuilder()
+                                        .setManufacturer("lights-out-inc")
+                                        .setModel("hs1234")
+                                        .setHwVersion("3.2")
+                                        .setSwVersion("11.4")
+                                        .build())
+                                .setCustomData("{\"fooValue\":74, \"barValue\":true, \"bazValue\":\"foo\"}")
+                                .setOtherDeviceIds(listOf(DeviceProto.AgentOtherDeviceId.newBuilder()
+                                        .setDeviceId("otherDevice123")
+                                        .build()
+                                ))
+                                .addOtherDeviceId("otherDevice123-2")
+                                .build()
+                )
+
+                return response
+            }
+
+            override fun onQuery(request: QueryRequest, headers: Map<*, *>?): QueryResponse {
+                TODO("not implemented")
+            }
+
+            override fun onExecute(request: ExecuteRequest, headers: Map<*, *>?): ExecuteResponse {
+                TODO("not implemented")
+            }
+
+            override fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit {
+                TODO("not implemented")
+            }
+        }
+
+        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val expectedJson = fromFile("smarthome_sync_response_local.json")
+                .replace(Regex("\n\\s*"), "") // Remove newlines
+                .replace(Regex(":\\s"), ":") // Remove space after colon
+        Assert.assertEquals(expectedJson, jsonString)
+    }
+
+    @Test
     fun testSyncResponseWithTraitList() {
         val request = fromFile("smarthome_sync_request.json")
         Assert.assertNotNull(request)

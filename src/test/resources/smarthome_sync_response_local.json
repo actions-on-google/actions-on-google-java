@@ -1,0 +1,33 @@
+{
+  "payload": {
+    "agentUserId":"1836.15267389",
+    "devices":[{
+      "traits":[
+        "action.devices.traits.OnOff"
+      ],
+      "roomHint":"kitchen",
+      "otherDeviceIds":[
+        {"deviceId":"otherDevice123"},
+        {"deviceId":"otherDevice123-2"}
+      ],
+      "name":{
+        "defaultNames":[
+          "My Outlet 1234"
+        ],
+        "name":"Night light",
+        "nicknames":[
+          "wall plug"
+        ]},
+      "customData":"{\"fooValue\": 74, \"barValue\": true, \"bazValue\": \"foo\"}",
+      "id":"123",
+      "type":"action.devices.types.OUTLET",
+      "deviceInfo": {
+        "swVersion": "11.4",
+        "model": "hs1234",
+        "manufacturer": "lights-out-inc",
+        "hwVersion": "3.2"
+      }
+    }]
+  },
+  "requestId":"ff36a3cc-ec34-11e6-b1a0-64510650abcf"
+}
