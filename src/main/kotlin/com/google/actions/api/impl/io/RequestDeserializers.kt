@@ -728,7 +728,6 @@ internal class OrderV3Deserializer : JsonDeserializer<OrderV3> {
             order.transactionMerchant = context?.deserialize(jsonObject.get("transactionMerchant"),
                     MerchantV3::class.java)
         }
-
         val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
         if (followUpActions != null) {
             val list = ArrayList<Action>()
@@ -1053,6 +1052,10 @@ internal class LineItemV3Deserializer : JsonDeserializer<LineItemV3> {
         if (jsonObject.get("purchase") != null) {
             lineItemV3.purchase = context?.deserialize(jsonObject.get("purchase"),
                     PurchaseItemExtension::class.java)
+        }
+        if (jsonObject.get("reservation") != null) {
+            lineItemV3.reservation = context?.deserialize(jsonObject.get("reservation"),
+                    ReservationItemExtension::class.java)
         }
         val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
         if (followUpActions != null) {
@@ -1386,6 +1389,64 @@ internal class PurchaseItemExtensionDeserializer : JsonDeserializer<PurchaseItem
     }
 }
 
+internal class ReservationItemExtensionDeserializer : JsonDeserializer<ReservationItemExtension> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): ReservationItemExtension {
+        val jsonObject = json!!.asJsonObject
+        val reservationItemExtension = ReservationItemExtension()
+
+        if (jsonObject.get("location") != null) {
+            reservationItemExtension.location = context?.deserialize(jsonObject.get("location"),
+                    Location::class.java)
+        }
+        if (jsonObject.get("reservationTime") != null) {
+            reservationItemExtension.reservationTime = context?.deserialize(jsonObject.get("reservationTime"),
+                    TimeV3::class.java)
+        }
+        if (jsonObject.get("userAcceptableTimeRange") != null) {
+            reservationItemExtension.userAcceptableTimeRange = context?.deserialize(jsonObject.get("userAcceptableTimeRange"),
+                    TimeV3::class.java)
+        }
+        val staffFacilitators = jsonObject.get("staffFacilitators")?.asJsonArray
+        if (staffFacilitators != null) {
+            val list = ArrayList<StaffFacilitator>()
+            for (staffFacilitator in staffFacilitators) {
+                list.add(context!!.deserialize(staffFacilitator, StaffFacilitator::class.java))
+            }
+            reservationItemExtension.staffFacilitators = list
+        }
+        val extension = jsonObject.get("extension")?.asJsonObject
+        if (extension != null) {
+            val map = mutableMapOf<String, Any>()
+            extension.entrySet().forEach { (key) ->
+                val jsonElement = extension.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            reservationItemExtension.extension = map
+        }
+
+        reservationItemExtension.confirmationCode = jsonObject.get("confirmationCode")?.asString
+        reservationItemExtension.partySize = jsonObject.get("partySize")?.asInt
+        reservationItemExtension.status = jsonObject.get("status")?.asString
+        reservationItemExtension.type = jsonObject.get("type")?.asString
+        reservationItemExtension.userVisibleStatusLabel = jsonObject.get("userVisibleStatusLabel")?.asString
+
+        return reservationItemExtension
+    }
+}
+
 internal class PaymentMethodDisplayInfoDeserializer : JsonDeserializer<PaymentMethodDisplayInfo> {
     override fun deserialize(
             json: JsonElement?,
@@ -1551,6 +1612,25 @@ internal class PurchaseItemExtensionItemOptionDeserializer : JsonDeserializer<Pu
         purchaseItemExtensionItemOption.quantity = jsonObject.get("quantity")?.asInt
 
         return purchaseItemExtensionItemOption
+    }
+}
+
+internal class StaffFacilitatorDeserializer : JsonDeserializer<StaffFacilitator> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): StaffFacilitator {
+        val jsonObject = json!!.asJsonObject
+        val staffFacilitator = StaffFacilitator()
+
+        if (jsonObject.get("image") != null) {
+            staffFacilitator.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+
+        staffFacilitator.name = jsonObject.get("name")?.asString
+
+        return staffFacilitator
     }
 }
 

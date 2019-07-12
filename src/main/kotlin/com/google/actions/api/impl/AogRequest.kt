@@ -320,6 +320,8 @@ internal class AogRequest internal constructor(
                             MoneyV3Deserializer())
                     .registerTypeAdapter(PurchaseItemExtension::class.java,
                             PurchaseItemExtensionDeserializer())
+                    .registerTypeAdapter(ReservationItemExtension::class.java,
+                            ReservationItemExtensionDeserializer())
                     .registerTypeAdapter(PaymentMethodDisplayInfo::class.java,
                             PaymentMethodDisplayInfoDeserializer())
                     .registerTypeAdapter(TimeV3::class.java,
@@ -336,6 +338,8 @@ internal class AogRequest internal constructor(
                             MerchantUnitMeasureDeserializer())
                     .registerTypeAdapter(PurchaseItemExtensionItemOption::class.java,
                             PurchaseItemExtensionItemOptionDeserializer())
+                    .registerTypeAdapter(StaffFacilitator::class.java,
+                            StaffFacilitatorDeserializer())
                     .registerTypeAdapter(PickupInfoCurbsideInfo::class.java,
                             PickupInfoCurbsideInfoDeserializer())
                     .registerTypeAdapter(AndroidAppVersionFilter::class.java,
