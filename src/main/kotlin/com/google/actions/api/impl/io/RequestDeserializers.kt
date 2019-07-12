@@ -343,6 +343,19 @@ internal class ExtensionDeserializer : JsonDeserializer<Map<String, Any>> {
                             TransactionRequirementsCheckResult::class.java)?.let { extension.put("checkResult", it) }
                 }
             }
+            "type.googleapis.com/google.actions.transactions.v3.TransactionDecisionValue" -> {
+                jsonObject.get("transactionDecision")?.asString?.let { extension.put("transactionDecision", it) }
+                if (jsonObject.get("order") != null) {
+                    context?.deserialize<OrderV3>(
+                            jsonObject.get("order"),
+                            OrderV3::class.java)?.let { extension.put("order", it) }
+                }
+                if (jsonObject.get("deliveryAddress") != null) {
+                    context?.deserialize<Location>(
+                            jsonObject.get("deliveryAddress"),
+                            Location::class.java)?.let { extension.put("deliveryAddress", it) }
+                }
+            }
             else -> {
                 jsonObject.entrySet().forEach { (key) ->
                     jsonObject.get(key)?.asString?.let { extension.put(key, it) }
@@ -677,5 +690,922 @@ internal class TransactionRequirementsCheckResultDeserializer :
             context: JsonDeserializationContext?): TransactionRequirementsCheckResult {
         val jsonObject = json!!.asJsonObject
         return TransactionRequirementsCheckResult().setResultType(jsonObject.get("resultType")?.asString)
+    }
+}
+
+internal class OrderV3Deserializer : JsonDeserializer<OrderV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): OrderV3 {
+        val jsonObject = json!!.asJsonObject
+        val order = OrderV3()
+        if (jsonObject.get("buyerInfo") != null) {
+            order.buyerInfo = context?.deserialize(jsonObject.get("buyerInfo"),
+                    UserInfo::class.java)
+        }
+        if (jsonObject.get("contents") != null) {
+            order.contents = context?.deserialize(jsonObject.get("contents"),
+                    OrderContents::class.java)
+        }
+        if (jsonObject.get("image") != null) {
+            order.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+        if (jsonObject.get("paymentData") != null) {
+            order.paymentData = context?.deserialize(jsonObject.get("paymentData"),
+                    PaymentData::class.java)
+        }
+        if (jsonObject.get("purchase") != null) {
+            order.purchase = context?.deserialize(jsonObject.get("purchase"),
+                    PurchaseOrderExtension::class.java)
+        }
+        if (jsonObject.get("ticket") != null) {
+            order.ticket = context?.deserialize(jsonObject.get("ticket"),
+                    TicketOrderExtension::class.java)
+        }
+        if (jsonObject.get("transactionMerchant") != null) {
+            order.transactionMerchant = context?.deserialize(jsonObject.get("transactionMerchant"),
+                    MerchantV3::class.java)
+        }
+
+        val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
+        if (followUpActions != null) {
+            val list = ArrayList<Action>()
+            for (followUpAction in followUpActions) {
+                list.add(context!!.deserialize(followUpAction, Action::class.java))
+            }
+            order.followUpActions = list
+        }
+        val priceAttributes = jsonObject.get("priceAttributes")?.asJsonArray
+        if (priceAttributes != null) {
+            val list = ArrayList<PriceAttribute>()
+            for (priceAttribute in priceAttributes) {
+                list.add(context!!.deserialize(priceAttribute, PriceAttribute::class.java))
+            }
+            order.priceAttributes = list
+        }
+        val promotions = jsonObject.get("promotions")?.asJsonArray
+        if (promotions != null) {
+            val list = ArrayList<PromotionV3>()
+            for (promotion in promotions) {
+                list.add(context!!.deserialize(promotion, PromotionV3::class.java))
+            }
+            order.promotions = list
+        }
+
+        order.createTime = jsonObject.get("createTime")?.asString
+        order.googleOrderId = jsonObject.get("googleOrderId")?.asString
+        order.lastUpdateTime = jsonObject.get("lastUpdateTime")?.asString
+        order.merchantOrderId = jsonObject.get("merchantOrderId")?.asString
+        order.note = jsonObject.get("note")?.asString
+        order.termsOfServiceUrl = jsonObject.get("termsOfServiceUrl")?.asString
+        order.userVisibleOrderId = jsonObject.get("userVisibleOrderId")?.asString
+        order.userVisibleStateLabel = jsonObject.get("userVisibleStateLabel")?.asString
+
+        val vertical = jsonObject.get("vertical")?.asJsonObject
+        if (vertical != null) {
+            val map = mutableMapOf<String, Any>()
+            vertical.entrySet().forEach { (key) ->
+                val jsonElement = vertical.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            order.vertical = map
+        }
+
+        return order
+    }
+}
+
+internal class UserInfoDeserializer : JsonDeserializer<UserInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): UserInfo {
+        val jsonObject = json!!.asJsonObject
+        val userInfo = UserInfo()
+        val phoneNumbers = jsonObject.get("phoneNumbers")?.asJsonArray
+        if (phoneNumbers != null) {
+            val list = ArrayList<PhoneNumber>()
+            for (phoneNumber in phoneNumbers) {
+                list.add(context!!.deserialize(phoneNumber, PhoneNumber::class.java))
+            }
+            userInfo.phoneNumbers = list
+        }
+
+        userInfo.displayName = jsonObject.get("displayName")?.asString
+        userInfo.email = jsonObject.get("email")?.asString
+        userInfo.firstName = jsonObject.get("firstName")?.asString
+        userInfo.lastName = jsonObject.get("lastName")?.asString
+
+        return userInfo
+    }
+}
+
+internal class OrderContentsDeserializer : JsonDeserializer<OrderContents> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): OrderContents {
+        val jsonObject = json!!.asJsonObject
+        val orderContents = OrderContents()
+        val lineItems = jsonObject.get("lineItems")?.asJsonArray
+        if (lineItems != null) {
+            val list = ArrayList<LineItemV3>()
+            for (lineItem in lineItems) {
+                list.add(context!!.deserialize(lineItem, LineItemV3::class.java))
+            }
+            orderContents.lineItems = list
+        }
+
+        return orderContents
+    }
+}
+
+internal class PaymentDataDeserializer : JsonDeserializer<PaymentData> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PaymentData {
+        val jsonObject = json!!.asJsonObject
+        val paymentData = PaymentData()
+
+        if (jsonObject.get("paymentInfo") != null) {
+            paymentData.paymentInfo = context?.deserialize(jsonObject.get("paymentInfo"),
+                    PaymentInfoV3::class.java)
+        }
+        if (jsonObject.get("paymentResult") != null) {
+            paymentData.paymentResult = context?.deserialize(jsonObject.get("paymentResult"),
+                    PaymentResult::class.java)
+        }
+
+        return paymentData
+    }
+}
+
+internal class PurchaseOrderExtensionDeserializer : JsonDeserializer<PurchaseOrderExtension> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseOrderExtension {
+        val jsonObject = json!!.asJsonObject
+        val purchaseOrderExtension = PurchaseOrderExtension()
+
+        if (jsonObject.get("fulfillmentInfo") != null) {
+            purchaseOrderExtension.fulfillmentInfo = context?.deserialize(jsonObject.get("fulfillmentInfo"),
+                    PurchaseFulfillmentInfo::class.java)
+        }
+        if (jsonObject.get("returnsInfo") != null) {
+            purchaseOrderExtension.returnsInfo = context?.deserialize(jsonObject.get("returnsInfo"),
+                    PurchaseReturnsInfo::class.java)
+        }
+
+        val errors = jsonObject.get("errors")?.asJsonArray
+        if (errors != null) {
+            val list = ArrayList<PurchaseError>()
+            for (error in errors) {
+                list.add(context!!.deserialize(error, PurchaseError::class.java))
+            }
+            purchaseOrderExtension.errors = list
+        }
+
+        val extension = jsonObject.get("extension")?.asJsonObject
+        if (extension != null) {
+            val map = mutableMapOf<String, Any>()
+            extension.entrySet().forEach { (key) ->
+                val jsonElement = extension.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            purchaseOrderExtension.extension = map
+        }
+
+        purchaseOrderExtension.purchaseLocationType = jsonObject.get("purchaseLocationType")?.asString
+        purchaseOrderExtension.status = jsonObject.get("status")?.asString
+        purchaseOrderExtension.type = jsonObject.get("type")?.asString
+        purchaseOrderExtension.userVisibleStatusLabel = jsonObject.get("userVisibleStatusLabel")?.asString
+
+        return purchaseOrderExtension
+    }
+}
+
+internal class TicketOrderExtensionDeserializer : JsonDeserializer<TicketOrderExtension> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): TicketOrderExtension {
+        val jsonObject = json!!.asJsonObject
+        val ticketOrderExtension = TicketOrderExtension()
+
+        if (jsonObject.get("ticketEvent") != null) {
+            ticketOrderExtension.ticketEvent = context?.deserialize(jsonObject.get("ticketEvent"),
+                    TicketEvent::class.java)
+        }
+
+        return ticketOrderExtension
+    }
+}
+
+internal class MerchantV3Deserializer : JsonDeserializer<MerchantV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): MerchantV3 {
+        val jsonObject = json!!.asJsonObject
+        val merchantV3 = MerchantV3()
+
+        if (jsonObject.get("address") != null) {
+            merchantV3.address = context?.deserialize(jsonObject.get("address"),
+                    Location::class.java)
+        }
+        if (jsonObject.get("image") != null) {
+            merchantV3.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+        val phoneNumbers = jsonObject.get("phoneNumbers")?.asJsonArray
+        if (phoneNumbers != null) {
+            val list = ArrayList<PhoneNumber>()
+            for (phoneNumber in phoneNumbers) {
+                list.add(context!!.deserialize(phoneNumber, PhoneNumber::class.java))
+            }
+            merchantV3.phoneNumbers = list
+        }
+
+        merchantV3.id = jsonObject.get("id")?.asString
+        merchantV3.name = jsonObject.get("name")?.asString
+
+        return merchantV3
+    }
+}
+
+internal class ActionDeserializer : JsonDeserializer<Action> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Action {
+        val jsonObject = json!!.asJsonObject
+        val action = Action()
+
+        if (jsonObject.get("actionMetadata") != null) {
+            action.actionMetadata = context?.deserialize(jsonObject.get("actionMetadata"),
+                    ActionActionMetadata::class.java)
+        }
+        if (jsonObject.get("openUrlAction") != null) {
+            action.openUrlAction = context?.deserialize(jsonObject.get("openUrlAction"),
+                    OpenUrlAction::class.java)
+        }
+
+        action.title = jsonObject.get("title")?.asString
+        action.type = jsonObject.get("type")?.asString
+
+        return action
+    }
+}
+
+internal class PriceAttributeDeserializer : JsonDeserializer<PriceAttribute> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PriceAttribute {
+        val jsonObject = json!!.asJsonObject
+        val priceAttribute = PriceAttribute()
+
+        if (jsonObject.get("amount") != null) {
+            priceAttribute.amount = context?.deserialize(jsonObject.get("amount"),
+                    MoneyV3::class.java)
+        }
+
+        priceAttribute.amountMillipercentage = jsonObject.get("amountMillipercentage")?.asInt
+        priceAttribute.name = jsonObject.get("name")?.asString
+        priceAttribute.state = jsonObject.get("state")?.asString
+        priceAttribute.taxIncluded = jsonObject.get("taxIncluded")?.asBoolean
+        priceAttribute.type = jsonObject.get("type")?.asString
+
+        return priceAttribute
+    }
+}
+
+internal class PromotionV3Deserializer : JsonDeserializer<PromotionV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PromotionV3 {
+        val jsonObject = json!!.asJsonObject
+        val promotionV3 = PromotionV3()
+
+        promotionV3.coupon = jsonObject.get("coupon")?.asString
+
+        return promotionV3
+    }
+}
+
+internal class PhoneNumberDeserializer : JsonDeserializer<PhoneNumber> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PhoneNumber {
+        val jsonObject = json!!.asJsonObject
+        val phoneNumber = PhoneNumber()
+
+        phoneNumber.e164PhoneNumber = jsonObject.get("e164PhoneNumber")?.asString
+        phoneNumber.extension = jsonObject.get("extension")?.asString
+        phoneNumber.preferredDomesticCarrierCode = jsonObject.get("preferredDomesticCarrierCode")?.asString
+
+        return phoneNumber
+    }
+}
+
+internal class LineItemV3Deserializer : JsonDeserializer<LineItemV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): LineItemV3 {
+        val jsonObject = json!!.asJsonObject
+        val lineItemV3 = LineItemV3()
+
+        if (jsonObject.get("image") != null) {
+            lineItemV3.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+        if (jsonObject.get("provider") != null) {
+            lineItemV3.provider = context?.deserialize(jsonObject.get("provider"),
+                    MerchantV3::class.java)
+        }
+        if (jsonObject.get("purchase") != null) {
+            lineItemV3.purchase = context?.deserialize(jsonObject.get("purchase"),
+                    PurchaseItemExtension::class.java)
+        }
+        val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
+        if (followUpActions != null) {
+            val list = ArrayList<Action>()
+            for (followUpAction in followUpActions) {
+                list.add(context!!.deserialize(followUpAction, Action::class.java))
+            }
+            lineItemV3.followUpActions = list
+        }
+        val notes = jsonObject.get("notes")?.asJsonArray
+        if (notes != null) {
+            val list = ArrayList<String>()
+            for (note in notes) {
+                if (note != null) {
+                    list.add(note.asString)
+                }
+            }
+            lineItemV3.notes = list
+        }
+        val priceAttributes = jsonObject.get("priceAttributes")?.asJsonArray
+        if (priceAttributes != null) {
+            val list = ArrayList<PriceAttribute>()
+            for (priceAttribute in priceAttributes) {
+                list.add(context!!.deserialize(priceAttribute, PriceAttribute::class.java))
+            }
+            lineItemV3.priceAttributes = list
+        }
+        val recipients = jsonObject.get("recipients")?.asJsonArray
+        if (recipients != null) {
+            val list = ArrayList<UserInfo>()
+            for (recipient in recipients) {
+                list.add(context!!.deserialize(recipient, UserInfo::class.java))
+            }
+            lineItemV3.recipients = list
+        }
+
+        val vertical = jsonObject.get("vertical")?.asJsonObject
+        if (vertical != null) {
+            val map = mutableMapOf<String, Any>()
+            vertical.entrySet().forEach { (key) ->
+                val jsonElement = vertical.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            lineItemV3.vertical = map
+        }
+
+        lineItemV3.description = jsonObject.get("description")?.asString
+        lineItemV3.id = jsonObject.get("id")?.asString
+        lineItemV3.name = jsonObject.get("name")?.asString
+        lineItemV3.userVisibleStateLabel = jsonObject.get("userVisibleStateLabel")?.asString
+
+        return lineItemV3
+    }
+}
+
+internal class PaymentInfoV3Deserializer : JsonDeserializer<PaymentInfoV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PaymentInfoV3 {
+        val jsonObject = json!!.asJsonObject
+        val paymentInfoV3 = PaymentInfoV3()
+
+        if (jsonObject.get("paymentMethodDisplayInfo") != null) {
+            paymentInfoV3.paymentMethodDisplayInfo = context?.deserialize(jsonObject.get("paymentMethodDisplayInfo"),
+                    PaymentMethodDisplayInfo::class.java)
+        }
+
+        paymentInfoV3.paymentMethodProvenance = jsonObject.get("paymentMethodProvenance")?.asString
+
+        return paymentInfoV3
+    }
+}
+
+internal class PaymentResultDeserializer : JsonDeserializer<PaymentResult> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PaymentResult {
+        val jsonObject = json!!.asJsonObject
+        val paymentResult = PaymentResult()
+
+        paymentResult.googlePaymentData = jsonObject.get("googlePaymentData")?.asString
+        paymentResult.merchantPaymentMethodId = jsonObject.get("merchantPaymentMethodId")?.asString
+
+        return paymentResult
+    }
+}
+
+internal class PurchaseFulfillmentInfoDeserializer : JsonDeserializer<PurchaseFulfillmentInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseFulfillmentInfo {
+        val jsonObject = json!!.asJsonObject
+        val purchaseFulfillmentInfo = PurchaseFulfillmentInfo()
+
+        if (jsonObject.get("expectedFulfillmentTime") != null) {
+            purchaseFulfillmentInfo.expectedFulfillmentTime = context?.deserialize(jsonObject.get("expectedFulfillmentTime"),
+                    TimeV3::class.java)
+        }
+        if (jsonObject.get("expectedPreparationTime") != null) {
+            purchaseFulfillmentInfo.expectedPreparationTime = context?.deserialize(jsonObject.get("expectedPreparationTime"),
+                    TimeV3::class.java)
+        }
+        if (jsonObject.get("fulfillmentContact") != null) {
+            purchaseFulfillmentInfo.fulfillmentContact = context?.deserialize(jsonObject.get("fulfillmentContact"),
+                    UserInfo::class.java)
+        }
+        if (jsonObject.get("location") != null) {
+            purchaseFulfillmentInfo.location = context?.deserialize(jsonObject.get("location"),
+                    Location::class.java)
+        }
+        if (jsonObject.get("pickupInfo") != null) {
+            purchaseFulfillmentInfo.pickupInfo = context?.deserialize(jsonObject.get("pickupInfo"),
+                    PickupInfo::class.java)
+        }
+        if (jsonObject.get("price") != null) {
+            purchaseFulfillmentInfo.price = context?.deserialize(jsonObject.get("price"),
+                    PriceAttribute::class.java)
+        }
+
+        purchaseFulfillmentInfo.expireTime = jsonObject.get("expireTime")?.asString
+        purchaseFulfillmentInfo.fulfillmentType = jsonObject.get("fulfillmentType")?.asString
+        purchaseFulfillmentInfo.id = jsonObject.get("id")?.asString
+        purchaseFulfillmentInfo.shippingMethodName = jsonObject.get("shippingMethodName")?.asString
+        purchaseFulfillmentInfo.storeCode = jsonObject.get("storeCode")?.asString
+
+        return purchaseFulfillmentInfo
+    }
+}
+
+internal class PurchaseReturnsInfoDeserializer : JsonDeserializer<PurchaseReturnsInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseReturnsInfo {
+        val jsonObject = json!!.asJsonObject
+        val purchaseReturnsInfo = PurchaseReturnsInfo()
+
+        purchaseReturnsInfo.daysToReturn = jsonObject.get("daysToReturn")?.asInt
+        purchaseReturnsInfo.isReturnable = jsonObject.get("isReturnable")?.asBoolean
+        purchaseReturnsInfo.policyUrl = jsonObject.get("policyUrl")?.asString
+
+        return purchaseReturnsInfo
+    }
+}
+
+internal class PurchaseErrorDeserializer : JsonDeserializer<PurchaseError> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseError {
+        val jsonObject = json!!.asJsonObject
+        val purchaseError = PurchaseError()
+
+        if (jsonObject.get("updatedPrice") != null) {
+            purchaseError.updatedPrice = context?.deserialize(jsonObject.get("updatedPrice"),
+                    PriceAttribute::class.java)
+        }
+
+        purchaseError.availableQuantity = jsonObject.get("availableQuantity")?.asInt
+        purchaseError.description = jsonObject.get("description")?.asString
+        purchaseError.entityId = jsonObject.get("entityId")?.asString
+        purchaseError.type = jsonObject.get("type")?.asString
+
+        return purchaseError
+    }
+}
+
+internal class TicketEventDeserializer : JsonDeserializer<TicketEvent> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): TicketEvent {
+        val jsonObject = json!!.asJsonObject
+        val ticketEvent = TicketEvent()
+
+        if (jsonObject.get("doorTime") != null) {
+            ticketEvent.doorTime = context?.deserialize(jsonObject.get("doorTime"),
+                    TimeV3::class.java)
+        }
+        if (jsonObject.get("endDate") != null) {
+            ticketEvent.endDate = context?.deserialize(jsonObject.get("endDate"),
+                    TimeV3::class.java)
+        }
+        if (jsonObject.get("location") != null) {
+            ticketEvent.location = context?.deserialize(jsonObject.get("location"),
+                    Location::class.java)
+        }
+        if (jsonObject.get("startDate") != null) {
+            ticketEvent.startDate = context?.deserialize(jsonObject.get("startDate"),
+                    TimeV3::class.java)
+        }
+        val eventCharacters = jsonObject.get("eventCharacters")?.asJsonArray
+        if (eventCharacters != null) {
+            val list = ArrayList<EventCharacter>()
+            for (eventCharacter in eventCharacters) {
+                list.add(context!!.deserialize(eventCharacter, EventCharacter::class.java))
+            }
+            ticketEvent.eventCharacters = list
+        }
+
+        ticketEvent.description = jsonObject.get("description")?.asString
+        ticketEvent.name = jsonObject.get("name")?.asString
+        ticketEvent.type = jsonObject.get("type")?.asString
+        ticketEvent.url = jsonObject.get("url")?.asString
+
+        return ticketEvent
+    }
+}
+
+internal class ActionActionMetadataDeserializer : JsonDeserializer<ActionActionMetadata> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): ActionActionMetadata {
+        val jsonObject = json!!.asJsonObject
+        val actionActionMetadata = ActionActionMetadata()
+
+        actionActionMetadata.expireTime = jsonObject.get("expireTime")?.asString
+
+        return actionActionMetadata
+    }
+}
+
+internal class OpenUrlActionDeserializer : JsonDeserializer<OpenUrlAction> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): OpenUrlAction {
+        val jsonObject = json!!.asJsonObject
+        val openUrlAction = OpenUrlAction()
+
+        if (jsonObject.get("androidApp") != null) {
+            openUrlAction.androidApp = context?.deserialize(jsonObject.get("androidApp"),
+                    AndroidApp::class.java)
+        }
+
+        openUrlAction.url = jsonObject.get("url")?.asString
+        openUrlAction.urlTypeHint = jsonObject.get("urlTypeHint")?.asString
+
+        return openUrlAction
+    }
+}
+
+internal class MoneyV3Deserializer : JsonDeserializer<MoneyV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): MoneyV3 {
+        val jsonObject = json!!.asJsonObject
+        val moneyV3 = MoneyV3()
+
+        moneyV3.currencyCode = jsonObject.get("currencyCode")?.asString
+        moneyV3.amountInMicros = jsonObject.get("amountInMicros")?.asLong
+
+        return moneyV3
+    }
+}
+
+internal class PurchaseItemExtensionDeserializer : JsonDeserializer<PurchaseItemExtension> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseItemExtension {
+        val jsonObject = json!!.asJsonObject
+        val purchaseItemExtension = PurchaseItemExtension()
+
+        if (jsonObject.get("fulfillmentInfo") != null) {
+            purchaseItemExtension.fulfillmentInfo = context?.deserialize(jsonObject.get("fulfillmentInfo"),
+                    PurchaseFulfillmentInfo::class.java)
+        }
+        if (jsonObject.get("productDetails") != null) {
+            purchaseItemExtension.productDetails = context?.deserialize(jsonObject.get("productDetails"),
+                    ProductDetails::class.java)
+        }
+        if (jsonObject.get("returnsInfo") != null) {
+            purchaseItemExtension.returnsInfo = context?.deserialize(jsonObject.get("returnsInfo"),
+                    PurchaseReturnsInfo::class.java)
+        }
+        if (jsonObject.get("unitMeasure") != null) {
+            purchaseItemExtension.unitMeasure = context?.deserialize(jsonObject.get("unitMeasure"),
+                    MerchantUnitMeasure::class.java)
+        }
+        val itemOptions = jsonObject.get("itemOptions")?.asJsonArray
+        if (itemOptions != null) {
+            val list = ArrayList<PurchaseItemExtensionItemOption>()
+            for (itemOption in itemOptions) {
+                list.add(context!!.deserialize(itemOption, PurchaseItemExtensionItemOption::class.java))
+            }
+            purchaseItemExtension.itemOptions = list
+        }
+        val extension = jsonObject.get("extension")?.asJsonObject
+        if (extension != null) {
+            val map = mutableMapOf<String, Any>()
+            extension.entrySet().forEach { (key) ->
+                val jsonElement = extension.get(key)
+                if (jsonElement != null && jsonElement.isJsonPrimitive) {
+                    val jsonElementPrimitive = jsonElement.asJsonPrimitive
+                    when {
+                        jsonElementPrimitive.isString ->
+                            jsonElement.asString?.let { map.put(key, it) }
+                        jsonElementPrimitive.isNumber ->
+                            jsonElement.asNumber?.let { map.put(key, it) }
+                        jsonElementPrimitive.isBoolean ->
+                            jsonElement.asBoolean.let { map.put(key, it) }
+                    }
+                }
+            }
+            purchaseItemExtension.extension = map
+        }
+
+        purchaseItemExtension.productId = jsonObject.get("productId")?.asString
+        purchaseItemExtension.quantity = jsonObject.get("quantity")?.asInt
+        purchaseItemExtension.status = jsonObject.get("status")?.asString
+        purchaseItemExtension.type = jsonObject.get("type")?.asString
+        purchaseItemExtension.userVisibleStatusLabel = jsonObject.get("userVisibleStatusLabel")?.asString
+
+        return purchaseItemExtension
+    }
+}
+
+internal class PaymentMethodDisplayInfoDeserializer : JsonDeserializer<PaymentMethodDisplayInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PaymentMethodDisplayInfo {
+        val jsonObject = json!!.asJsonObject
+        val paymentMethodDisplayInfo = PaymentMethodDisplayInfo()
+
+        paymentMethodDisplayInfo.paymentMethodDisplayName = jsonObject.get("paymentMethodDisplayName")?.asString
+        paymentMethodDisplayInfo.paymentType = jsonObject.get("paymentType")?.asString
+
+        return paymentMethodDisplayInfo
+    }
+}
+
+internal class TimeV3Deserializer : JsonDeserializer<TimeV3> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): TimeV3 {
+        val jsonObject = json!!.asJsonObject
+        val timeV3 = TimeV3()
+
+        timeV3.timeIso8601 = jsonObject.get("timeIso8601")?.asString
+
+        return timeV3
+    }
+}
+
+internal class PickupInfoDeserializer : JsonDeserializer<PickupInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PickupInfo {
+        val jsonObject = json!!.asJsonObject
+        val pickupInfo = PickupInfo()
+
+        if (jsonObject.get("curbsideInfo") != null) {
+            pickupInfo.curbsideInfo = context?.deserialize(jsonObject.get("curbsideInfo"),
+                    PickupInfoCurbsideInfo::class.java)
+        }
+
+        pickupInfo.pickupType = jsonObject.get("pickupType")?.asString
+
+        return pickupInfo
+    }
+}
+
+internal class EventCharacterDeserializer : JsonDeserializer<EventCharacter> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): EventCharacter {
+        val jsonObject = json!!.asJsonObject
+        val eventCharacter = EventCharacter()
+
+        if (jsonObject.get("image") != null) {
+            eventCharacter.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+
+        eventCharacter.name = jsonObject.get("name")?.asString
+        eventCharacter.type = jsonObject.get("type")?.asString
+
+        return eventCharacter
+    }
+}
+
+internal class AndroidAppDeserializer : JsonDeserializer<AndroidApp> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): AndroidApp {
+        val jsonObject = json!!.asJsonObject
+        val androidApp = AndroidApp()
+
+        val versions = jsonObject.get("versions")?.asJsonArray
+        if (versions != null) {
+            val list = ArrayList<AndroidAppVersionFilter>()
+            for (version in versions) {
+                list.add(context!!.deserialize(version, AndroidAppVersionFilter::class.java))
+            }
+            androidApp.versions = list
+        }
+
+        androidApp.packageName = jsonObject.get("packageName")?.asString
+
+        return androidApp
+    }
+}
+
+internal class ProductDetailsDeserializer : JsonDeserializer<ProductDetails> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): ProductDetails {
+        val jsonObject = json!!.asJsonObject
+        val productDetails = ProductDetails()
+
+        val productAttributes = jsonObject.get("productAttributes")?.asJsonObject
+        if (productAttributes != null) {
+            val map = mutableMapOf<String, String>()
+            productAttributes.entrySet().forEach { (key) ->
+                val jsonElement = productAttributes.get(key)
+                jsonElement?.asString?.let { map.put(key, it) }
+            }
+            productDetails.productAttributes = map
+        }
+
+        productDetails.gtin = jsonObject.get("gtin")?.asString
+        productDetails.plu = jsonObject.get("plu")?.asString
+        productDetails.productId = jsonObject.get("productId")?.asString
+        productDetails.productType = jsonObject.get("productType")?.asString
+
+        return productDetails
+    }
+}
+
+internal class MerchantUnitMeasureDeserializer : JsonDeserializer<MerchantUnitMeasure> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): MerchantUnitMeasure {
+        val jsonObject = json!!.asJsonObject
+        val merchantUnitMeasure = MerchantUnitMeasure()
+
+        merchantUnitMeasure.measure = jsonObject.get("measure")?.asDouble
+        merchantUnitMeasure.unit = jsonObject.get("unit")?.asString
+
+        return merchantUnitMeasure
+    }
+}
+
+internal class PurchaseItemExtensionItemOptionDeserializer : JsonDeserializer<PurchaseItemExtensionItemOption> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PurchaseItemExtensionItemOption {
+        val jsonObject = json!!.asJsonObject
+        val purchaseItemExtensionItemOption = PurchaseItemExtensionItemOption()
+
+        val prices = jsonObject.get("prices")?.asJsonArray
+        if (prices != null) {
+            val list = ArrayList<PriceAttribute>()
+            for (price in prices) {
+                list.add(context!!.deserialize(price, PriceAttribute::class.java))
+            }
+            purchaseItemExtensionItemOption.prices = list
+        }
+        val subOptions = jsonObject.get("subOptions")?.asJsonArray
+        if (subOptions != null) {
+            val list = ArrayList<PurchaseItemExtensionItemOption>()
+            for (subOption in subOptions) {
+                list.add(context!!.deserialize(subOption, PurchaseItemExtensionItemOption::class.java))
+            }
+            purchaseItemExtensionItemOption.subOptions = list
+        }
+
+        purchaseItemExtensionItemOption.id = jsonObject.get("id")?.asString
+        purchaseItemExtensionItemOption.name = jsonObject.get("name")?.asString
+        purchaseItemExtensionItemOption.note = jsonObject.get("note")?.asString
+        purchaseItemExtensionItemOption.productId = jsonObject.get("productId")?.asString
+        purchaseItemExtensionItemOption.quantity = jsonObject.get("quantity")?.asInt
+
+        return purchaseItemExtensionItemOption
+    }
+}
+
+internal class PickupInfoCurbsideInfoDeserializer : JsonDeserializer<PickupInfoCurbsideInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): PickupInfoCurbsideInfo {
+        val jsonObject = json!!.asJsonObject
+        val pickupInfoCurbsideInfo = PickupInfoCurbsideInfo()
+
+        if (jsonObject.get("userVehicle") != null) {
+            pickupInfoCurbsideInfo.userVehicle = context?.deserialize(jsonObject.get("userVehicle"),
+                    Vehicle::class.java)
+        }
+
+        pickupInfoCurbsideInfo.curbsideFulfillmentType = jsonObject.get("curbsideFulfillmentType")?.asString
+
+        return pickupInfoCurbsideInfo
+    }
+}
+
+internal class AndroidAppVersionFilterDeserializer : JsonDeserializer<AndroidAppVersionFilter> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): AndroidAppVersionFilter {
+        val jsonObject = json!!.asJsonObject
+        val androidAppVersionFilter = AndroidAppVersionFilter()
+
+        androidAppVersionFilter.maxVersion = jsonObject.get("maxVersion")?.asInt
+        androidAppVersionFilter.minVersion = jsonObject.get("minVersion")?.asInt
+
+        return androidAppVersionFilter
+    }
+}
+
+internal class VehicleDeserializer : JsonDeserializer<Vehicle> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Vehicle {
+        val jsonObject = json!!.asJsonObject
+        val vehicle = Vehicle()
+
+        if (jsonObject.get("image") != null) {
+            vehicle.image = context?.deserialize(jsonObject.get("image"),
+                    Image::class.java)
+        }
+
+        vehicle.colorName = jsonObject.get("colorName")?.asString
+        vehicle.licensePlate = jsonObject.get("licensePlate")?.asString
+        vehicle.make = jsonObject.get("make")?.asString
+        vehicle.model = jsonObject.get("model")?.asString
+
+        return vehicle
     }
 }
