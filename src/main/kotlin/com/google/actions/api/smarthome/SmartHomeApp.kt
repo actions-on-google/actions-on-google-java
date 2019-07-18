@@ -39,18 +39,60 @@ abstract class SmartHomeApp : App {
         this.credentials = GoogleCredentials.fromStream(stream)
     }
 
+    /**
+     * Builds a SmartHomeRequest object from a JSON-formatted string input.
+     *
+     * @param inputJson The request input as a string in a JSON format
+     * @return A parsed request object
+     */
     fun createRequest(inputJson: String): SmartHomeRequest {
         return SmartHomeRequest.create(inputJson)
     }
 
+    /**
+     * The intent handler for action.devices.SYNC that is implemented in your smart home Action
+     *
+     * @param request The request object containing relevant fields
+     * @param headers Request parameters
+     * @return A valid response to the SYNC request
+     */
     abstract fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse
 
+    /**
+     * The intent handler for action.devices.QUERY that is implemented in your smart home Action
+     *
+     * @param request The request object containing relevant fields
+     * @param headers Request parameters
+     * @return A valid response to the QUERY request
+     */
     abstract fun onQuery(request: QueryRequest, headers: Map<*, *>?): QueryResponse
 
+    /**
+     * The intent handler for action.devices.EXECUTE that is implemented in your smart home Action
+     *
+     * @param request The request object containing relevant fields
+     * @param headers Request parameters
+     * @return A valid response to the EXECUTE request
+     */
     abstract fun onExecute(request: ExecuteRequest, headers: Map<*, *>?): ExecuteResponse
 
+    /**
+     * The intent handler for action.devices.DISCONNECT that is implemented in your smart home
+     * Action. This intent does not expect a response.
+     *
+     * @param request The request object containing relevant fields
+     * @param headers Request parameters
+     */
     abstract fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit
 
+    /**
+     * Sends a RequestSync command to the Home Graph, which will cause a SYNC request to be sent
+     * to the server to refresh the list of a user's current devices. This should be called when
+     * a user adds a new device, removes a device, or the device parameters change.
+     *
+     * @param agentUserId The user id for the given user on your service
+     * @return A response to the API call
+     */
     fun requestSync(agentUserId: String): HomeGraphApiServiceProto.RequestSyncDevicesResponse {
         if (this.credentials == null) {
             throw IllegalArgumentException("You must pass credentials in the app constructor")
@@ -68,6 +110,14 @@ abstract class SmartHomeApp : App {
 
     }
 
+    /**
+     * Sends a ReportState command to the Home Graph, which will store a device's current state.
+     * This should be called after a device receives an EXECUTE request, or if the device has
+     * changed state through a means outside of your smart home Action.
+     *
+     * @param request A payload containing a series of devices and their connected states
+     * @return A response to the API call
+     */
     fun reportState(request: HomeGraphApiServiceProto.ReportStateAndNotificationRequest):
             HomeGraphApiServiceProto.ReportStateAndNotificationResponse {
         if (this.credentials == null) {

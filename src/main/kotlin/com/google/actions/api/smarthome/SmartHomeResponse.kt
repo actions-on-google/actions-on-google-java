@@ -22,12 +22,22 @@ import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
 import org.json.JSONObject
 
+/**
+ * A representation of the JSON payload that should be sent during a smart home request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents">Public documentation</a>
+ */
 open class SmartHomeResponse {
     open fun build(): JSONObject {
         return JSONObject() // Return empty object
     }
 }
 
+/**
+ * A representation of the JSON payload that should be sent during an action.devices.SYNC request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#response_format">Public documentation</a>
+ */
 class SyncResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
@@ -311,6 +321,12 @@ class SyncResponse() : SmartHomeResponse() {
     }
 }
 
+
+/**
+ * A representation of the JSON payload that should be sent during an action.devices.QUERY request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#response_format_2">Public documentation</a>
+ */
 class QueryResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
@@ -352,6 +368,12 @@ class QueryResponse() : SmartHomeResponse() {
     }
 }
 
+
+/**
+ * A representation of the JSON payload that should be sent during an action.devices.EXECUTE request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#response_format_3">Public documentation</a>
+ */
 class ExecuteResponse() : SmartHomeResponse() {
     lateinit var requestId: String
     lateinit var payload: Payload
@@ -431,6 +453,11 @@ class ExecuteResponse() : SmartHomeResponse() {
     }
 }
 
+/**
+ * The type of challenge that should be presented to the user to authorize a given EXECUTE command.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/two-factor-authentication">Two-factor authentication</a>
+ */
 enum class ChallengeType(val challenge: String) {
     ACK("ackNeeded"),
     PIN("pinNeeded"),

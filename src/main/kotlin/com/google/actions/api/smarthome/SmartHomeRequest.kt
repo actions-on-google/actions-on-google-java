@@ -18,6 +18,11 @@ package com.google.actions.api.smarthome
 
 import org.json.JSONObject
 
+/**
+ * A representation of the JSON payload received during a smart home request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents">Public documentation</a>
+ */
 open class SmartHomeRequest {
     lateinit var requestId: String
     lateinit var inputs: Array<RequestInputs>
@@ -137,10 +142,20 @@ open class SmartHomeRequest {
     }
 }
 
+/**
+ * A representation of the JSON payload received during an action.devices.SYNC request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#request_format">Public documentation</a>
+ */
 class SyncRequest : SmartHomeRequest() {
     class Inputs : RequestInputs()
 }
 
+/**
+ * A representation of the JSON payload received during an action.devices.QUERY request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#request_format_2">Public documentation</a>
+ */
 class QueryRequest : SmartHomeRequest() {
     class Inputs : RequestInputs() {
         lateinit var payload: Payload
@@ -156,6 +171,11 @@ class QueryRequest : SmartHomeRequest() {
     }
 }
 
+/**
+ * A representation of the JSON payload received during an action.devices.EXECUTE request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#request_format_3">Public documentation</a>
+ */
 class ExecuteRequest : SmartHomeRequest() {
     class Inputs : RequestInputs() {
         lateinit var payload: Payload
@@ -182,6 +202,11 @@ class ExecuteRequest : SmartHomeRequest() {
     }
 }
 
+/**
+ * A representation of the JSON payload received during an action.devices.DISCONNECT request.
+ *
+ * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents#request_format_4">Public documentation</a>
+ */
 class DisconnectRequest : SmartHomeRequest() {
     class Inputs : RequestInputs()
 }
