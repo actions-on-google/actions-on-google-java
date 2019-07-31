@@ -294,6 +294,18 @@ class ResponseBuilder internal constructor(
   }
 
   /**
+   * Adds a [HtmlResponse](https://developers.google.com/actions/interactivecanvas/)
+   * to the response. A HtmlResponse creates a visual, immersive experience to conversational
+   * Actions.
+   * @param htmlResponse The HtmlResponse to add.
+   * @return This ResponseBuilder.
+   */
+  fun add(htmlResponse: HtmlResponse): ResponseBuilder {
+    responseItems.add(RichResponseItem().setHtmlResponse(htmlResponse))
+    return this
+  }
+
+  /**
    * Helper method to add multiple suggestions to the response.
    * @param suggestions The suggestions to add.
    * @return This ResponseBuilder.
