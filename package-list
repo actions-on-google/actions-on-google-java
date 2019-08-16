@@ -1,4 +1,6 @@
 com.google.actions.api
 com.google.actions.api.response
 com.google.actions.api.response.helperintent
+com.google.actions.api.response.helperintent.transactions.v3
+com.google.actions.api.smarthome
 com.google.actions.api.test
