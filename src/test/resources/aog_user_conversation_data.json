@@ -7,7 +7,7 @@
   "conversation": {
     "conversationId": "1234",
     "type": "ACTIVE",
-    "conversationToken": "{\"data\":{\"headquarters\":[\"google1\",\"google2\"],\"history\":[],\"cats\":[]}}"
+    "conversationToken": "{\"data\":{\"headquarters\":[\"google1\",\"google2\"],\"history\":[],\"cats\":[],\"test\":\"hello\"}}"
   },
   "inputs": [
     {

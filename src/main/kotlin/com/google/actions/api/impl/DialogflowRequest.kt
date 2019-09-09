@@ -36,7 +36,7 @@ internal class DialogflowRequest internal constructor(
     override val intent: String
         get() = webhookRequest.queryResult?.intent?.displayName ?: "INVALID"
 
-    override val userStorage: Map<String, Any>
+    override val userStorage: MutableMap<String, Any>
         get() {
             return when (aogRequest) {
                 null -> HashMap()
@@ -44,7 +44,7 @@ internal class DialogflowRequest internal constructor(
             }
         }
 
-    override var conversationData: Map<String, Any> = HashMap()
+    override var conversationData: MutableMap<String, Any> = HashMap()
 
     override val user: User? get() = aogRequest?.user
     override val device: Device? get() = aogRequest?.device

@@ -62,8 +62,8 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 class ResponseBuilder internal constructor(
         val usesDialogflow: Boolean = true,
         val sessionId: String? = null,
-        val conversationData: Map<String, Any>? = null,
-        val userStorage: Map<String, Any>? = null) {
+        val conversationData: MutableMap<String, Any>? = null,
+        val userStorage: MutableMap<String, Any>? = null) {
 
   internal var expectUserResponse: Boolean = true
 

@@ -32,7 +32,7 @@ internal class DialogflowResponse internal constructor(
     override val expectUserResponse: Boolean?
         get() = googlePayload?.expectUserResponse
 
-    internal var conversationData: Map<String, Any>? = null
+    internal var conversationData: MutableMap<String, Any>? = null
     internal var googlePayload: AogResponse? = null
     internal var contexts: MutableList<ActionContext>? = ArrayList()
     internal var sessionId: String? = null

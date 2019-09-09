@@ -285,4 +285,26 @@ class AogRequestTest {
         val selected = aogRequest.getSelectedOption()
         assertEquals("2", selected)
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun conversationDataIsMutable() {
+        val aogRequest = fromFile("aog_user_conversation_data.json")
+        var conversationDataValue = aogRequest.conversationData["test"] as String
+        assertEquals("hello", conversationDataValue)
+        aogRequest.conversationData["test"] = "world"
+        conversationDataValue = aogRequest.conversationData["test"] as String
+        assertEquals("world", conversationDataValue)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun userStorageIsMutable() {
+        val aogRequest = fromFile("aog_user_storage.json")
+        var userStorageValue = aogRequest.userStorage["test"] as String
+        assertEquals("hello", userStorageValue)
+        aogRequest.userStorage["test"] = "world"
+        userStorageValue = aogRequest.userStorage["test"] as String
+        assertEquals("world", userStorageValue)
+    }
 }

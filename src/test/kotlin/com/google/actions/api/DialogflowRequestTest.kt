@@ -168,4 +168,26 @@ class DialogflowRequestTest {
                     responseBuilder.build())
         }
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun conversationDataIsMutable() {
+        val request = fromFile("dialogflow_with_conv_data.json")
+        var conversationDataValue = request.conversationData["test"] as String
+        assertEquals("hello", conversationDataValue)
+        request.conversationData["test"] = "world"
+        conversationDataValue = request.conversationData["test"] as String
+        assertEquals("world", conversationDataValue)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun userStorageIsMutable() {
+        val request = fromFile("dialogflow_user_storage.json")
+        var userStorageValue = request.userStorage["test"] as String
+        assertEquals("hello", userStorageValue)
+        request.userStorage["test"] = "world"
+        userStorageValue = request.userStorage["test"] as String
+        assertEquals("world", userStorageValue)
+    }
 }

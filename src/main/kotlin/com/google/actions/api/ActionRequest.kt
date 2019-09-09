@@ -90,13 +90,13 @@ interface ActionRequest {
      * Key-value pair data that is persisted across conversations for a
      * particular user.
      */
-    val userStorage: Map<String, Any>
+    val userStorage: MutableMap<String, Any>
 
     /**
      * Key-value pair data that is persisted across turns in the same
      * conversation session.
      */
-    val conversationData: Map<String, Any>
+    val conversationData: MutableMap<String, Any>
 
     /**
      * @return Indicates whether request must be handled in the sandbox mode for

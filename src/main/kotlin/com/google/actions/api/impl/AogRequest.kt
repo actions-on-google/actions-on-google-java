@@ -32,8 +32,8 @@ internal class AogRequest internal constructor(
 
     override val webhookRequest: WebhookRequest? get() = null
 
-    override var userStorage: Map<String, Any> = HashMap()
-    override var conversationData: Map<String, Any> = HashMap()
+    override var userStorage: MutableMap<String, Any> = HashMap()
+    override var conversationData: MutableMap<String, Any> = HashMap()
 
     override val intent: String
         get() {
@@ -375,7 +375,7 @@ internal class AogRequest internal constructor(
             return aogRequest
         }
 
-        private fun fromJson(serializedValue: String?): Map<String, Any> {
+        private fun fromJson(serializedValue: String?): MutableMap<String, Any> {
             if (serializedValue != null && !serializedValue.isEmpty()) {
                 val gson = Gson()
                 try {

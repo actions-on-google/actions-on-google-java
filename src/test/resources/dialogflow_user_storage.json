@@ -1,0 +1,122 @@
+{
+  "responseId": "95012a31-e61c-41c8-ad2b-fb6a042d47d2-763f7f5c",
+  "queryResult": {
+    "queryText": "bye",
+    "parameters": {},
+    "allRequiredParamsPresent": true,
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            ""
+          ]
+        }
+      }
+    ],
+    "outputContexts": [
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/actions_capability_web_browser"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/actions_capability_screen_output"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/actions_capability_account_linking"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/actions_capability_media_response_audio"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/actions_capability_audio_output"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/google_assistant_input_type_keyboard"
+      },
+      {
+        "name": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR/contexts/_actions_on_google",
+        "lifespanCount": 98,
+        "parameters": {
+          "data": "{}"
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/test-kotlin-user-storage/agent/intents/0230f1ce-724f-4a23-8cb3-05cbb503692d",
+      "displayName": "bye"
+    },
+    "intentDetectionConfidence": 1,
+    "languageCode": "en"
+  },
+  "originalDetectIntentRequest": {
+    "source": "google",
+    "version": "2",
+    "payload": {
+      "user": {
+        "locale": "en-US",
+        "lastSeen": "2019-09-09T20:37:24Z",
+        "userStorage": "{\"data\":{\"test\":\"hello\"}}",
+        "userVerificationStatus": "VERIFIED"
+      },
+      "conversation": {
+        "conversationId": "ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR",
+        "type": "ACTIVE",
+        "conversationToken": "[\"_actions_on_google\"]"
+      },
+      "inputs": [
+        {
+          "intent": "actions.intent.TEXT",
+          "rawInputs": [
+            {
+              "inputType": "KEYBOARD",
+              "query": "bye"
+            }
+          ],
+          "arguments": [
+            {
+              "name": "text",
+              "rawText": "bye",
+              "textValue": "bye"
+            }
+          ]
+        }
+      ],
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.WEB_BROWSER"
+          },
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          },
+          {
+            "name": "actions.capability.ACCOUNT_LINKING"
+          },
+          {
+            "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+          },
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }
+        ]
+      },
+      "isInSandbox": true,
+      "availableSurfaces": [
+        {
+          "capabilities": [
+            {
+              "name": "actions.capability.AUDIO_OUTPUT"
+            },
+            {
+              "name": "actions.capability.SCREEN_OUTPUT"
+            },
+            {
+              "name": "actions.capability.WEB_BROWSER"
+            }
+          ]
+        }
+      ],
+      "requestType": "SIMULATOR"
+    }
+  },
+  "session": "projects/PROJECT_ID/agent/sessions/ABwppHFh6sMQYXTHApbs8pNVdiAcvWG1UmUdO4XQEiXUYs5n3nAjQhrApN6MxiPbs6AKk3ZjuGKN-1A01nMY9mJK96zXHWpR"
+}

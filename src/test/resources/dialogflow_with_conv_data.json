@@ -29,7 +29,7 @@
         "name": "projects/projectId/agent/sessions/sessionId/contexts/_actions_on_google",
         "lifespanCount": 98,
         "parameters": {
-          "data": "{\"headquarters\":[\"google_headquarters_fact_1\",\"google_headquarters_fact_2\",\"google_headquarters_fact_3\"],\"cats\":[\"cat_fact_1\",\"cat_fact_2\",\"cat_fact_3\"],\"history\":[]}",
+          "data": "{\"headquarters\":[\"google_headquarters_fact_1\",\"google_headquarters_fact_2\",\"google_headquarters_fact_3\"],\"cats\":[\"cat_fact_1\",\"cat_fact_2\",\"cat_fact_3\"],\"history\":[],\"test\":\"hello\"}",
           "category.original": "",
           "category": "history"
         }

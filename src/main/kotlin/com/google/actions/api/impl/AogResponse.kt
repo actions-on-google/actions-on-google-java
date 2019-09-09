@@ -32,8 +32,8 @@ internal class AogResponse internal constructor(
     override val expectUserResponse: Boolean
 
     internal var helperIntents: List<ExpectedIntent>?
-    internal var conversationData: Map<String, Any>? = null
-    internal var userStorage: Map<String, Any>? = null
+    internal var conversationData: MutableMap<String, Any>? = null
+    internal var userStorage: MutableMap<String, Any>? = null
     internal var sessionId: String? = null
     private var textIntent: ExpectedIntent? = null
 
