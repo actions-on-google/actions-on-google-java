@@ -60,5 +60,6 @@ enum class Capability(val value: String) {
     SCREEN_OUTPUT("actions.capability.SCREEN_OUTPUT"),
     AUDIO_OUTPUT("actions.capability.AUDIO_OUTPUT"),
     MEDIA_RESPONSE_AUDIO("actions.capability.MEDIA_RESPONSE_AUDIO"),
-    WEB_BROWSER("actions.capability.WEB_BROWSER")
+    WEB_BROWSER("actions.capability.WEB_BROWSER"),
+    INTERACTIVE_CANVAS("actions.capability.INTERACTIVE_CANVAS")
 }

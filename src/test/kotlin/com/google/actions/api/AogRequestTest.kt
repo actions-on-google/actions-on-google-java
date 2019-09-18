@@ -136,6 +136,22 @@ class AogRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun hasCapabilityReturnsCorrectValues() {
+        val aogRequest = fromFile("aog_with_all_surface_capabilities.json")
+        val expectedPresentInTheRequest = listOf(
+                "actions.capability.SCREEN_OUTPUT",
+                "actions.capability.AUDIO_OUTPUT",
+                "actions.capability.MEDIA_RESPONSE_AUDIO",
+                "actions.capability.WEB_BROWSER",
+                "actions.capability.INTERACTIVE_CANVAS"
+        )
+        for (capability in expectedPresentInTheRequest) {
+            assertTrue(aogRequest.hasCapability(capability))
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun jsonWithDateTimeValueIsParsed() {
         val aogRequest = fromFile("aog_with_datetime.json")
         val dateTime = aogRequest.getDateTime()
