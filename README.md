@@ -5,8 +5,8 @@ request processing logic letting you focus on your Action’s business logic.
 
 * [GitHub repo](https://github.com/actions-on-google/actions-on-google-java)
 * [Reference docs](https://actions-on-google.github.io/actions-on-google-java/)
-* [Actions on Google docs](https://developers.google.com/actions/)
-* [Actions on Google samples](https://developers.google.com/actions/samples/)
+* [Actions on Google docs](https://developers.google.com/assistant)
+* [Actions on Google samples](https://developers.google.com/assistant/actions/samples)
 
 ## Requirements
 
@@ -164,9 +164,9 @@ During active development, you may start a local server to run your Action as a 
 You can use the [Actions on Google testing library](https://github.com/actions-on-google/actions-on-google-testing-nodejs) to test your Action end to end. Note that the testing library requires tests to be written in Node.js. The webhook fulfillment can be in Node.js/Java/Kotlin or any other language.
 
 ### References & Issues
-+ Questions? Go to [StackOverflow](https://stackoverflow.com/questions/tagged/actions-on-google), [Assistant Developer Community on Reddit](https://www.reddit.com/r/GoogleAssistantDev/) or [Support](https://developers.google.com/actions/support/).
++ Questions? Go to [StackOverflow](https://stackoverflow.com/questions/tagged/actions-on-google), [Assistant Developer Community on Reddit](https://www.reddit.com/r/GoogleAssistantDev/) or [Support](https://developers.google.com/assistant/support).
 + For bugs, please report an issue on Github.
-+ Actions on Google [Documentation](https://developers.google.com/actions/extending-the-assistant)
++ Actions on Google [Documentation](https://developers.google.com/assistant)
 + [Webhook Boilerplate Template](https://github.com/actions-on-google/dialogflow-webhook-boilerplate-java) for Actions on Google.
 + More info about [Gradle & the App Engine Plugin](https://cloud.google.com/appengine/docs/flexible/java/using-gradle).
 + More info about deploying [Java apps with App Engine](https://cloud.google.com/appengine/docs/standard/java/quickstart).
