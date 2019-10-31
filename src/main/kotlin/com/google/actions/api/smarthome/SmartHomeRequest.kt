@@ -104,7 +104,9 @@ open class SmartHomeRequest {
                             val executionJson = executionsJsonArray.getJSONObject(j)
                             val executionObject = ExecuteRequest.Inputs.Payload.Commands.Execution()
                             executionObject.command = executionJson.getString("command")
-                            executionObject.params = executionJson.getJSONObject("params")?.toMap()
+                            if (executionJson.has("params")) {
+                                executionObject.params = executionJson.getJSONObject("params").toMap()
+                            }
                             executionObject.challenge =
                                     executionJson.optJSONObject("challenge")?.toMap()
                             executionsList.add(executionObject)

@@ -1,0 +1,20 @@
+{
+  "inputs": [{
+    "context": {
+      "locale_country": "US",
+      "locale_language": "en"
+    },
+    "intent": "action.devices.EXECUTE",
+    "payload": {
+      "commands": [{
+        "devices": [{
+          "id": "vacuumJawn"
+        }],
+        "execution": [{
+          "command": "action.devices.commands.Dock"
+        }]
+      }]
+    }
+  }],
+  "requestId": "6209328299679820472"
+}

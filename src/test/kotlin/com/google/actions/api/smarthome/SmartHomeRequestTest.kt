@@ -138,6 +138,23 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun dockExecuteJsonIsParsed() {
+        val request = fromFile("smarthome_execute_dock_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands.size, 1)
+        Assert.assertEquals(payload.commands[0].devices.size, 1)
+        Assert.assertEquals(payload.commands[0].devices[0].id, "vacuumJawn")
+        Assert.assertEquals(payload.commands[0].execution.size, 1)
+        Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.Dock")
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun basicDisconnectJsonIsParsed() {
         val request = fromFile("smarthome_disconnect_request.json") as DisconnectRequest
         Assert.assertNotNull(request)
