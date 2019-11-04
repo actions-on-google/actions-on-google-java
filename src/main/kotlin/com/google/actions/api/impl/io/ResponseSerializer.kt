@@ -16,10 +16,7 @@
 
 package com.google.actions.api.impl.io
 
-import com.google.actions.api.APP_DATA_CONTEXT
-import com.google.actions.api.APP_DATA_CONTEXT_LIFESPAN
-import com.google.actions.api.ActionContext
-import com.google.actions.api.ActionResponse
+import com.google.actions.api.*
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.DialogflowResponse
 import com.google.api.services.actions_fulfillment.v2.model.RichResponse
@@ -35,7 +32,6 @@ import kotlin.collections.set
 
 internal class ResponseSerializer(
         private val sessionId: String? = "") {
-
 
     private companion object {
         val includeVersionMetadata = false
@@ -74,6 +70,7 @@ internal class ResponseSerializer(
         val webhookResponse = dialogflowResponse.webhookResponse
         val conversationData = dialogflowResponse.conversationData
         val contexts = dialogflowResponse.contexts
+        val sessionEntityTypes = dialogflowResponse.sessionEntityTypes
 
         if (googlePayload != null) {
             val aogPayload = DialogflowGooglePayload(googlePayload)
@@ -92,6 +89,7 @@ internal class ResponseSerializer(
             setContext(context, webhookResponse)
         }
         contexts?.forEach { setContext(it, webhookResponse) }
+        sessionEntityTypes?.forEach { setSessionEntityType(it, webhookResponse) }
 
         val webhookResponseMap = webhookResponse.toMutableMap()
         if (includeVersionMetadata) {
@@ -114,15 +112,39 @@ internal class ResponseSerializer(
                 webhookResponse.outputContexts = ArrayList<Context>()
             }
             val dfContext = Context()
-            dfContext.name = getAsNamespaced(context.name)
+            dfContext.name = getAsNamespaced(context.name, "contexts")
             dfContext.lifespanCount = context.lifespan
             dfContext.parameters = context.parameters
             webhookResponse.outputContexts?.add(dfContext)
         }
     }
 
-    private fun getAsNamespaced(name: String): String {
-        val namespace = "$sessionId/contexts/"
+    private fun setSessionEntityType(
+            sessionEntityType: SessionEntityType,
+            webhookResponse: WebhookResponse) {
+        val type = webhookResponse.sessionEntityTypes?.find {
+            it.name == sessionEntityType.name
+        }
+        if (type != null) {
+            type.entities = sessionEntityType.entities
+            type.entityOverrideMode = sessionEntityType.entityOverrideMode.name
+        } else {
+            if (webhookResponse.sessionEntityTypes == null) {
+                webhookResponse.sessionEntityTypes =
+                        ArrayList<com.google.api.services.dialogflow_fulfillment.v2.model.SessionEntityType>()
+            }
+            val dfEntityType =
+                    com.google.api.services.dialogflow_fulfillment.v2.model.SessionEntityType()
+            dfEntityType.name =
+                    getAsNamespaced(sessionEntityType.name, "entityTypes")
+            dfEntityType.entities = sessionEntityType.entities
+            dfEntityType.entityOverrideMode = sessionEntityType.entityOverrideMode.name
+            webhookResponse.sessionEntityTypes?.add(dfEntityType)
+        }
+    }
+
+    private fun getAsNamespaced(name: String, type: String): String {
+        val namespace = "$sessionId/$type/"
         if (name.startsWith(namespace)) {
             return name
         }

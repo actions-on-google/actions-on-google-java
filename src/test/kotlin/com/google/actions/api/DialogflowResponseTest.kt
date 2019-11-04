@@ -22,6 +22,7 @@ import com.google.actions.api.response.helperintent.NewSurface
 import com.google.actions.api.response.helperintent.RegisterUpdate
 import com.google.actions.api.response.helperintent.SelectionList
 import com.google.api.services.actions_fulfillment.v2.model.*
+import com.google.api.services.dialogflow_fulfillment.v2.model.EntityTypeEntity
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -30,6 +31,7 @@ import junit.framework.TestCase.assertNotNull
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.testng.annotations.Test
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class DialogflowResponseTest {
@@ -70,7 +72,7 @@ class DialogflowResponseTest {
         val dataAsJsonObject = gson.fromJson<Map<String, Any>>(
                 dataAsJson, Map::class.java)
         assertEquals("pizza",
-                dataAsJsonObject.get("favorite_dish"))
+                dataAsJsonObject["favorite_dish"])
     }
 
     @Test
@@ -113,7 +115,7 @@ class DialogflowResponseTest {
 
         appResponse.finalResponse = FinalResponse().setRichResponse(richResponse)
 
-        var response = ResponseBuilder()
+        val response = ResponseBuilder()
                 .endConversation()
                 .use(appResponse)
                 .use(webhookResponse)
@@ -175,8 +177,9 @@ class DialogflowResponseTest {
         val intent = googlePayload.helperIntents!![0]
 
         assertEquals("actions.intent.NEW_SURFACE", intent.intent)
+
         val capabilitiesArray =
-                intent.inputValueData.get("capabilities") as Array<String>
+                intent.inputValueData["capabilities"] as Array<String>
         assertEquals(capability, capabilitiesArray[0])
     }
 
@@ -239,5 +242,50 @@ class DialogflowResponseTest {
                 ?.get("outputContexts")?.asJsonArray
                 ?.get(0)?.asJsonObject
                 ?.get("lifespanCount")?.asInt)
+    }
+
+    @Test
+    fun testAddSessionEntity() {
+        val responseBuilder = ResponseBuilder(usesDialogflow = true, sessionId = "sessionId")
+        responseBuilder.expectUserResponse = true
+
+        val sessionEntityType =
+                SessionEntityType("test_session_entity_type", EntityOverrideMode.ENTITY_OVERRIDE_MODE_OVERRIDE)
+        val entities = ArrayList<EntityTypeEntity>()
+        val entity = EntityTypeEntity()
+        entity.value = "test_entity"
+        val synonyms = ArrayList<String>()
+        synonyms.add("test_synonym_1")
+        synonyms.add("test_synonym_2")
+        synonyms.add("test_synonym_3")
+        entity.synonyms = synonyms
+        entities.add(entity)
+        sessionEntityType.entities = entities
+
+        responseBuilder.webhookResponse
+
+        val response = responseBuilder
+                .add("test")
+                .add(sessionEntityType)
+                .build()
+
+        val json = response.toJson()
+        val gson = Gson()
+        val jsonObject = gson.fromJson<JsonObject>(json, JsonObject::class.java)
+        val jsonEntityType = jsonObject
+                ?.get("sessionEntityTypes")?.asJsonArray
+                ?.get(0)?.asJsonObject
+
+        assertEquals("sessionId/entityTypes/test_session_entity_type",
+                jsonEntityType?.get("name")?.asString)
+        val jsonEntities = jsonEntityType?.get("entities")?.asJsonArray
+        assertEquals(1, jsonEntities?.size())
+        val jsonEntity = jsonEntities?.get(0)?.asJsonObject
+        assertEquals("test_entity", jsonEntity?.get("value")?.asString)
+        val jsonSynonyms = jsonEntity?.get("synonyms")?.asJsonArray
+        assertEquals(3, jsonSynonyms?.size())
+        assertEquals("test_synonym_1", jsonSynonyms?.get(0)?.asString)
+        assertEquals("test_synonym_2", jsonSynonyms?.get(1)?.asString)
+        assertEquals("test_synonym_3", jsonSynonyms?.get(2)?.asString)
     }
 }

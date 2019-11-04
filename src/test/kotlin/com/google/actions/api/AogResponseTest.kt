@@ -358,7 +358,7 @@ class AogResponseTest {
                 ?.expectedInputs?.get(0)
                 ?.possibleIntents?.get(0) as ExpectedIntent
         assertEquals("actions.intent.REGISTER_UPDATE", intent.intent)
-        assertEquals(updateIntent, intent.inputValueData.get("intent"))
+        assertEquals(updateIntent, intent.inputValueData["intent"])
     }
 
     @Test

@@ -113,12 +113,12 @@ class DialogflowRequestTest {
             assertEquals("signature", inAppDetails.inAppDataSignature)
             val inAppPurchaseData = inAppDetails.inAppPurchaseData
             assertNotNull(inAppPurchaseData)
-            assertEquals("purchaseToken", inAppPurchaseData.get("purchaseToken"))
-            assertEquals("productId", inAppPurchaseData.get("productId"))
-            assertEquals("orderId", inAppPurchaseData.get("orderId"))
-            assertEquals(1557772151801, (inAppPurchaseData.get("purchaseTime") as Number).toLong())
-            assertEquals("package.name", inAppPurchaseData.get("packageName"))
-            assertEquals(0, (inAppPurchaseData.get("purchaseState") as Number).toInt())
+            assertEquals("purchaseToken", inAppPurchaseData["purchaseToken"])
+            assertEquals("productId", inAppPurchaseData["productId"])
+            assertEquals("orderId", inAppPurchaseData["orderId"])
+            assertEquals(1557772151801, (inAppPurchaseData["purchaseTime"] as Number).toLong())
+            assertEquals("package.name", inAppPurchaseData["packageName"])
+            assertEquals(0, (inAppPurchaseData["purchaseState"] as Number).toInt())
         }
     }
 
@@ -155,14 +155,13 @@ class DialogflowRequestTest {
         app.handleRequest(inputJson, null)
     }
 
-
     internal inner class MyDialogflowApp : DialogflowApp() {
 
         @ForIntent("Default Welcome Intent")
         fun handleFooIntent(
                 request: ActionRequest): CompletableFuture<ActionResponse> {
             LOG.info("handleFooIntent is invoked.")
-            val responseBuilder = ResponseBuilder()
+            val responseBuilder = getResponseBuilder(request)
 
             return CompletableFuture.completedFuture(
                     responseBuilder.build())

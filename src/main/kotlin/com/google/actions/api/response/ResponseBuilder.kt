@@ -18,6 +18,7 @@ package com.google.actions.api.response
 
 import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
+import com.google.actions.api.SessionEntityType
 import com.google.actions.api.impl.AogResponse
 import com.google.actions.api.impl.DialogflowResponse
 import com.google.actions.api.response.helperintent.HelperIntent
@@ -84,6 +85,8 @@ class ResponseBuilder internal constructor(
   internal var fulfillmentText: String? = null
 
   internal var contexts: MutableList<ActionContext> = ArrayList()
+
+  internal var sessionEntityTypes: MutableList<SessionEntityType> = ArrayList()
 
   /**
    * Builds the ActionResponse based on the added artifacts.
@@ -326,6 +329,16 @@ class ResponseBuilder internal constructor(
   }
 
   /**
+   * Helper method to add an SessionEntityType to the response.
+   * @param sessionEntityType The SessionEntityType to add.
+   * @return This ResponseBuilder.
+   */
+  fun add(sessionEntityType: SessionEntityType): ResponseBuilder {
+    this.sessionEntityTypes.add(sessionEntityType)
+    return this
+  }
+
+  /**
    * Helper method to add an ActionContext to the response. Contexts are supported only on
    * Dialogflow.
    * @param context The ActionContext to add.
@@ -367,6 +380,7 @@ class ResponseBuilder internal constructor(
   internal fun buildDialogflowResponse(): DialogflowResponse {
     val response = DialogflowResponse(this)
     response.contexts = contexts
+    response.sessionEntityTypes = sessionEntityTypes
     return response
   }
 

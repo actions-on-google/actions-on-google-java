@@ -214,7 +214,6 @@ internal class AogRequest internal constructor(
             return create(gson.fromJson(body, JsonObject::class.java), headers,
                     partOfDialogflowRequest)
         }
-
         fun create(
                 json: JsonObject,
                 headers: Map<*, *>? = HashMap<String, Any>(),

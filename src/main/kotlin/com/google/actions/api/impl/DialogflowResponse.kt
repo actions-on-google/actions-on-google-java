@@ -18,6 +18,7 @@ package com.google.actions.api.impl
 
 import com.google.actions.api.ActionContext
 import com.google.actions.api.ActionResponse
+import com.google.actions.api.SessionEntityType
 import com.google.actions.api.impl.io.ResponseSerializer
 import com.google.actions.api.response.ResponseBuilder
 import com.google.api.services.actions_fulfillment.v2.model.AppResponse
@@ -35,6 +36,7 @@ internal class DialogflowResponse internal constructor(
     internal var conversationData: MutableMap<String, Any>? = null
     internal var googlePayload: AogResponse? = null
     internal var contexts: MutableList<ActionContext>? = ArrayList()
+    internal var sessionEntityTypes: MutableList<SessionEntityType>? = ArrayList()
     internal var sessionId: String? = null
 
     init {

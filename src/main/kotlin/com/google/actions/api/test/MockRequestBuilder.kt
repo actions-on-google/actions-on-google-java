@@ -57,7 +57,6 @@ class MockRequestBuilder() {
 
     init {
         defaultUser.lastSeen = "2018-05-24T19:03:47Z"
-        defaultUser.userId = "abcd"
         defaultUser.locale = "en-US"
         defaultUser.userVerificationStatus = "VERIFIED"
 

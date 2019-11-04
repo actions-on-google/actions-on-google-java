@@ -63,3 +63,8 @@ enum class Capability(val value: String) {
     WEB_BROWSER("actions.capability.WEB_BROWSER"),
     INTERACTIVE_CANVAS("actions.capability.INTERACTIVE_CANVAS")
 }
+
+enum class EntityOverrideMode {
+    ENTITY_OVERRIDE_MODE_OVERRIDE,
+    ENTITY_OVERRIDE_MODE_SUPPLEMENT
+}

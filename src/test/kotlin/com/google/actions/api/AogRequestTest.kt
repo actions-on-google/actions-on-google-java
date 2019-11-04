@@ -207,6 +207,7 @@ class AogRequestTest {
         val aogRequest = fromFile("aog_user_conversation_data.json")
         assertEquals(emptyList<String>(), aogRequest
                 .conversationData["history"])
+
         val headquarters = aogRequest.conversationData["headquarters"] as List<String>
         assertEquals("google1", headquarters[0])
     }
