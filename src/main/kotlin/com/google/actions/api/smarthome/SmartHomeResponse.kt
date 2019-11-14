@@ -20,6 +20,7 @@ import com.google.home.graph.v1.DeviceProto
 import com.google.protobuf.ProtocolStringList
 import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
+import org.json.JSONException
 import org.json.JSONObject
 
 /**
@@ -267,15 +268,39 @@ class SyncResponse() : SmartHomeResponse() {
                 /**
                  * Gets the custom data of the device
                  */
+                @Deprecated(message = "The data type is now a JSON object.",
+                        replaceWith = ReplaceWith("getCustomDataAsJSON().toString()"))
                 fun getCustomData(): String {
-                    return protoBuilder.customData
+                    return this.getCustomDataAsJSON().toString()
+                }
+
+                fun getCustomDataAsJSON(): JSONObject {
+                    val customDataStruct = protoBuilder.customData
+                    try {
+                        return JSONObject(JsonFormat.printer().print(customDataStruct))
+                    } catch (e: Exception) {
+                        throw RuntimeException(e)
+                    }
                 }
 
                 /**
-                 * Sets the custom data of the device
+                 * Sets the custom data of the device.
                  */
+                @Deprecated(message = "Please format the data as a JSON object",
+                        replaceWith = ReplaceWith("setCustomData(JSONObject(customData))",
+                                "org.json.JSONObject")
+                )
                 fun setCustomData(customData: String): Builder {
-                    protoBuilder.customData = customData
+                    var customDataJSON = JSONObject(customData)
+                    val customDataStruct = Struct.newBuilder()
+                    try {
+                        JsonFormat.parser()
+                                .ignoringUnknownFields()
+                                .merge(customDataJSON.toString(), customDataStruct)
+                    } catch (e: Exception) {
+                        throw RuntimeException(e)
+                    }
+                    protoBuilder.setCustomData(customDataStruct)
                     return this
                 }
 
@@ -283,7 +308,15 @@ class SyncResponse() : SmartHomeResponse() {
                  * Sets the custom data of the device
                  */
                 fun setCustomData(customData: JSONObject): Builder {
-                    protoBuilder.customData = customData.toString()
+                    val customDataStruct = Struct.newBuilder()
+                    try {
+                        JsonFormat.parser()
+                                .ignoringUnknownFields()
+                                .merge(customData.toString(), customDataStruct)
+                    } catch (e: Exception) {
+                        throw RuntimeException(e)
+                    }
+                    protoBuilder.setCustomData(customDataStruct)
                     return this
                 }
 

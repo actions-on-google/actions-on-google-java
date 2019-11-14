@@ -14,7 +14,7 @@
         "nicknames":[
           "wall plug"
         ]},
-      "customData":"{\"fooValue\": 74, \"barValue\": true, \"bazValue\": \"foo\"}",
+      "customData":{"fooValue": 74,"bazValue": "foo","barValue": true},
       "id":"123",
       "type":"action.devices.types.OUTLET",
       "deviceInfo":{
@@ -39,7 +39,7 @@
           "reading lamp"
         ]
       },
-      "customData":"{\"fooValue\":12, \"barValue\":false, \"bazValue\":\"bar\"}",
+      "customData":{"fooValue":12,"bazValue": "bar","barValue":false},
       "id":"456",
       "type":"action.devices.types.LIGHT",
       "deviceInfo":{
@@ -82,7 +82,7 @@
             }]
         }
       },
-      "customData": "{\"fooValue\":74,\"bazValue\":\"lambtwirl\",\"barValue\":true}",
+      "customData": {"fooValue":74,"bazValue":"lambtwirl","barValue":true},
       "id": "789",
       "type": "action.devices.types.AC_UNIT",
       "deviceInfo": {

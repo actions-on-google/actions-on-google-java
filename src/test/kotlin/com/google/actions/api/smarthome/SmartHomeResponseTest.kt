@@ -118,7 +118,7 @@ class SmartHomeResponseTest {
                                         .setHwVersion("1.2")
                                         .setSwVersion("5.4")
                                         .build())
-                                .setCustomData("{\"fooValue\":12, \"barValue\":false, \"bazValue\":\"bar\"}")
+                                .setCustomData(JSONObject("{\"fooValue\":12, \"barValue\":false, \"bazValue\":\"bar\"}"))
                                 .build(),
                         SyncResponse.Payload.Device.Builder()
                                 .setId("789")
@@ -355,6 +355,54 @@ class SmartHomeResponseTest {
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+    }
+    @Test
+    fun testSyncResponseCustomData() {
+        val request = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(request)
+        val nightLightCustomData = "{\"fooValue\":74,\"bazValue\":\"foo\",\"barValue\":true}"
+        val acUnitCustomData = JSONObject()
+                .put("fooValue", 74)
+                .put("barValue", true)
+                .put("bazValue", "lambtwirl")
+
+        val deviceBuilders = arrayOf(
+                SyncResponse.Payload.Device.Builder()
+                        .setId("123")
+                        .setType("action.devices.types.OUTLET")
+                        .addTrait("action.devices.traits.OnOff")
+                        .setName(DeviceProto.DeviceNames.newBuilder()
+                                .addDefaultNames("My Outlet 1234")
+                                .setName("Night light")
+                                .addNicknames("wall plug")
+                                .build())
+                        .setWillReportState(false)
+                        .setRoomHint("kitchen")
+                        .setDeviceInfo(DeviceProto.DeviceInfo.newBuilder()
+                                .setManufacturer("lights-out-inc")
+                                .setModel("hs1234")
+                                .setHwVersion("3.2")
+                                .setSwVersion("11.4")
+                                .build())
+                        .setCustomData(JSONObject(nightLightCustomData)),
+                SyncResponse.Payload.Device.Builder()
+                        .setId("789")
+                        .setType("action.devices.types.AC_UNIT")
+                        .addTrait("action.devices.traits.OnOff")
+                        .addTrait("action.devices.traits.FanSpeed")
+                        .setName(
+                                listOf("Sirius Cybernetics Corporation 33321"),
+                                "AC Unit",
+                                listOf("living room AC")
+                        )
+                        .setWillReportState(true)
+                        .setDeviceInfo("Sirius Cybernetics Corporation", "492134", "3.2",
+                                "11.4")
+                        .setCustomData(acUnitCustomData)
+        )
+        Assert.assertEquals(nightLightCustomData, deviceBuilders[0].getCustomData())
+        Assert.assertEquals(nightLightCustomData, deviceBuilders[0].getCustomDataAsJSON().toString())
+        Assert.assertEquals(acUnitCustomData.toString(), deviceBuilders[1].getCustomDataAsJSON().toString())
     }
 
     @Test
