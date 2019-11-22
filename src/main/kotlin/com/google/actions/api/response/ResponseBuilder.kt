@@ -158,20 +158,20 @@ class ResponseBuilder internal constructor(
 
   /**
    * Adds the specified text to the response. This is a short-cut to creating a
-   * [SimpleResponse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#simpleresponse)
+   * [SimpleResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#simpleresponse)
    * with the specified text as the display text and the text to speech.
    * @param text The text to add.
    * @return This ResponseBuilder.
    */
   fun add(text: String): ResponseBuilder {
     responseItems.add(RichResponseItem().setSimpleResponse(
-        SimpleResponse().setTextToSpeech(text)))
+            SimpleResponse().setTextToSpeech(text)))
     fulfillmentText = text
     return this
   }
 
   /**
-   * Adds a [SimpleResponse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#simpleresponse)
+   * Adds a [SimpleResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#simpleresponse)
    * to the response.
    * @param simpleResponse The SimpleResponse to add.
    * @return This ResponseBuilder.
@@ -183,7 +183,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [BasicCard](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#basiccard)
+   * Adds a [BasicCard](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#basiccard)
    * to the response.
    * @param basicCard The BasicCard to add.
    * @return This ResponseBuilder.
@@ -194,19 +194,19 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [StructuredResponse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#structuredresponse)
+   * Adds a [StructuredResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#structuredresponse)
    * to the response.
    * @param structuredResponse The StructuredResponse to add.
    * @return This ResponseBuilder.
    */
   fun add(structuredResponse: StructuredResponse): ResponseBuilder {
     responseItems.add(RichResponseItem()
-        .setStructuredResponse(structuredResponse))
+            .setStructuredResponse(structuredResponse))
     return this
   }
 
   /**
-   * Adds a [MediaResponse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#mediaresponse)
+   * Adds a [MediaResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#mediaresponse)
    * to the response.
    * @param mediaResponse The MediaResponse to add.
    * @return This ResponseBuilder.
@@ -217,7 +217,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [CarouselBrowse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#carouselbrowse)
+   * Adds a [CarouselBrowse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#carouselbrowse)
    * to the response.
    * @param carousel The CarouselBrowse to add.
    * @return This ResponseBuilder.
@@ -228,7 +228,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [TableCard](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#tablecard)
+   * Adds a [TableCard](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#tablecard)
    * to the response.
    * @param tableCard The TableCard to add.
    * @return This ResponseBuilder.
@@ -239,7 +239,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [RichResponse](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#richresponse)
+   * Adds a [RichResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#richresponse)
    * to the response.
    * @param richResponse The RichResponse to add.
    * @return This ResponseBuilder.
@@ -250,7 +250,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [Suggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#suggestion)
+   * Adds a [Suggestion](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#suggestion)
    * to the response. A suggestion chip allows the user to tap to quickly
    * post a reply to the conversation.
    * @param suggestion The Suggestion to add.
@@ -262,7 +262,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds an [Image](https://developers.google.com/actions/reference/rest/Shared.Types/Image)
+   * Adds an [Image](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/Image)
    * to the response. This is a short-cut to creating a basic card with just the
    * image.
    * @param image The Image to add.
@@ -270,7 +270,7 @@ class ResponseBuilder internal constructor(
    */
   fun add(image: Image): ResponseBuilder {
     responseItems.add(RichResponseItem().setBasicCard(
-        BasicCard().setImage(image)))
+            BasicCard().setImage(image)))
     return this
   }
 
@@ -285,7 +285,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [LinkOutSuggestion](https://developers.google.com/actions/reference/rest/Shared.Types/AppResponse#linkoutsuggestion)
+   * Adds a [LinkOutSuggestion](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#linkoutsuggestion)
    * to the response. A LinkOutSuggestion creates a suggestion chip that allows
    * the user to jump out to the App or Website associated with this agent.
    * @param linkOutSuggestion The LinkOutSuggestion to add.
@@ -297,7 +297,7 @@ class ResponseBuilder internal constructor(
   }
 
   /**
-   * Adds a [HtmlResponse](https://developers.google.com/actions/interactivecanvas/)
+   * Adds a [HtmlResponse](https://developers.google.com/assistant/conversational/reference/rest/Shared.Types/AppResponse#htmlresponse)
    * to the response. A HtmlResponse creates a visual, immersive experience to conversational
    * Actions.
    * @param htmlResponse The HtmlResponse to add.

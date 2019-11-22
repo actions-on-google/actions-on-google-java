@@ -142,7 +142,6 @@ internal class ResponseSerializer(
             webhookResponse.sessionEntityTypes?.add(dfEntityType)
         }
     }
-
     private fun getAsNamespaced(name: String, type: String): String {
         val namespace = "$sessionId/$type/"
         if (name.startsWith(namespace)) {
@@ -279,6 +278,7 @@ internal class ResponseSerializer(
             for (item in richResponse.items) {
                 if (item.basicCard != null
                         || item.carouselBrowse != null
+                        || item.htmlResponse != null
                         || item.tableCard != null
                         || item.mediaResponse != null
                         || item.structuredResponse?.orderUpdate != null) {

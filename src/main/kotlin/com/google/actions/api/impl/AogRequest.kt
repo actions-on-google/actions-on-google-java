@@ -214,6 +214,7 @@ internal class AogRequest internal constructor(
             return create(gson.fromJson(body, JsonObject::class.java), headers,
                     partOfDialogflowRequest)
         }
+
         fun create(
                 json: JsonObject,
                 headers: Map<*, *>? = HashMap<String, Any>(),
@@ -289,6 +290,8 @@ internal class AogRequest internal constructor(
                             TicketOrderExtensionDeserializer())
                     .registerTypeAdapter(MerchantV3::class.java,
                             MerchantV3Deserializer())
+                    .registerTypeAdapter(Disclosure::class.java,
+                            DisclosureDeserializer())
                     .registerTypeAdapter(Action::class.java,
                             ActionDeserializer())
                     .registerTypeAdapter(PriceAttribute::class.java,
@@ -311,6 +314,10 @@ internal class AogRequest internal constructor(
                             PurchaseErrorDeserializer())
                     .registerTypeAdapter(TicketEvent::class.java,
                             TicketEventDeserializer())
+                    .registerTypeAdapter(DisclosureText::class.java,
+                            DisclosureTextDeserializer())
+                    .registerTypeAdapter(DisclosurePresentationOptions::class.java,
+                            DisclosurePresentationOptionsDeserializer())
                     .registerTypeAdapter(ActionActionMetadata::class.java,
                             ActionActionMetadataDeserializer())
                     .registerTypeAdapter(OpenUrlAction::class.java,
@@ -327,8 +334,12 @@ internal class AogRequest internal constructor(
                             TimeV3Deserializer())
                     .registerTypeAdapter(PickupInfo::class.java,
                             PickupInfoDeserializer())
+                    .registerTypeAdapter(CheckInInfo::class.java,
+                            CheckInInfoDeserializer())
                     .registerTypeAdapter(EventCharacter::class.java,
                             EventCharacterDeserializer())
+                    .registerTypeAdapter(DisclosureTextTextLink::class.java,
+                            DisclosureTextTextLinkDeserializer())
                     .registerTypeAdapter(AndroidApp::class.java,
                             AndroidAppDeserializer())
                     .registerTypeAdapter(ProductDetails::class.java,

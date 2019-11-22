@@ -728,6 +728,15 @@ internal class OrderV3Deserializer : JsonDeserializer<OrderV3> {
             order.transactionMerchant = context?.deserialize(jsonObject.get("transactionMerchant"),
                     MerchantV3::class.java)
         }
+
+        val disclosures = jsonObject.get("disclosures")?.asJsonArray
+        if (disclosures != null) {
+            val list = ArrayList<Disclosure>()
+            for (disclosure in disclosures) {
+                list.add(context!!.deserialize(disclosure, Disclosure::class.java))
+            }
+            order.disclosures = list
+        }
         val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
         if (followUpActions != null) {
             val list = ArrayList<Action>()
@@ -956,6 +965,26 @@ internal class MerchantV3Deserializer : JsonDeserializer<MerchantV3> {
     }
 }
 
+internal class DisclosureDeserializer : JsonDeserializer<Disclosure> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): Disclosure {
+        val jsonObject = json!!.asJsonObject
+        val disclosure = Disclosure()
+        if (jsonObject.get("disclosureText") != null) {
+            disclosure.disclosureText = context?.deserialize(jsonObject.get("disclosureText"),
+                    DisclosureText::class.java)
+        }
+        if (jsonObject.get("presentationOptions") != null) {
+            disclosure.presentationOptions = context?.deserialize(jsonObject.get("presentationOptions"),
+                    DisclosurePresentationOptions::class.java)
+        }
+        disclosure.title = jsonObject.get("title")?.asString
+        return disclosure
+    }
+}
+
 internal class ActionDeserializer : JsonDeserializer<Action> {
     override fun deserialize(
             json: JsonElement?,
@@ -1057,6 +1086,14 @@ internal class LineItemV3Deserializer : JsonDeserializer<LineItemV3> {
             lineItemV3.reservation = context?.deserialize(jsonObject.get("reservation"),
                     ReservationItemExtension::class.java)
         }
+        val disclosures = jsonObject.get("disclosures")?.asJsonArray
+        if (disclosures != null) {
+            val list = ArrayList<Disclosure>()
+            for (disclosure in disclosures) {
+                list.add(context!!.deserialize(disclosure, Disclosure::class.java))
+            }
+            lineItemV3.disclosures = list
+        }
         val followUpActions = jsonObject.get("followUpActions")?.asJsonArray
         if (followUpActions != null) {
             val list = ArrayList<Action>()
@@ -1091,7 +1128,6 @@ internal class LineItemV3Deserializer : JsonDeserializer<LineItemV3> {
             }
             lineItemV3.recipients = list
         }
-
         val vertical = jsonObject.get("vertical")?.asJsonObject
         if (vertical != null) {
             val map = mutableMapOf<String, Any>()
@@ -1275,6 +1311,38 @@ internal class TicketEventDeserializer : JsonDeserializer<TicketEvent> {
         ticketEvent.url = jsonObject.get("url")?.asString
 
         return ticketEvent
+    }
+}
+
+internal class DisclosureTextDeserializer : JsonDeserializer<DisclosureText> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): DisclosureText {
+        val jsonObject = json!!.asJsonObject
+        val disclosureText = DisclosureText()
+        val textLinks = jsonObject.get("textLinks")?.asJsonArray
+        if (textLinks != null) {
+            val list = ArrayList<DisclosureTextTextLink>()
+            for (textLink in textLinks) {
+                list.add(context!!.deserialize(textLink, DisclosureTextTextLink::class.java))
+            }
+            disclosureText.textLinks = list
+        }
+        disclosureText.template = jsonObject.get("template")?.asString
+        return disclosureText
+    }
+}
+internal class DisclosurePresentationOptionsDeserializer : JsonDeserializer<DisclosurePresentationOptions> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): DisclosurePresentationOptions {
+        val jsonObject = json!!.asJsonObject
+        val disclosurePresentationOptions = DisclosurePresentationOptions()
+        disclosurePresentationOptions.initiallyExpanded = jsonObject.get("initiallyExpanded")?.asBoolean
+        disclosurePresentationOptions.presentationRequirement = jsonObject.get("presentationRequirement")?.asString
+        return disclosurePresentationOptions
     }
 }
 
@@ -1484,6 +1552,15 @@ internal class PickupInfoDeserializer : JsonDeserializer<PickupInfo> {
         val jsonObject = json!!.asJsonObject
         val pickupInfo = PickupInfo()
 
+        val checkInInfo = jsonObject.get("checkInInfo")?.asJsonArray
+        if (checkInInfo != null) {
+            val list = ArrayList<CheckInInfo>()
+            for (info in checkInInfo) {
+                list.add(context!!.deserialize(info, CheckInInfo::class.java))
+            }
+            pickupInfo.checkInInfo = list
+        }
+
         if (jsonObject.get("curbsideInfo") != null) {
             pickupInfo.curbsideInfo = context?.deserialize(jsonObject.get("curbsideInfo"),
                     PickupInfoCurbsideInfo::class.java)
@@ -1492,6 +1569,20 @@ internal class PickupInfoDeserializer : JsonDeserializer<PickupInfo> {
         pickupInfo.pickupType = jsonObject.get("pickupType")?.asString
 
         return pickupInfo
+    }
+}
+
+internal class CheckInInfoDeserializer : JsonDeserializer<CheckInInfo> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): CheckInInfo {
+        val jsonObject = json!!.asJsonObject
+        val checkInInfo = CheckInInfo()
+
+        checkInInfo.checkInType = jsonObject.get("checkInType")?.asString
+
+        return checkInInfo
     }
 }
 
@@ -1512,6 +1603,19 @@ internal class EventCharacterDeserializer : JsonDeserializer<EventCharacter> {
         eventCharacter.type = jsonObject.get("type")?.asString
 
         return eventCharacter
+    }
+}
+
+internal class DisclosureTextTextLinkDeserializer : JsonDeserializer<DisclosureTextTextLink> {
+    override fun deserialize(
+            json: JsonElement?,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?): DisclosureTextTextLink {
+        val jsonObject = json!!.asJsonObject
+        val disclosureTextTextLink = DisclosureTextTextLink()
+        disclosureTextTextLink.displayText = jsonObject.get("displayText")?.asString
+        disclosureTextTextLink.url = jsonObject.get("url")?.asString
+        return disclosureTextTextLink
     }
 }
 
