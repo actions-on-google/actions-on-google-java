@@ -18,6 +18,7 @@ package com.google.actions.api
 
 import com.google.actions.api.response.ResponseBuilder
 import org.slf4j.LoggerFactory
+import java.io.InputStream
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -40,6 +41,20 @@ abstract class DefaultApp : App {
      *   headers.
      */
     abstract fun createRequest(inputJson: String, headers: Map<*, *>?):
+            ActionRequest
+
+    /**
+     * Creates an ActionRequest from the specified input stream and metadata.
+     *
+     * This is semantically equivalent to reading the stream as a String using
+     * UTF-8 encoding and then calling `createRequest` with the resulting
+     * string.
+     *
+     * @param inputStream The input stream. Must be closed by the caller
+     * @param headers Map containing metadata, usually from the HTTP request
+     *   headers.
+     */
+    abstract fun createRequest(inputStream: InputStream, headers: Map<*, *>?):
             ActionRequest
 
     /**

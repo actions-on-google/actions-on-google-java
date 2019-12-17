@@ -22,6 +22,8 @@ import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.OutputStream
+import java.io.OutputStreamWriter
 
 /**
  * A representation of the JSON payload that should be sent during a smart home request.
@@ -29,6 +31,12 @@ import org.json.JSONObject
  * @see <a href="https://developers.google.com/actions/smarthome/develop/process-intents">Public documentation</a>
  */
 open class SmartHomeResponse {
+    open fun writeTo(outputStream: OutputStream) {
+        val writer = OutputStreamWriter(outputStream, Charsets.UTF_8)
+        build().write(writer)
+        writer.flush()
+    }
+
     open fun build(): JSONObject {
         return JSONObject() // Return empty object
     }

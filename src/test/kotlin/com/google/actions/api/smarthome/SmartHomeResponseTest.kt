@@ -20,6 +20,7 @@ import com.google.home.graph.v1.DeviceProto
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -35,8 +36,8 @@ class SmartHomeResponseTest {
 
     @Test
     fun testResponseRoute() {
-        val request = fromFile("smarthome_sync_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -56,11 +57,20 @@ class SmartHomeResponseTest {
             }
         }
 
-        app.handleRequest(request, null) // This should call onSync, or it will fail
+        app.handleRequest(requestJson, null).get() // This should call onSync, or it will fail
+        app.handleRequest(app.createRequest(requestJson), null).get() // This should call onSync, or it will fail
+
+        val erroneousRequestJson = fromFile("smarthome_query_request.json")
+        try {
+            app.handleRequest(erroneousRequestJson, null)
+            // This should fail
+            Assert.fail("The expected request is not implemented")
+        } catch (e: kotlin.NotImplementedError) {
+            // Caught the exception
+        }
 
         try {
-            val erroneousRequest = fromFile("smarthome_query_request.json")
-            app.handleRequest(erroneousRequest, null)
+            app.handleRequest(app.createRequest(erroneousRequestJson), null)
             // This should fail
             Assert.fail("The expected request is not implemented")
         } catch (e: kotlin.NotImplementedError) {
@@ -70,8 +80,8 @@ class SmartHomeResponseTest {
 
     @Test
     fun testSyncResponse() {
-        val request = fromFile("smarthome_sync_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -173,17 +183,23 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onSync
         val expectedJson = fromFile("smarthome_sync_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val response = app.handleRequest(app.createRequest(requestJson), null).get()
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
     }
 
     @Test
     fun testLocalSyncResponse() {
-        val request = fromFile("smarthome_sync_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -234,17 +250,24 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onSync
         val expectedJson = fromFile("smarthome_sync_response_local.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val request = app.createRequest(requestJson)
+        val response = app.handleRequest(request, null).get() // This should call onSync
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
     }
 
     @Test
     fun testSyncResponseWithTraitList() {
-        val request = fromFile("smarthome_sync_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_sync_request.json")
+        Assert.assertNotNull(requestJson)
         val traitListOutlet = mutableListOf("action.devices.traits.OnOff")
         val traitListLight = mutableListOf(
                 "action.devices.traits.OnOff",
@@ -350,11 +373,18 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onSync
         val expectedJson = fromFile("smarthome_sync_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val request = app.createRequest(requestJson)
+        val response = app.handleRequest(request, null).get() // This should call onSync
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
     }
     @Test
     fun testSyncResponseCustomData() {
@@ -407,8 +437,8 @@ class SmartHomeResponseTest {
 
     @Test
     fun testQueryRoute() {
-        val request = fromFile("smarthome_query_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_query_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -428,13 +458,15 @@ class SmartHomeResponseTest {
             }
         }
 
-        app.handleRequest(request, null) // This should call onQuery, or it will fail
+        app.handleRequest(requestJson, null).get() // This should call onQuery, or it will fail
+        val request = app.createRequest(requestJson)
+        app.handleRequest(request, null).get() // This should call onQuery, or it will fail
     }
 
     @Test
     fun testQueryResponse() {
-        val request = fromFile("smarthome_query_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_query_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -473,17 +505,25 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onQuery
         val expectedJson = fromFile("smarthome_query_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val request = app.createRequest(requestJson)
+        val response = app.handleRequest(request, null).get() // This should call onQuery
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
+
     }
 
     @Test
     fun testExecuteRoute() {
-        val request = fromFile("smarthome_execute_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_execute_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -503,13 +543,15 @@ class SmartHomeResponseTest {
             }
         }
 
-        app.handleRequest(request, null) // This should call onExecute, or it will fail
+        app.handleRequest(requestJson, null).get() // This should call onExecute, or it will fail
+        val request = app.createRequest(requestJson)
+        app.handleRequest(request, null).get()
     }
 
     @Test
     fun testExecuteResponse() {
-        val request = fromFile("smarthome_execute_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_execute_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -551,17 +593,24 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onExecute
         val expectedJson = fromFile("smarthome_execute_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val request = app.createRequest(requestJson)
+        val response = app.handleRequest(request, null).get() // This should call onExecute
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
     }
 
     @Test
     fun testExecute2FAResponse() {
-        val request = fromFile("smarthome_execute_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_execute_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -606,17 +655,24 @@ class SmartHomeResponseTest {
             }
         }
 
-        val jsonString = app.handleRequest(request, null).get() // This should call onSync
+        val jsonString = app.handleRequest(requestJson, null).get() // This should call onExecute
         val expectedJson = fromFile("smarthome_execute_2fa_response.json")
                 .replace(Regex("\n\\s*"), "") // Remove newlines
                 .replace(Regex(":\\s"), ":") // Remove space after colon
         Assert.assertEquals(expectedJson, jsonString)
+
+        val request = app.createRequest(requestJson)
+        val response = app.handleRequest(request, null).get() // This should call onExecute
+        Assert.assertEquals(expectedJson, ByteArrayOutputStream().use {
+            response.writeTo(it)
+            it.toString("UTF-8")
+        })
     }
 
     @Test
     fun testDisconnectRoute() {
-        val request = fromFile("smarthome_disconnect_request.json")
-        Assert.assertNotNull(request)
+        val requestJson = fromFile("smarthome_disconnect_request.json")
+        Assert.assertNotNull(requestJson)
 
         val app = object : SmartHomeApp() {
             override fun onSync(request: SyncRequest, headers: Map<*, *>?): SyncResponse {
@@ -634,6 +690,8 @@ class SmartHomeResponseTest {
             override fun onDisconnect(request: DisconnectRequest, headers: Map<*, *>?): Unit {}
         }
 
-        app.handleRequest(request, null) // This should call onDisconnect, or it will fail
+        app.handleRequest(requestJson, null).get() // This should call onDisconnect, or it will fail
+        val request = app.createRequest(requestJson)
+        app.handleRequest(request, null).get() // This should call onDisconnect, or it will fail
     }
 }
