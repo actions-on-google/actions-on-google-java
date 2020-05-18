@@ -24,6 +24,7 @@ import io.grpc.ManagedChannelBuilder
 import io.grpc.auth.MoreCallCredentials
 import java.io.FileInputStream
 import java.util.concurrent.CompletableFuture
+import org.slf4j.LoggerFactory
 
 abstract class SmartHomeApp : App {
     var credentials: GoogleCredentials? = null
@@ -37,6 +38,14 @@ abstract class SmartHomeApp : App {
     constructor (fileName: String) {
         val stream = FileInputStream("key.json")
         this.credentials = GoogleCredentials.fromStream(stream)
+    }
+
+    private companion object {
+        val LOG = LoggerFactory.getLogger(SmartHomeApp::class.java.name)
+    }
+
+    private fun homegraphWrapperDeprecationNotice(method: String): String {
+        return "SmartHomeApp.$method homegraph wrapper method is deprecated. Use HomeGraph API Client Library for Java: https://github.com/googleapis/google-api-java-client-services/tree/master/clients/google-api-services-homegraph/v1"
     }
 
     /**
@@ -93,7 +102,9 @@ abstract class SmartHomeApp : App {
      * @param agentUserId The user id for the given user on your service
      * @return A response to the API call
      */
+    @Deprecated(message = "Use HomeGraph API Client Library for Java: https://github.com/googleapis/google-api-java-client-services/tree/master/clients/google-api-services-homegraph/v1")
     fun requestSync(agentUserId: String): HomeGraphApiServiceProto.RequestSyncDevicesResponse {
+        LOG.warn(homegraphWrapperDeprecationNotice("::requestSync.name"));
         if (this.credentials == null) {
             throw IllegalArgumentException("You must pass credentials in the app constructor")
         }
@@ -118,8 +129,10 @@ abstract class SmartHomeApp : App {
      * @param request A payload containing a series of devices and their connected states
      * @return A response to the API call
      */
+    @Deprecated(message = "Use HomeGraph API Client Library for Java: https://github.com/googleapis/google-api-java-client-services/tree/master/clients/google-api-services-homegraph/v1")
     fun reportState(request: HomeGraphApiServiceProto.ReportStateAndNotificationRequest):
             HomeGraphApiServiceProto.ReportStateAndNotificationResponse {
+        LOG.warn(homegraphWrapperDeprecationNotice(::reportState.name));
         if (this.credentials == null) {
             throw IllegalArgumentException("You must pass credentials in the app constructor")
         }
