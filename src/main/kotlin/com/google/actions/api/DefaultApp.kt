@@ -17,21 +17,13 @@
 package com.google.actions.api
 
 import com.google.actions.api.response.ResponseBuilder
-import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 
 /**
  * Default implementation of an Actions App. This class provides most of the
  * functionality of an App such as request parsing and routing.
  */
-abstract class DefaultApp : App {
-
-    val errorMsg_badReturnValue = "The return value of an intent handler" +
-            " must be ActionResponse or CompletableFuture<ActionResponse>"
-
-    private companion object {
-        val LOG = LoggerFactory.getLogger(DefaultApp::class.java.name)
-    }
+abstract class DefaultApp() : App {
 
     /**
      * Creates an ActionRequest for the specified JSON and metadata.
@@ -46,6 +38,11 @@ abstract class DefaultApp : App {
      * @return A ResponseBuilder for this App.
      */
     abstract fun getResponseBuilder(request: ActionRequest): ResponseBuilder
+
+    /**
+     * @return A Router for this App.
+     */
+    abstract fun router(): Router
 
     override fun handleRequest(
             inputJson: String?, headers: Map<*, *>?): CompletableFuture<String> {
@@ -69,28 +66,7 @@ abstract class DefaultApp : App {
 
     @Throws(Exception::class)
     fun routeRequest(request: ActionRequest): CompletableFuture<ActionResponse> {
-        val intent = request.intent
-        val forIntentType = ForIntent::class.java
-        for (method in javaClass.declaredMethods) {
-            if (method.isAnnotationPresent(forIntentType)) {
-                val annotation = method.getAnnotation(forIntentType)
-                val forIntent = annotation as ForIntent
-                if (forIntent.value == intent) {
-                    val result = method.invoke(this, request)
-                    return if (result is ActionResponse) {
-                        CompletableFuture.completedFuture(result)
-                    } else if (result is CompletableFuture<*>) {
-                        result as CompletableFuture<ActionResponse>
-                    } else {
-                        LOG.warn(errorMsg_badReturnValue)
-                        throw Exception(errorMsg_badReturnValue)
-                    }
-                }
-            }
-        }
-        // Unable to find a method with the annotation matching the intent.
-        LOG.warn("Intent handler not found: {}", intent)
-        throw Exception("Intent handler not found - $intent")
+        return router().route(request)
     }
 
     fun handleError(exception: Exception): CompletableFuture<String> {

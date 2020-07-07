@@ -58,4 +58,6 @@ open class ActionsSdkApp : DefaultApp() {
                 userStorage = request.userStorage)
         return responseBuilder
     }
+
+    override fun router() = AnnotationRouter(this)
 }

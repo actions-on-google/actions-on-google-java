@@ -17,7 +17,6 @@
 package com.google.actions.api
 
 import com.google.actions.api.impl.DialogflowRequest
-import com.google.actions.api.response.ResponseBuilder
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.junit.Assert.assertEquals
@@ -152,7 +151,8 @@ class DialogflowRequestTest {
         val inputJson = Files.readAllLines(
                 Paths.get("src", "test", "resources",
                         "dialogflow_welcome.json")).joinToString("\n")
-        app.handleRequest(inputJson, null)
+        val result = app.handleRequest(inputJson, null).get()
+        assertNotNull(result)
     }
 
     internal inner class MyDialogflowApp : DialogflowApp() {
