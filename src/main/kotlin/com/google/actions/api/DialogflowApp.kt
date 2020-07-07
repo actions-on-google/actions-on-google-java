@@ -56,4 +56,6 @@ open class DialogflowApp : DefaultApp() {
                 userStorage = request.userStorage)
         return responseBuilder
     }
+
+    override fun router(): Router = AnnotationRouter(this)
 }
