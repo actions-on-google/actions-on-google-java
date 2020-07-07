@@ -67,9 +67,9 @@ repositories {
 // Add a step to generate the protos during a build
 compileKotlin.doFirst {
     println "Generated source files from protobufs"
-    extractIncludeProto.execute()
-    extractProto.execute()
-    generateProto.execute()
+    extractIncludeProto.extract()
+    extractProto.extract()
+    generateProto.compile()
 }
 
 // Add a step to remove the generated protobufs during a clean
