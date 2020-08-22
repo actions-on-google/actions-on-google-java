@@ -24,6 +24,7 @@ import io.grpc.ManagedChannelBuilder
 import io.grpc.auth.MoreCallCredentials
 import java.io.FileInputStream
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 abstract class SmartHomeApp : App {
     var credentials: GoogleCredentials? = null
@@ -107,7 +108,6 @@ abstract class SmartHomeApp : App {
                 .build()
 
         return blockingStub.requestSyncDevices(request)
-
     }
 
     /**
@@ -129,8 +129,16 @@ abstract class SmartHomeApp : App {
                 // See https://grpc.io/docs/guides/auth.html#authenticate-with-google-3.
                 .withCallCredentials(MoreCallCredentials.from(this.credentials))
 
-        return blockingStub.reportStateAndNotification(request)
+        val response = blockingStub.reportStateAndNotification(request)
 
+        channel.shutdown()
+        try {
+            channel.awaitTermination(500, TimeUnit.MILLISECONDS)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        return response
     }
 
     override fun handleRequest(inputJson: String?, headers: Map<*, *>?): CompletableFuture<String> {
