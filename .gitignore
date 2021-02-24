@@ -1,9 +1,6 @@
 .gradle/
 .idea/
 build/
-gradle/
-gradlew
-gradlew.bat
 out/
 .DS_Store
 src/generated # Generated source files
