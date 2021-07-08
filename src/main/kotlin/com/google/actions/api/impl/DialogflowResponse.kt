@@ -25,6 +25,7 @@ import com.google.api.services.actions_fulfillment.v2.model.AppResponse
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
 import com.google.api.services.actions_fulfillment.v2.model.RichResponse
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
+import java.io.OutputStream
 
 internal class DialogflowResponse internal constructor(
         responseBuilder: ResponseBuilder) : ActionResponse {
@@ -58,6 +59,10 @@ internal class DialogflowResponse internal constructor(
 
     override val helperIntent: ExpectedIntent?
         get() = googlePayload?.helperIntent
+
+    override fun writeTo(outputStream: OutputStream) {
+        ResponseSerializer(sessionId).writeJsonV2To(this, outputStream)
+    }
 
     override fun toJson(): String {
         return ResponseSerializer(sessionId).toJsonV2(this)

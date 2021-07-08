@@ -25,6 +25,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import org.slf4j.LoggerFactory
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.util.*
 
 internal class AogRequest internal constructor(
@@ -201,6 +203,145 @@ internal class AogRequest internal constructor(
     companion object {
         private val LOG = LoggerFactory.getLogger(AogRequest::class.java.name)
 
+        private val gson = GsonBuilder()
+            .registerTypeAdapter(AppRequest::class.java,
+                AppRequestDeserializer())
+            .registerTypeAdapter(User::class.java,
+                UserDeserializer())
+            .registerTypeAdapter(Input::class.java,
+                InputDeserializer())
+            .registerTypeAdapter(Status::class.java,
+                StatusDeserializer())
+            .registerTypeAdapter(Surface::class.java,
+                SurfaceDeserializer())
+            .registerTypeAdapter(Device::class.java,
+                DeviceDeserializer())
+            .registerTypeAdapter(Location::class.java,
+                LocationDeserializer())
+            .registerTypeAdapter(Argument::class.java,
+                ArgumentDeserializer())
+            .registerTypeAdapter(RawInput::class.java,
+                RawInputDeserializer())
+            .registerTypeAdapter(PackageEntitlement::class.java,
+                PackageEntitlementDeserializer())
+            .registerTypeAdapter(Entitlement::class.java,
+                EntitlementDeserializer())
+            .registerTypeAdapter(SignedData::class.java,
+                SignedDataDeserializer())
+            .registerTypeAdapter(DateTime::class.java,
+                DateTimeValueDeserializer())
+            .registerTypeAdapter(Order::class.java,
+                OrderDeserializer())
+            .registerTypeAdapter(CustomerInfo::class.java,
+                CustomerInfoDeserializer())
+            .registerTypeAdapter(ProposedOrder::class.java,
+                ProposedOrderDeserializer())
+            .registerTypeAdapter(Cart::class.java,
+                CartDeserializer())
+            .registerTypeAdapter(LineItem::class.java,
+                LineItemDeserializer())
+            .registerTypeAdapter(LineItemSubLine::class.java,
+                LineItemSubLineDeserializer())
+            .registerTypeAdapter(Promotion::class.java,
+                PromotionDeserializer())
+            .registerTypeAdapter(Merchant::class.java,
+                MerchantDeserializer())
+            .registerTypeAdapter(Image::class.java,
+                ImageDeserializer())
+            .registerTypeAdapter(Price::class.java,
+                PriceDeserializer())
+            .registerTypeAdapter(Money::class.java,
+                MoneyDeserializer())
+            .registerTypeAdapter(PaymentInfo::class.java,
+                PaymentInfoDeserializer())
+            .registerTypeAdapter(PaymentInfoGoogleProvidedPaymentInstrument::class.java,
+                PaymentInfoGoogleProvidedPaymentInstrumentDeserializer())
+            .registerTypeAdapter(TransactionRequirementsCheckResult::class.java,
+                TransactionRequirementsCheckResultDeserializer())
+            .registerTypeAdapter(OrderV3::class.java,
+                OrderV3Deserializer())
+            .registerTypeAdapter(UserInfo::class.java,
+                UserInfoDeserializer())
+            .registerTypeAdapter(OrderContents::class.java,
+                OrderContentsDeserializer())
+            .registerTypeAdapter(PaymentData::class.java,
+                PaymentDataDeserializer())
+            .registerTypeAdapter(PurchaseOrderExtension::class.java,
+                PurchaseOrderExtensionDeserializer())
+            .registerTypeAdapter(TicketOrderExtension::class.java,
+                TicketOrderExtensionDeserializer())
+            .registerTypeAdapter(MerchantV3::class.java,
+                MerchantV3Deserializer())
+            .registerTypeAdapter(Disclosure::class.java,
+                DisclosureDeserializer())
+            .registerTypeAdapter(Action::class.java,
+                ActionDeserializer())
+            .registerTypeAdapter(PriceAttribute::class.java,
+                PriceAttributeDeserializer())
+            .registerTypeAdapter(PromotionV3::class.java,
+                PromotionV3Deserializer())
+            .registerTypeAdapter(PhoneNumber::class.java,
+                PhoneNumberDeserializer())
+            .registerTypeAdapter(LineItemV3::class.java,
+                LineItemV3Deserializer())
+            .registerTypeAdapter(PaymentInfoV3::class.java,
+                PaymentInfoV3Deserializer())
+            .registerTypeAdapter(PaymentResult::class.java,
+                PaymentResultDeserializer())
+            .registerTypeAdapter(PurchaseFulfillmentInfo::class.java,
+                PurchaseFulfillmentInfoDeserializer())
+            .registerTypeAdapter(PurchaseReturnsInfo::class.java,
+                PurchaseReturnsInfoDeserializer())
+            .registerTypeAdapter(PurchaseError::class.java,
+                PurchaseErrorDeserializer())
+            .registerTypeAdapter(TicketEvent::class.java,
+                TicketEventDeserializer())
+            .registerTypeAdapter(DisclosureText::class.java,
+                DisclosureTextDeserializer())
+            .registerTypeAdapter(DisclosurePresentationOptions::class.java,
+                DisclosurePresentationOptionsDeserializer())
+            .registerTypeAdapter(ActionActionMetadata::class.java,
+                ActionActionMetadataDeserializer())
+            .registerTypeAdapter(OpenUrlAction::class.java,
+                OpenUrlActionDeserializer())
+            .registerTypeAdapter(MoneyV3::class.java,
+                MoneyV3Deserializer())
+            .registerTypeAdapter(PurchaseItemExtension::class.java,
+                PurchaseItemExtensionDeserializer())
+            .registerTypeAdapter(ReservationItemExtension::class.java,
+                ReservationItemExtensionDeserializer())
+            .registerTypeAdapter(PaymentMethodDisplayInfo::class.java,
+                PaymentMethodDisplayInfoDeserializer())
+            .registerTypeAdapter(TimeV3::class.java,
+                TimeV3Deserializer())
+            .registerTypeAdapter(PickupInfo::class.java,
+                PickupInfoDeserializer())
+            .registerTypeAdapter(CheckInInfo::class.java,
+                CheckInInfoDeserializer())
+            .registerTypeAdapter(EventCharacter::class.java,
+                EventCharacterDeserializer())
+            .registerTypeAdapter(DisclosureTextTextLink::class.java,
+                DisclosureTextTextLinkDeserializer())
+            .registerTypeAdapter(AndroidApp::class.java,
+                AndroidAppDeserializer())
+            .registerTypeAdapter(ProductDetails::class.java,
+                ProductDetailsDeserializer())
+            .registerTypeAdapter(MerchantUnitMeasure::class.java,
+                MerchantUnitMeasureDeserializer())
+            .registerTypeAdapter(PurchaseItemExtensionItemOption::class.java,
+                PurchaseItemExtensionItemOptionDeserializer())
+            .registerTypeAdapter(StaffFacilitator::class.java,
+                StaffFacilitatorDeserializer())
+            .registerTypeAdapter(PickupInfoCurbsideInfo::class.java,
+                PickupInfoCurbsideInfoDeserializer())
+            .registerTypeAdapter(AndroidAppVersionFilter::class.java,
+                AndroidAppVersionFilterDeserializer())
+            .registerTypeAdapter(Vehicle::class.java,
+                VehicleDeserializer())
+            .registerTypeAdapter(genericType<Map<String, Any>>(),
+                ExtensionDeserializer())
+            .create()
+
         fun create(appRequest: AppRequest): AogRequest {
             return AogRequest(appRequest)
         }
@@ -210,8 +351,7 @@ internal class AogRequest internal constructor(
                 headers: Map<*, *>? = HashMap<String, Any>(),
                 partOfDialogflowRequest: Boolean = false):
                 AogRequest {
-            val gson = Gson()
-            return create(gson.fromJson(body, JsonObject::class.java), headers,
+            return create(gson.fromJson<AppRequest>(body, AppRequest::class.java), headers,
                     partOfDialogflowRequest)
         }
 
@@ -220,148 +360,29 @@ internal class AogRequest internal constructor(
                 headers: Map<*, *>? = HashMap<String, Any>(),
                 partOfDialogflowRequest: Boolean = false):
                 AogRequest {
-            val gsonBuilder = GsonBuilder()
-            gsonBuilder
-                    .registerTypeAdapter(AppRequest::class.java,
-                            AppRequestDeserializer())
-                    .registerTypeAdapter(User::class.java,
-                            UserDeserializer())
-                    .registerTypeAdapter(Input::class.java,
-                            InputDeserializer())
-                    .registerTypeAdapter(Status::class.java,
-                            StatusDeserializer())
-                    .registerTypeAdapter(Surface::class.java,
-                            SurfaceDeserializer())
-                    .registerTypeAdapter(Device::class.java,
-                            DeviceDeserializer())
-                    .registerTypeAdapter(Location::class.java,
-                            LocationDeserializer())
-                    .registerTypeAdapter(Argument::class.java,
-                            ArgumentDeserializer())
-                    .registerTypeAdapter(RawInput::class.java,
-                            RawInputDeserializer())
-                    .registerTypeAdapter(PackageEntitlement::class.java,
-                            PackageEntitlementDeserializer())
-                    .registerTypeAdapter(Entitlement::class.java,
-                            EntitlementDeserializer())
-                    .registerTypeAdapter(SignedData::class.java,
-                            SignedDataDeserializer())
-                    .registerTypeAdapter(DateTime::class.java,
-                            DateTimeValueDeserializer())
-                    .registerTypeAdapter(Order::class.java,
-                            OrderDeserializer())
-                    .registerTypeAdapter(CustomerInfo::class.java,
-                            CustomerInfoDeserializer())
-                    .registerTypeAdapter(ProposedOrder::class.java,
-                            ProposedOrderDeserializer())
-                    .registerTypeAdapter(Cart::class.java,
-                            CartDeserializer())
-                    .registerTypeAdapter(LineItem::class.java,
-                            LineItemDeserializer())
-                    .registerTypeAdapter(LineItemSubLine::class.java,
-                            LineItemSubLineDeserializer())
-                    .registerTypeAdapter(Promotion::class.java,
-                            PromotionDeserializer())
-                    .registerTypeAdapter(Merchant::class.java,
-                            MerchantDeserializer())
-                    .registerTypeAdapter(Image::class.java,
-                            ImageDeserializer())
-                    .registerTypeAdapter(Price::class.java,
-                            PriceDeserializer())
-                    .registerTypeAdapter(Money::class.java,
-                            MoneyDeserializer())
-                    .registerTypeAdapter(PaymentInfo::class.java,
-                            PaymentInfoDeserializer())
-                    .registerTypeAdapter(PaymentInfoGoogleProvidedPaymentInstrument::class.java,
-                            PaymentInfoGoogleProvidedPaymentInstrumentDeserializer())
-                    .registerTypeAdapter(TransactionRequirementsCheckResult::class.java,
-                            TransactionRequirementsCheckResultDeserializer())
-                    .registerTypeAdapter(OrderV3::class.java,
-                            OrderV3Deserializer())
-                    .registerTypeAdapter(UserInfo::class.java,
-                            UserInfoDeserializer())
-                    .registerTypeAdapter(OrderContents::class.java,
-                            OrderContentsDeserializer())
-                    .registerTypeAdapter(PaymentData::class.java,
-                            PaymentDataDeserializer())
-                    .registerTypeAdapter(PurchaseOrderExtension::class.java,
-                            PurchaseOrderExtensionDeserializer())
-                    .registerTypeAdapter(TicketOrderExtension::class.java,
-                            TicketOrderExtensionDeserializer())
-                    .registerTypeAdapter(MerchantV3::class.java,
-                            MerchantV3Deserializer())
-                    .registerTypeAdapter(Disclosure::class.java,
-                            DisclosureDeserializer())
-                    .registerTypeAdapter(Action::class.java,
-                            ActionDeserializer())
-                    .registerTypeAdapter(PriceAttribute::class.java,
-                            PriceAttributeDeserializer())
-                    .registerTypeAdapter(PromotionV3::class.java,
-                            PromotionV3Deserializer())
-                    .registerTypeAdapter(PhoneNumber::class.java,
-                            PhoneNumberDeserializer())
-                    .registerTypeAdapter(LineItemV3::class.java,
-                            LineItemV3Deserializer())
-                    .registerTypeAdapter(PaymentInfoV3::class.java,
-                            PaymentInfoV3Deserializer())
-                    .registerTypeAdapter(PaymentResult::class.java,
-                            PaymentResultDeserializer())
-                    .registerTypeAdapter(PurchaseFulfillmentInfo::class.java,
-                            PurchaseFulfillmentInfoDeserializer())
-                    .registerTypeAdapter(PurchaseReturnsInfo::class.java,
-                            PurchaseReturnsInfoDeserializer())
-                    .registerTypeAdapter(PurchaseError::class.java,
-                            PurchaseErrorDeserializer())
-                    .registerTypeAdapter(TicketEvent::class.java,
-                            TicketEventDeserializer())
-                    .registerTypeAdapter(DisclosureText::class.java,
-                            DisclosureTextDeserializer())
-                    .registerTypeAdapter(DisclosurePresentationOptions::class.java,
-                            DisclosurePresentationOptionsDeserializer())
-                    .registerTypeAdapter(ActionActionMetadata::class.java,
-                            ActionActionMetadataDeserializer())
-                    .registerTypeAdapter(OpenUrlAction::class.java,
-                            OpenUrlActionDeserializer())
-                    .registerTypeAdapter(MoneyV3::class.java,
-                            MoneyV3Deserializer())
-                    .registerTypeAdapter(PurchaseItemExtension::class.java,
-                            PurchaseItemExtensionDeserializer())
-                    .registerTypeAdapter(ReservationItemExtension::class.java,
-                            ReservationItemExtensionDeserializer())
-                    .registerTypeAdapter(PaymentMethodDisplayInfo::class.java,
-                            PaymentMethodDisplayInfoDeserializer())
-                    .registerTypeAdapter(TimeV3::class.java,
-                            TimeV3Deserializer())
-                    .registerTypeAdapter(PickupInfo::class.java,
-                            PickupInfoDeserializer())
-                    .registerTypeAdapter(CheckInInfo::class.java,
-                            CheckInInfoDeserializer())
-                    .registerTypeAdapter(EventCharacter::class.java,
-                            EventCharacterDeserializer())
-                    .registerTypeAdapter(DisclosureTextTextLink::class.java,
-                            DisclosureTextTextLinkDeserializer())
-                    .registerTypeAdapter(AndroidApp::class.java,
-                            AndroidAppDeserializer())
-                    .registerTypeAdapter(ProductDetails::class.java,
-                            ProductDetailsDeserializer())
-                    .registerTypeAdapter(MerchantUnitMeasure::class.java,
-                            MerchantUnitMeasureDeserializer())
-                    .registerTypeAdapter(PurchaseItemExtensionItemOption::class.java,
-                            PurchaseItemExtensionItemOptionDeserializer())
-                    .registerTypeAdapter(StaffFacilitator::class.java,
-                            StaffFacilitatorDeserializer())
-                    .registerTypeAdapter(PickupInfoCurbsideInfo::class.java,
-                            PickupInfoCurbsideInfoDeserializer())
-                    .registerTypeAdapter(AndroidAppVersionFilter::class.java,
-                            AndroidAppVersionFilterDeserializer())
-                    .registerTypeAdapter(Vehicle::class.java,
-                            VehicleDeserializer())
-                    .registerTypeAdapter(genericType<Map<String, Any>>(),
-                            ExtensionDeserializer())
 
-            val gson = gsonBuilder.create()
             val appRequest = gson.fromJson<AppRequest>(json, AppRequest::class.java)
+            return create(appRequest, headers, partOfDialogflowRequest)
+        }
 
+        fun create(
+            inputStream: InputStream,
+            headers: Map<*, *>? = HashMap<String, Any>(),
+            partOfDialogflowRequest: Boolean = false
+        ): AogRequest {
+
+            val appRequest = gson.fromJson<AppRequest>(
+                InputStreamReader(inputStream, Charsets.UTF_8),
+                AppRequest::class.java
+            )
+            return create(appRequest, headers, partOfDialogflowRequest)
+        }
+
+        fun create(
+            appRequest: AppRequest,
+            headers: Map<*, *>? = HashMap<String, Any>(),
+            partOfDialogflowRequest: Boolean
+        ): AogRequest {
             val aogRequest = create(appRequest)
             val user = aogRequest.appRequest.user
             if (user != null) {
@@ -387,7 +408,6 @@ internal class AogRequest internal constructor(
 
         private fun fromJson(serializedValue: String?): MutableMap<String, Any> {
             if (serializedValue != null && !serializedValue.isEmpty()) {
-                val gson = Gson()
                 try {
                     val map: Map<String, Any> = gson.fromJson(serializedValue,
                             object : TypeToken<Map<String, Any>>() {}.type)

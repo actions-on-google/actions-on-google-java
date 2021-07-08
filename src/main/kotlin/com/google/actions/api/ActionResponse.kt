@@ -20,6 +20,8 @@ import com.google.api.services.actions_fulfillment.v2.model.AppResponse
 import com.google.api.services.actions_fulfillment.v2.model.ExpectedIntent
 import com.google.api.services.actions_fulfillment.v2.model.RichResponse
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
+import java.io.IOException
+import java.io.OutputStream
 
 /**
  * Defines requirements of an object that represents a response from the Actions
@@ -57,6 +59,16 @@ interface ActionResponse {
      * have to design your own.
      */
     val helperIntent: ExpectedIntent?
+
+    /**
+     * Writes the JSON representation of the response to the given output stream.
+     *
+     * This is more efficient than calling [toJson] first and then writing the string.
+     *
+     * @param outputStream The output stream to write to. Must be closed by the caller.
+     */
+    @Throws(IOException::class)
+    fun writeTo(outputStream: OutputStream)
 
     /**
      * Returns the JSON representation of the response.

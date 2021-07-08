@@ -18,6 +18,7 @@ package com.google.actions.api
 
 import com.google.actions.api.impl.DialogflowRequest
 import com.google.actions.api.response.ResponseBuilder
+import java.io.InputStream
 
 /**
  * Implementation of App for Dialogflow based webhook. Developers must extend
@@ -46,6 +47,10 @@ open class DialogflowApp : DefaultApp() {
 
     override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
         return DialogflowRequest.create(inputJson, headers)
+    }
+
+    override fun createRequest(inputStream: InputStream, headers: Map<*, *>?): ActionRequest {
+        return DialogflowRequest.create(inputStream, headers)
     }
 
     override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {

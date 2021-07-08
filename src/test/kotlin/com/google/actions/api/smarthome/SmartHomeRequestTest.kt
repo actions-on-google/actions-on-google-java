@@ -37,10 +37,26 @@ class SmartHomeRequestTest {
         return SmartHomeRequest.create(json.toString())
     }
 
+    @Throws(IOException::class)
+    private fun fromStream(file: String): SmartHomeRequest {
+        val absolutePath = Paths.get("src", "test", "resources", file)
+        return Files.newInputStream(absolutePath).use { SmartHomeRequest.create(it) }
+    }
+
     @Test
     @Throws(Exception::class)
     fun basicSyncJsonIsParsed() {
         val request = fromFile("smarthome_sync_request.json") as SyncRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.SYNC")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun basicSyncStreamIsParsed() {
+        val request = fromStream("smarthome_sync_request.json") as SyncRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)
@@ -65,8 +81,42 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun basicQueryStreamIsParsed() {
+        val request = fromStream("smarthome_query_request.json") as QueryRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.QUERY")
+
+        val payload = (request.inputs[0] as QueryRequest.Inputs).payload
+        Assert.assertEquals(payload.devices.size, 2)
+        Assert.assertEquals(payload.devices[0].id, "123")
+
+        Assert.assertEquals(payload.devices[1].id, "456")
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun customDataQueryJsonIsParsed() {
         val request = fromFile("smarthome_query_customdata_request.json") as QueryRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.QUERY")
+
+        val payload = (request.inputs[0] as QueryRequest.Inputs).payload
+        Assert.assertEquals(payload.devices.size, 2)
+        Assert.assertEquals(payload.devices[0].id, "123")
+        Assert.assertEquals(payload.devices[0].customData!!["fooValue"], 74)
+
+        Assert.assertEquals(payload.devices[1].id, "456")
+        Assert.assertEquals(payload.devices[1].customData!!["fooValue"], 12)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun customDataQueryStreamIsParsed() {
+        val request = fromStream("smarthome_query_customdata_request.json") as QueryRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)
@@ -102,6 +152,25 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun basicExecuteStreamIsParsed() {
+        val request = fromStream("smarthome_execute_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands.size, 1)
+        Assert.assertEquals(payload.commands[0].devices.size, 2)
+        Assert.assertEquals(payload.commands[0].devices[0].id, "123")
+        Assert.assertEquals(payload.commands[0].devices[1].id, "456")
+        Assert.assertEquals(payload.commands[0].execution.size, 1)
+        Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.OnOff")
+        Assert.assertEquals(payload.commands[0].execution[0].params!!["on"], true)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun twoFactorExecuteJsonIsParsed() {
         val request = fromFile("smarthome_execute_2fa_request.json") as ExecuteRequest
         Assert.assertNotNull(request)
@@ -117,8 +186,44 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun twoFactorExecuteStreamIsParsed() {
+        val request = fromStream("smarthome_execute_2fa_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands[0].execution.size, 2)
+        Assert.assertEquals(payload.commands[0].execution[0].challenge!!["pin"], "333222")
+        Assert.assertEquals(payload.commands[0].execution[1].challenge!!["ack"], true)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun customDataExecuteJsonIsParsed() {
         val request = fromFile("smarthome_execute_customdata_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands.size, 1)
+        Assert.assertEquals(payload.commands[0].devices.size, 2)
+        Assert.assertEquals(payload.commands[0].devices[0].id, "123")
+        Assert.assertEquals(payload.commands[0].devices[0].customData!!["fooValue"], 74)
+        Assert.assertEquals(payload.commands[0].devices[1].id, "456")
+        Assert.assertEquals(payload.commands[0].devices[1].customData!!["fooValue"], 36)
+        Assert.assertEquals(payload.commands[0].execution.size, 1)
+        Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.OnOff")
+        Assert.assertEquals(payload.commands[0].execution[0].params!!["on"], true)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun customDataExecuteStreamIsParsed() {
+        val request = fromStream("smarthome_execute_customdata_request.json") as ExecuteRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)
@@ -155,8 +260,35 @@ class SmartHomeRequestTest {
 
     @Test
     @Throws(Exception::class)
+    fun dockExecuteStreamIsParsed() {
+        val request = fromStream("smarthome_execute_dock_request.json") as ExecuteRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.EXECUTE")
+
+        val payload = (request.inputs[0] as ExecuteRequest.Inputs).payload
+        Assert.assertEquals(payload.commands.size, 1)
+        Assert.assertEquals(payload.commands[0].devices.size, 1)
+        Assert.assertEquals(payload.commands[0].devices[0].id, "vacuumJawn")
+        Assert.assertEquals(payload.commands[0].execution.size, 1)
+        Assert.assertEquals(payload.commands[0].execution[0].command, "action.devices.commands.Dock")
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun basicDisconnectJsonIsParsed() {
         val request = fromFile("smarthome_disconnect_request.json") as DisconnectRequest
+        Assert.assertNotNull(request)
+        Assert.assertNotNull(request.requestId)
+        Assert.assertEquals(request.inputs.size, 1)
+        Assert.assertEquals(request.inputs[0].intent, "action.devices.DISCONNECT")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun basicDisconnectStreamIsParsed() {
+        val request = fromStream("smarthome_disconnect_request.json") as DisconnectRequest
         Assert.assertNotNull(request)
         Assert.assertNotNull(request.requestId)
         Assert.assertEquals(request.inputs.size, 1)

@@ -19,6 +19,7 @@ package com.google.actions.api
 import com.google.actions.api.impl.AogRequest
 import com.google.actions.api.response.ResponseBuilder
 import org.slf4j.LoggerFactory
+import java.io.InputStream
 
 /**
  * Implementation of App for ActionsSDK based webhook. Developers must extend
@@ -48,6 +49,11 @@ open class ActionsSdkApp : DefaultApp() {
     override fun createRequest(inputJson: String, headers: Map<*, *>?): ActionRequest {
         LOG.info("ActionsSdkApp.createRequest..")
         return AogRequest.create(inputJson, headers)
+    }
+
+    override fun createRequest(inputStream: InputStream, headers: Map<*, *>?): ActionRequest {
+        LOG.info("ActionsSdkApp.createRequest..")
+        return AogRequest.create(inputStream, headers)
     }
 
     override fun getResponseBuilder(request: ActionRequest): ResponseBuilder {

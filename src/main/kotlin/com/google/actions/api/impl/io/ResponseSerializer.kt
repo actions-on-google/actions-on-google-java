@@ -26,6 +26,10 @@ import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.slf4j.LoggerFactory
+import java.io.OutputStream
+import java.io.OutputStreamWriter
+import java.io.StringWriter
+import java.io.Writer
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -36,6 +40,7 @@ internal class ResponseSerializer(
     private companion object {
         val includeVersionMetadata = false
         val LOG = LoggerFactory.getLogger(ResponseSerializer::class.java.name)
+        val gson = GsonBuilder().create()
 
         fun getLibraryMetadata(): Map<String, String> {
             val metadataProperties = ResourceBundle.getBundle("metadata")
@@ -53,19 +58,27 @@ internal class ResponseSerializer(
         )
     }
 
-    fun toJsonV2(response: ActionResponse): String {
+    fun toJsonV2(response: ActionResponse): String =
+        StringWriter().use { writeJsonV2To(response, it) }.toString()
+
+    fun writeJsonV2To(response: ActionResponse, outputStream: OutputStream) {
+        val writer = OutputStreamWriter(outputStream, Charsets.UTF_8)
+        writeJsonV2To(response, writer)
+        writer.flush()
+    }
+
+    private fun writeJsonV2To(response: ActionResponse, writer: Writer) {
         when (response) {
-            is DialogflowResponse -> return serializeDialogflowResponseV2(
-                    response)
-            is AogResponse -> return serializeAogResponse(response)
+            is DialogflowResponse -> serializeDialogflowResponseV2(response, writer)
+            is AogResponse -> serializeAogResponse(response, writer)
         }
         LOG.warn("Unable to serialize the response.")
         throw Exception("Unable to serialize the response")
     }
 
     private fun serializeDialogflowResponseV2(
-            dialogflowResponse: DialogflowResponse): String {
-        val gson = GsonBuilder().create()
+            dialogflowResponse: DialogflowResponse,
+            writer: Writer) {
         val googlePayload = dialogflowResponse.googlePayload
         val webhookResponse = dialogflowResponse.webhookResponse
         val conversationData = dialogflowResponse.conversationData
@@ -97,7 +110,7 @@ internal class ResponseSerializer(
             metadata["google_library"] = getLibraryMetadata()
             webhookResponseMap["metadata"] = metadata
         }
-        return gson.toJson(webhookResponseMap)
+        gson.toJson(webhookResponseMap, writer)
     }
 
     private fun setContext(
@@ -194,7 +207,7 @@ internal class ResponseSerializer(
             if (userStorage != null) {
                 val dataMap = HashMap<String, Any?>()
                 dataMap["data"] = userStorage
-                this.userStorage = Gson().toJson(dataMap)
+                this.userStorage = gson.toJson(dataMap)
             }
             this.isSsml = false
         }
@@ -228,7 +241,7 @@ internal class ResponseSerializer(
     }
 
     @Throws(Exception::class)
-    private fun serializeAogResponse(aogResponse: AogResponse): String {
+    private fun serializeAogResponse(aogResponse: AogResponse, writer: Writer) {
         aogResponse.prepareAppResponse()
         checkSimpleResponseIsPresent(aogResponse)
         val appResponseMap = aogResponse.appResponse!!.toMutableMap()
@@ -239,7 +252,7 @@ internal class ResponseSerializer(
             appResponseMap["ResponseMetadata"] = map
         }
 
-        return Gson().toJson(appResponseMap)
+        gson.toJson(appResponseMap, writer)
     }
 
     @Throws(Exception::class)
