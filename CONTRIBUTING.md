@@ -30,3 +30,16 @@ accept your pull requests.
    recommended coding standards for this organization.
 1. Ensure that your code has an appropriate set of unit tests which all pass.
 1. Submit a pull request.
+
+## Compiling Locally
+
+1. Use Java 8 for compilation. Otherwise compilation will fail while looking for `javax.annotation.Generated`.
+
+1. Install bundled jars to the local repository:
+
+       mvn install:install-file@install-actions-bindings
+       mvn install:install-file@install-dialogflow-bindings
+
+1. Compile the project:
+
+       mvn compile

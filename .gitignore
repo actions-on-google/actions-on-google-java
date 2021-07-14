@@ -7,3 +7,4 @@ gradlew.bat
 out/
 .DS_Store
 src/generated # Generated source files
+local-repo/
