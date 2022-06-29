@@ -23,6 +23,8 @@ import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.*
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.lang.reflect.Type
 import java.util.*
 
@@ -168,37 +170,42 @@ internal class DialogflowRequest internal constructor(
     }
 
     companion object {
+        private val gson = GsonBuilder()
+            .registerTypeAdapter(WebhookRequest::class.java,
+                WebhookRequestDeserializer())
+            .registerTypeAdapter(QueryResult::class.java,
+                QueryResultDeserializer())
+            .registerTypeAdapter(Context::class.java,
+                ContextDeserializer())
+            .registerTypeAdapter(OriginalDetectIntentRequest::class.java,
+                OriginalDetectIntentRequestDeserializer())
+            .create()
 
-        fun create(body: String, headers: Map<*, *>?): DialogflowRequest {
-            val gson = Gson()
-            return create(gson.fromJson(body, JsonObject::class.java), headers)
-        }
+        fun create(body: String, headers: Map<*, *>?): DialogflowRequest =
+            create(gson.fromJson(body, WebhookRequest::class.java), headers)
 
-        fun create(json: JsonObject, headers: Map<*, *>?): DialogflowRequest {
-            val gsonBuilder = GsonBuilder()
-            gsonBuilder
-                    .registerTypeAdapter(WebhookRequest::class.java,
-                            WebhookRequestDeserializer())
-                    .registerTypeAdapter(QueryResult::class.java,
-                            QueryResultDeserializer())
-                    .registerTypeAdapter(Context::class.java,
-                            ContextDeserializer())
-                    .registerTypeAdapter(OriginalDetectIntentRequest::class.java,
-                            OriginalDetectIntentRequestDeserializer())
+        fun create(json: JsonObject, headers: Map<*, *>?): DialogflowRequest =
+            create(gson.fromJson(json, WebhookRequest::class.java), headers)
 
-            val gson = gsonBuilder.create()
-            val webhookRequest = gson.fromJson<WebhookRequest>(json,
-                    WebhookRequest::class.java)
-            val aogRequest: AogRequest
+        fun create(inputStream: InputStream, headers: Map<*, *>?): DialogflowRequest =
+            create(
+                gson.fromJson(InputStreamReader(inputStream, Charsets.UTF_8), WebhookRequest::class.java),
+                headers
+            )
+
+        private fun create(
+            webhookRequest: WebhookRequest,
+            headers: Map<*, *>?
+        ): DialogflowRequest {
 
             val originalDetectIntentRequest =
                     webhookRequest.originalDetectIntentRequest
             val payload = originalDetectIntentRequest?.payload
-            if (payload != null) {
-                aogRequest = AogRequest.create(gson.toJson(payload), headers,
+            val aogRequest = if (payload != null) {
+                AogRequest.create(gson.toJson(payload), headers,
                         partOfDialogflowRequest = true)
             } else {
-                aogRequest = AogRequest.create(JsonObject(), headers,
+                AogRequest.create(JsonObject(), headers,
                         partOfDialogflowRequest = true)
             }
 

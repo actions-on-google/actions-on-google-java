@@ -17,6 +17,10 @@
 package com.google.actions.api.smarthome
 
 import org.json.JSONObject
+import org.json.JSONTokener
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 
 /**
  * A representation of the JSON payload received during a smart home request.
@@ -32,8 +36,13 @@ open class SmartHomeRequest {
     }
 
     companion object {
-        fun create(inputJson: String): SmartHomeRequest {
-            val json = JSONObject(inputJson)
+        fun create(inputStream: InputStream): SmartHomeRequest =
+            create(JSONObject(JSONTokener(InputStreamReader(inputStream, Charsets.UTF_8))))
+
+        fun create(inputJson: String): SmartHomeRequest =
+            create(JSONObject(inputJson))
+
+        private fun create(json: JSONObject): SmartHomeRequest {
             val requestId = json.getString("requestId")
             val inputs = json.getJSONArray("inputs")
             val request = inputs.getJSONObject(0)

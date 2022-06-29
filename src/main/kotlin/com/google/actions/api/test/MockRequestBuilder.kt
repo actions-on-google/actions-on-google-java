@@ -134,8 +134,6 @@ class MockRequestBuilder() {
     }
 
     fun build(): ActionRequest {
-        val gson = Gson()
-
         if (userProfile != null) {
             user.profile = userProfile
         }
@@ -209,6 +207,8 @@ class MockRequestBuilder() {
     }
 
     companion object PreBuilt {
+        private val gson = Gson()
+
         fun welcome(
                 intent: String,
                 usesDialogflow: Boolean = true): MockRequestBuilder {

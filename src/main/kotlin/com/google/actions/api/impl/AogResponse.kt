@@ -22,6 +22,7 @@ import com.google.actions.api.response.ResponseBuilder
 import com.google.api.services.actions_fulfillment.v2.model.*
 import com.google.api.services.dialogflow_fulfillment.v2.model.WebhookResponse
 import com.google.gson.Gson
+import java.io.OutputStream
 import java.util.*
 
 internal class AogResponse internal constructor(
@@ -85,12 +86,12 @@ internal class AogResponse internal constructor(
             if (conversationData != null) {
                 val dataMap = HashMap<String, Any?>()
                 dataMap["data"] = conversationData
-                appResponse?.conversationToken = Gson().toJson(dataMap)
+                appResponse?.conversationToken = gson.toJson(dataMap)
             }
             if (userStorage != null) {
                 val dataMap = HashMap<String, Any?>()
                 dataMap["data"] = userStorage
-                appResponse?.userStorage = Gson().toJson(dataMap)
+                appResponse?.userStorage = gson.toJson(dataMap)
             }
         }
     }
@@ -132,7 +133,15 @@ internal class AogResponse internal constructor(
         appResponse?.expectedInputs = expectedInputs
     }
 
+    override fun writeTo(outputStream: OutputStream) {
+        ResponseSerializer(sessionId).writeJsonV2To(this, outputStream)
+    }
+
     override fun toJson(): String {
         return ResponseSerializer(sessionId).toJsonV2(this)
+    }
+
+    companion object {
+        private val gson = Gson()
     }
 }

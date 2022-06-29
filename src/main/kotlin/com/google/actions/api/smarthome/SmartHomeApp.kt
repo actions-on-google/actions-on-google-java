@@ -23,6 +23,7 @@ import com.google.home.graph.v1.HomeGraphApiServiceProto
 import io.grpc.ManagedChannelBuilder
 import io.grpc.auth.MoreCallCredentials
 import java.io.FileInputStream
+import java.io.InputStream
 import java.util.concurrent.CompletableFuture
 import org.slf4j.LoggerFactory
 
@@ -57,6 +58,18 @@ abstract class SmartHomeApp : App {
     fun createRequest(inputJson: String): SmartHomeRequest {
         return SmartHomeRequest.create(inputJson)
     }
+
+    /**
+     * Builds a [SmartHomeRequest] object from an [InputStream].
+     *
+     * This is semantically equivalent as reading the input stream as an UTF-8 string and then calling createRequest
+     * with the resulting string.
+     *
+     * @param inputStream The input stream to read from. The stream must be closed by the caller.
+     * @return A parsed request object
+     */
+    fun createRequest(inputStream: InputStream): SmartHomeRequest =
+        SmartHomeRequest.create(inputStream)
 
     /**
      * The intent handler for action.devices.SYNC that is implemented in your smart home Action
@@ -153,16 +166,23 @@ abstract class SmartHomeApp : App {
 
         return try {
             val request = createRequest(inputJson)
-            val response = routeRequest(request, headers)
-
-            val future: CompletableFuture<SmartHomeResponse> = CompletableFuture()
-            future.complete(response)
-            future.thenApply { this.getAsJson(it) }
-                  .exceptionally { throwable -> throwable.message }
+            handleRequest(request, headers)
+                .thenApply { getAsJson(it) }
+                .exceptionally { throwable -> throwable.message }
         } catch (e: Exception) {
             handleError(e)
         }
     }
+
+    fun handleRequest(request: SmartHomeRequest, headers: Map<*, *>?): CompletableFuture<SmartHomeResponse> =
+        try {
+            val response = routeRequest(request, headers)
+            CompletableFuture.completedFuture(response)
+        } catch (e: Exception) {
+            CompletableFuture<SmartHomeResponse>()
+                .apply { completeExceptionally(e) }
+        }
+
 
     @Throws(Exception::class)
     private fun routeRequest(request: SmartHomeRequest, headers: Map<*, *>?): SmartHomeResponse {
